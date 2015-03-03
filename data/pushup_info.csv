@@ -1,35 +1,37 @@
 user_id,timestamp,name,exercise,hertz,count,phone,stance,height (inches), female, comments
-1, 2015-02-21_12-35-35, Tali, pushup,20,10, ip5, normal,66, 1, did not go down very far
-2, 2015-02-21_18-55-31, Jess, pushup,20,10, ip5, normal,64, 1, did not go down all the way
-3, 2015-02-21_18-57-33, Sam, pushup,20,10, ip5, normal,70, 0, pretty good form
-4, 2015-02-21_18-59-09, Nick, pushup,20,10, ip5, normal,70, 0, pretty good form
-5, 2015-02-21_19-00-14, JustinS, pushup,20,10, ip5, normal,78, 0, a little sloppy
-6, 2015-02-21_11-24-43, Kelly, Kpushup,20,10, ip5, normal,65, 1, good form
-6, 2015-02-28_14-12-17, Kelly, Kpushup,20,10, ip5, normal,65, 1, good form
-6, 2015-02-28_14-13-46, Kelly, pushup,20,10, ip5, normal,65, 1, only went down half way
-7, 2015-02-16_17-18-38, Josh, pushup,10,10, ip6, normal,68, 0, good form
-7, 2015-02-16_17-20-25, Josh, pushup,10,10, ip6, normal,68, 0, ok form but did not go down all the way
-7, 2015-03-01_09-53-05, Josh, pushup,20,10, ip5, normal,68, 0, good form and medium pace
-7, 2015-03-01_09-53-39, Josh, pushup,20,10, ip5, normal,68, 0, good form and slow pace
-7, 2015-03-01_17-30-48, Josh, pushup,20,10, ip5, narrow,68, 0, good form and slow pace
-8, 2015-02-26_20-00-15, Benji, pushup,20,10, ip5, normal,72.5, 0, pretty good slows down at the end
-9, 2015-02-26_19-56-20, Arielle, Kpushup,20,10, ip5, normal,64, 1, good form
-10, 2015-02-26_19-53-19, JustinF, pushup,20,10, ip, narrow,73, 0, good form arms in more than normal
-11, 2015-02-27_20-26-10, Wei, pushup,20,10, ip5, inward,67, 0, hands turned inward good form - check height
-12, 2015-02-27_20-20-03, Jared, pushup,20,10, ip5, narrow,71, 0, Ok form
-13, 2015-02-27_20-21-57, Molly, pushup,20,10, ip5, normal,67, 1, pretty good but didnt go down all the way - check height
-14, 2015-02-27_17-08-09, Warren, pushup,20,20, ip5, normal,72, 0, too fast not low enough intentionally bad
-14, 2015-02-27_17-07-32, Warren, pushup,20,20, ip5, normal,72, 0, good form
-15, 2015-02-27_17-02-15, Clayton, pushup,20,10, ip5, normal,72, 0, OK form medium lowering depth
-16, 2015-02-27_16-59-47, Chapman, pushup,20,10, ip5, narrow,72, 0, Good form - check height
-17, 2015-02-27_16-57-09, Miles, pushup,20,10, ip5, normal,69, 0, Good form - check height
-18, 2015-02-27_16-53-56, Zack, pushup,20,10, ip5, normal,70, 0, slow but good form
-19, 2015-02-27_16-45-36, Chris, pushup,20,10, ip5, normal,72, 0, Ok form fast not very low
-20, 2015-02-28_15-59-20, Martin, pushup,20,10, ip5, normal,75, 0, starts good but only medium depth by the end
-21, 2015-03-01_11-11-36, Beau, pushup,20,10, ip5, narrow,76, 0, excellent form
-21, 2015-03-01_11-13-22, Beau, pushup,20,10, ip5, normal,76, 0, excellent form
-21, 2015-03-01_11-13-51, Beau, pushup,20,10, ip5, inward,76, 0, excellent form
-22, 2015-03-01_20-03-15, Tracy, Kpushup,20,10, ip5, normal,65, 1, good form
-22, 2015-03-01_20-03-47, Tracy, Kpushup,20,10, ip5, narrow,65, 1, good form first half and slowed down second half
-23, 2015-03-01_20-10-12, Rocky, pushup,20,10, ip5, normal,70, 0, good form
-23, 2015-03-01_20-10-35, Rocky, pushup,20,10, ip5, narrow,70, 0, good form
+1, 2015-02-21_12-35-35, Tali, pushup, 20, 10, ip5, normal, 66, 1, did not go down very far
+2, 2015-02-21_18-55-31, Jess, pushup, 20, 10, ip5, normal, 64, 1, did not go down all the way
+3, 2015-02-21_18-57-33, Sam, pushup, 20, 10, ip5, normal, 70, 0, pretty good form
+4, 2015-02-21_18-59-09, Nick, pushup, 20, 10, ip5, normal, 70, 0, pretty good form
+5, 2015-02-21_19-00-14, JustinS, pushup, 20, 10, ip5, normal, 78, 0, a little sloppy
+6, 2015-02-21_11-24-43, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, good form
+6, 2015-02-28_14-12-17, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, good form
+6, 2015-02-28_14-13-46, Kelly, pushup, 20, 10, ip5, normal, 65, 1, only went down half way
+6, 2015-03-03_08-11-21, Kelly, pushup, 20, 10, ip5, normal, 65, 1, Left arm with medium lowering. Second set so ok form
+6, 2015-03-03_08-09-39, Kelly, pushup, 20, 10, ip5, normal, 65, 1, Right arm push-ups medium lowering with pretty good form
+7, 2015-02-16_17-18-38, Josh, pushup, 10, 10, ip6, normal, 68, 0, good form
+7, 2015-02-16_17-20-25, Josh, pushup, 10, 10, ip6, normal, 68, 0, ok form but did not go down all the way
+7, 2015-03-01_09-53-05, Josh, pushup, 20, 10, ip5, normal, 68, 0, good form and medium pace
+7, 2015-03-01_09-53-39, Josh, pushup, 20, 10, ip5, normal, 68, 0, good form and slow pace
+7, 2015-03-01_17-30-48, Josh, pushup, 20, 10, ip5, narrow, 68, 0, good form and slow pace
+8, 2015-02-26_20-00-15, Benji, pushup, 20, 10, ip5, normal, 72.5, 0, pretty good slows down at the end
+9, 2015-02-26_19-56-20, Arielle, Kpushup, 20, 10, ip5, normal, 64, 1, good form
+10, 2015-02-26_19-53-19, JustinF, pushup, 20, 10, ip, narrow, 73, 0, good form arms in more than normal
+11, 2015-02-27_20-26-10, Wei, pushup, 20, 10, ip5, inward, 67, 0, hands turned inward good form - check height
+12, 2015-02-27_20-20-03, Jared, pushup, 20, 10, ip5, narrow, 71, 0, Ok form
+13, 2015-02-27_20-21-57, Molly, pushup, 20, 10, ip5, normal, 67, 1, pretty good but didnt go down all the way - check height
+14, 2015-02-27_17-08-09, Warren, pushup, 20, 20, ip5, normal, 72, 0, too fast not low enough intentionally bad
+14, 2015-02-27_17-07-32, Warren, pushup, 20, 20, ip5, normal, 72, 0, good form
+15, 2015-02-27_17-02-15, Clayton, pushup, 20, 10, ip5, normal, 72, 0, OK form medium lowering depth
+16, 2015-02-27_16-59-47, Chapman, pushup, 20, 10, ip5, narrow, 72, 0, Good form - check height
+17, 2015-02-27_16-57-09, Miles, pushup, 20, 10, ip5, normal, 69, 0, Good form - check height
+18, 2015-02-27_16-53-56, Zack, pushup, 20, 10, ip5, normal, 70, 0, slow but good form
+19, 2015-02-27_16-45-36, Chris, pushup, 20, 10, ip5, normal, 72, 0, Ok form fast not very low
+20, 2015-02-28_15-59-20, Martin, pushup, 20, 10, ip5, normal, 75, 0, starts good but only medium depth by the end
+21, 2015-03-01_11-11-36, Beau, pushup, 20, 10, ip5, narrow, 76, 0, excellent form
+21, 2015-03-01_11-13-22, Beau, pushup, 20, 10, ip5, normal, 76, 0, excellent form
+21, 2015-03-01_11-13-51, Beau, pushup, 20, 10, ip5, inward, 76, 0, excellent form
+22, 2015-03-01_20-03-15, Tracy, Kpushup, 20, 10, ip5, normal, 65, 1, good form
+22, 2015-03-01_20-03-47, Tracy, Kpushup, 20, 10, ip5, narrow, 65, 1, good form first half and slowed down second half
+23, 2015-03-01_20-10-12, Rocky, pushup, 20, 10, ip5, normal, 70, 0, good form
+23, 2015-03-01_20-10-35, Rocky, pushup, 20, 10, ip5, narrow, 70, 0, good form

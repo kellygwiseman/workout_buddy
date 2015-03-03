@@ -1,17 +1,14 @@
-"""Detect peaks in data based on their amplitude and other features."""
+"""Determine Attributes about Exercise Repetitions"""
 
 from __future__ import division, print_function
 import numpy as np
-
-__author__ = "Marcos Duarte, https://github.com/demotu/BMC"
-__version__ = "1.0.4"
-__license__ = "MIT"
-
 
 def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
                  kpsh=False, valley=False, show=False, ax=None):
 
     """Detect peaks in data based on their amplitude and other features.
+
+    Adapted code from Marcos Duarte, https://github.com/demotu/BMC, version = 1.0.4
 
     Parameters
     ----------
@@ -48,12 +45,6 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
     negating the data: `ind_valleys = detect_peaks(-x)`
     
     The function can handle NaN's 
-
-    See this IPython Notebook [1]_.
-
-    References
-    ----------
-    .. [1] http://nbviewer.ipython.org/github/demotu/BMC/blob/master/notebooks/DetectPeaks.ipynb
 """
     
 
@@ -115,3 +106,20 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
         _plot(x, mph, mpd, threshold, edge, valley, ax, ind)
 
     return ind
+
+def count_peaks(data, pushup_window, mph, mpd, freq):
+    # calculate timing of push-up reps since start of pushup window (in seconds)
+    pushup_data = data.ix[pushup_window[0]:pushup_window[-1]]
+    peakind = detect_peaks(pushup_data['motionPitch'], mph = mph, mpd = mpd)
+    peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
+    count = len(peakind)
+    return peakind, count
+
+def average_amplitude():
+    #return amp
+    pass
+    
+def average_duration():
+    #return dur
+    pass
+
