@@ -1,0 +1,627 @@
+''' 
+conditions1
+cond1 = np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ']) > 0.6
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.5
+cond4 = np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ']) > 0.7
+cond5 = np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY']) > 0.7
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+widths = np.arange(6,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali', 2),
+('Jess', 12),
+('Sam', 5),
+('Nick', 9),
+('JustinS', 9),
+('Kelly', 11),
+('Kelly', 10),
+('Kelly', 10),
+('Josh', 10),
+('Josh', 7),
+('Benji', 11),
+('Arielle', 0),
+('Molly', 10),
+('Warren', 18),
+('Warren', 2),
+('Clayton', 9),
+('Miles', 11),
+('Zack', 10),
+('Chris', 10),
+('Martin', 9),
+('Beau', 10),
+('Tracy', 10),
+('Rocky', 10)
+
+''' 
+conditions2
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.5
+cond4 = np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ']) > 0.7
+cond5 = np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY']) > 0.7
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+widths = np.arange(6,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali2', 10),
+ ('Jess2', 12),
+ ('Sam2', 5),
+ ('Nick2', 9),
+ ('JustinS2', 10),
+ ('Kelly2', 11),
+ ('Kelly2', 10),
+ ('Kelly2', 10),
+ ('Josh2', 10),
+ ('Josh2', 10),
+ ('Benji2', 11),
+ ('Arielle2', 0),
+ ('Molly2', 10),
+ ('Warren2', 18),
+ ('Warren2', 3),
+ ('Clayton2', 9),
+ ('Miles2', 11),
+ ('Zack2', 10),
+ ('Chris2', 10),
+ ('Martin2', 9),
+ ('Beau2', 10),
+ ('Tracy2', 10),
+ ('Rocky2', 10)
+
+''' 
+conditions3
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.5
+cond5 = np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY']) > 0.7
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+widths = np.arange(6,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali3', 10),
+ ('Jess3', 10),
+ ('Sam3', 5),
+ ('Nick3', 9),
+ ('JustinS3', 11),
+ ('Kelly3', 10),
+ ('Kelly3', 10),
+ ('Kelly3', 10),
+ ('Josh3', 11),
+ ('Josh3', 10),
+ ('Benji3', 11),
+ ('Arielle3', 10),
+ ('Molly3', 10),
+ ('Warren3', 18),
+ ('Warren3', 5),
+ ('Clayton3', 10),
+ ('Miles3', 11),
+ ('Zack3', 10),
+ ('Chris3', 10),
+ ('Martin3', 9),
+ ('Beau3', 10),
+ ('Tracy3', 10),
+ ('Rocky3', 10)
+
+''' 
+conditions4
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.5
+cond6 = np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW']) > 0.7
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+widths = np.arange(6,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali4', 10),
+ ('Jess4', 11),
+ ('Sam4', 2),
+ ('Nick4', 9),
+ ('JustinS4', 9),
+ ('Kelly4', 10),
+ ('Kelly4', 5),
+ ('Kelly4', 10),
+ ('Josh4', 10),
+ ('Josh4', 10),
+ ('Benji4', 11),
+ ('Arielle4', 10),
+ ('Molly4', 10),
+ ('Warren4', 12),
+ ('Warren4', 19)
+
+''' 
+conditions5
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.5
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])) > 1.4
+widths = np.arange(6,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali5', 10),
+ ('Jess5', 11),
+ ('Sam5', 3),
+ ('Nick5', 9),
+ ('JustinS5', 10),
+ ('Kelly5', 10),
+ ('Kelly5', 8),
+ ('Kelly5', 10),
+ ('Josh5', 10),
+ ('Josh5', 10),
+ ('Benji5', 11),
+ ('Arielle5', 10),
+ ('Molly5', 10),
+ ('Warren5', 12),
+ ('Warren5', 12),
+ ('Clayton5', 2),
+ ('Miles5', 11),
+ ('Zack5', 10),
+ ('Chris5', 9),
+ ('Martin5', 10),
+ ('Beau5', 10),
+ ('Tracy5', 10),
+ ('Rocky5', 10)
+
+''' 
+conditions6
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.5
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])) > 2.0
+widths = np.arange(6,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali6', 10),
+ ('Jess6', 11),
+ ('Sam6', 5),
+ ('Nick6', 9),
+ ('JustinS6', 10),
+ ('Kelly6', 10),
+ ('Kelly6', 10),
+ ('Kelly6', 10),
+ ('Josh6', 10),
+ ('Josh6', 10),
+ ('Benji6', 11),
+ ('Arielle6', 10),
+ ('Molly6', 10),
+ ('Warren6', 12),
+ ('Warren6', 9),
+ ('Clayton6', 8),
+ ('Miles6', 11),
+ ('Zack6', 10),
+ ('Chris6', 9),
+ ('Martin6', 10),
+ ('Beau6', 10),
+ ('Tracy6', 10),
+ ('Rocky6', 10)
+
+''' 
+conditions7
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.5
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+widths = np.arange(6,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali7', 10),
+ ('Jess7', 10),
+ ('Sam7', 8),
+ ('Nick7', 9),
+ ('JustinS7', 10),
+ ('Kelly7', 10),
+ ('Kelly7', 10),
+ ('Kelly7', 10),
+ ('Josh7', 10),
+ ('Josh7', 10),
+ ('Benji7', 11),
+ ('Arielle7', 10),
+ ('Molly7', 10),
+ ('Warren7', 12),
+ ('Warren7', 19),
+ ('Clayton7', 9),
+ ('Miles7', 11),
+ ('Zack7', 10),
+ ('Chris7', 9),
+ ('Martin7', 10),
+ ('Beau7', 10),
+ ('Tracy7', 10),
+ ('Rocky7', 10)
+
+''' 
+conditions8
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+widths = np.arange(6,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali8', 10),
+ ('Jess8', 11),
+ ('Sam8', 8),
+ ('Nick8', 9),
+ ('JustinS8', 10),
+ ('Kelly8', 10),
+ ('Kelly8', 10),
+ ('Kelly8', 10),
+ ('Josh8', 10),
+ ('Josh8', 10),
+ ('Benji8', 11),
+ ('Arielle8', 10),
+ ('Molly8', 10),
+ ('Warren8', 12),
+ ('Warren8', 20),
+ ('Clayton8', 7),
+ ('Miles8', 11),
+ ('Zack8', 10),
+ ('Chris8', 9),
+ ('Martin8', 10),
+ ('Beau8', 10),
+ ('Tracy8', 10),
+ ('Rocky8', 10)
+
+''' 
+conditions9
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.8
+widths = np.arange(6,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali9', 10),
+ ('Jess9', 12),
+ ('Sam9', 8),
+ ('Nick9', 9),
+ ('JustinS9', 9),
+ ('Kelly9', 10),
+ ('Kelly9', 10),
+ ('Kelly9', 10),
+ ('Josh9', 10),
+ ('Josh9', 10),
+ ('Benji9', 11),
+ ('Arielle9', 10),
+ ('Molly9', 10),
+ ('Warren9', 12),
+ ('Warren9', 20),
+ ('Clayton9', 7),
+ ('Miles9', 11),
+ ('Zack9', 10),
+ ('Chris9', 9),
+ ('Martin9', 10),
+ ('Beau9', 10),
+ ('Tracy9', 10),
+ ('Rocky9', 10)
+
+''' 
+conditions10
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+widths = np.arange(5,14)
+gap = 1.0
+max_dist = np.linspace(3.0,3.0,df.shape[0])
+'''
+('Tali10', 10),
+ ('Jess10', 11),
+ ('Sam10', 8),
+ ('Nick10', 9),
+ ('JustinS10', 10),
+ ('Kelly10', 10),
+ ('Kelly10', 10),
+ ('Kelly10', 10),
+ ('Josh10', 10),
+ ('Josh10', 10),
+ ('Benji10', 11),
+ ('Arielle10', 10),
+ ('Molly10', 10),
+ ('Warren10', 16),
+ ('Warren10', 18),
+ ('Clayton10', 8),
+ ('Miles10', 11),
+ ('Zack10', 10),
+ ('Chris10', 10),
+ ('Martin10', 10),
+ ('Beau10', 10),
+ ('Tracy10', 10),
+ ('Rocky10', 10)
+
+ ''' 
+conditions11
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])+
+             np.abs(correls.ix[:, 'motionQuaternionZ', 'motionQuaternionW'])) > 3.4
+widths = np.arange(5,14)
+gap = 1.0
+max_dist = np.linspace(3.0,3.0,df.shape[0])
+'''
+('Tali11', 10),
+ ('Jess11', 11),
+ ('Sam11', 9),
+ ('Nick11', 9),
+ ('JustinS11', 11),
+ ('Kelly11', 10),
+ ('Kelly11', 9),
+ ('Kelly11', 10),
+ ('Josh11', 10),
+ ('Josh11', 10),
+ ('Benji11', 11),
+ ('Arielle11', 8),
+ ('Molly11', 10),
+ ('Warren11', 16),
+ ('Warren11', 14),
+ ('Clayton11', 4),
+ ('Miles11', 11),
+ ('Zack11', 10),
+ ('Chris11', 10),
+ ('Martin11', 10),
+ ('Beau11', 10),
+ ('Tracy11', 10),
+ ('Rocky11', 10)
+
+''' 
+conditions12
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+widths = np.arange(5,14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali12', 10),
+ ('Jess12', 9),
+ ('Sam12', 8),
+ ('Nick12', 9),
+ ('JustinS12', 10),
+ ('Kelly12', 10),
+ ('Kelly12', 10),
+ ('Kelly12', 10),
+ ('Josh12', 10),
+ ('Josh12', 10),
+ ('Benji12', 11),
+ ('Arielle12', 10),
+ ('Molly12', 10),
+ ('Warren12', 16),
+ ('Warren12', 18),
+ ('Clayton12', 8),
+ ('Miles12', 11),
+ ('Zack12', 10),
+ ('Chris12', 10),
+ ('Martin12', 10),
+ ('Beau12', 10),
+ ('Tracy12', 10),
+ ('Rocky12', 10)
+
+''' 
+conditions12
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+widths = np.arange(5+2*file_list.iloc[i]['female'],14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali12', 10),
+ ('Jess12', 10),
+ ('Sam12', 8),
+ ('Nick12', 9),
+ ('JustinS12', 10),
+ ('Kelly12', 10),
+ ('Kelly12', 10),
+ ('Kelly12', 10),
+ ('Josh12', 10),
+ ('Josh12', 10),
+ ('Benji12', 11),
+ ('Arielle12', 10),
+ ('Molly12', 10),
+ ('Warren12', 16),
+ ('Warren12', 18),
+ ('Clayton12', 8),
+ ('Miles12', 11),
+ ('Zack12', 10),
+ ('Chris12', 10),
+ ('Martin12', 10),
+ ('Beau12', 10),
+ ('Tracy12', 10),
+ ('Rocky12', 10)]
+
+ ''' 
+conditions13
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+widths = np.arange(5+4*file_list.iloc[i]['female'],14)
+gap = 1.0
+max_dist = np.linspace(4.0,4.0,df.shape[0])
+'''
+('Tali13', 10),
+ ('Jess13', 10),
+ ('Sam13', 8),
+ ('Nick13', 9),
+ ('JustinS13', 10),
+ ('Kelly13', 10),
+ ('Kelly13', 9),
+ ('Kelly13', 10),
+ ('Josh13', 10),
+ ('Josh13', 10),
+ ('Benji13', 11),
+ ('Arielle13', 10),
+ ('Molly13', 10),
+ ('Warren13', 16),
+ ('Warren13', 18),
+ ('Clayton13', 8),
+ ('Miles13', 11),
+ ('Zack13', 10),
+ ('Chris13', 10),
+ ('Martin13', 10),
+ ('Beau13', 10),
+ ('Tracy13', 10),
+ ('Rocky13', 10)
+
+  ''' 
+conditions14
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+width_low = 5+4*file_list.iloc[i]['female']
+width_high = width_low + 6
+dist = width_low - 1.0
+widths = np.arange(width_low, width_high)
+gap = 1.0
+max_dist = np.linspace(dist,dist,df.shape[0])
+'''
+('Tali14', 10),
+ ('Jess14', 10),
+ ('Sam14', 9),
+ ('Nick14', 9),
+ ('JustinS14', 10),
+ ('Kelly14', 10),
+ ('Kelly14', 9),
+ ('Kelly14', 10),
+ ('Josh14', 10),
+ ('Josh14', 10),
+ ('Benji14', 11),
+ ('Arielle14', 10),
+ ('Molly14', 10),
+ ('Warren14', 16),
+ ('Warren14', 18),
+ ('Clayton14', 8),
+ ('Miles14', 11),
+ ('Zack14', 10),
+ ('Chris14', 10),
+ ('Martin14', 10),
+ ('Beau14', 10),
+ ('Tracy14', 10),
+ ('Rocky14', 10)
+
+'''
+conditions15
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40)
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+width_low = 5+4*file_list.iloc[i]['female']
+width_high = width_low + 6 + 3*file_list.iloc[i]['female']
+dist = width_low - 1.0 + 2*file_list.iloc[i]['female']
+widths = np.arange(width_low, width_high)
+gap = 2.0
+max_dist = np.linspace(dist,dist,df.shape[0])
+'''
+('Tali15', 10),
+ ('Jess15', 10),
+ ('Sam15', 9),
+ ('Nick15', 9),
+ ('JustinS15', 10),
+ ('Kelly15', 10),
+ ('Kelly15', 9),
+ ('Kelly15', 10),
+ ('Josh15', 10),
+ ('Josh15', 10),
+ ('Benji15', 11),
+ ('Arielle15', 10),
+ ('Molly15', 10),
+ ('Warren15', 16),
+ ('Warren15', 18),
+ ('Clayton15', 8),
+ ('Miles15', 11),
+ ('Zack15', 10),
+ ('Chris15', 10),
+ ('Martin15', 10),
+ ('Beau15', 10),
+ ('Tracy15', 10),
+ ('Rocky15', 10)
+
+''' 16 calculate peaks on pitch instead of filtered pitch'''
+ ('Tali16', 10),
+ ('Jess16', 10),
+ ('Sam16', 10),
+ ('Nick16', 10),
+ ('JustinS16', 11),
+ ('Kelly16', 10),
+ ('Kelly16', 9),
+ ('Kelly16', 10),
+ ('Josh16', 11),
+ ('Josh16', 12),
+ ('Benji16', 11),
+ ('Arielle16', 10),
+ ('Molly16', 10),
+ ('Warren16', 16),
+ ('Warren16', 22),
+ ('Clayton16', 9),
+ ('Miles16', 11),
+ ('Zack16', 16),
+ ('Chris16', 11),
+ ('Martin16', 11),
+ ('Beau16', 11),
+ ('Tracy16', 10),
+
+ ''' 17 increase initial crop to 5 seconds'''
+ ('Tali17', 10),
+ ('Jess17', 10),
+ ('Sam17', 10),
+ ('Nick17', 10),
+ ('JustinS17', 11),
+ ('Kelly17', 10),
+ ('Kelly17', 9),
+ ('Kelly17', 10),
+ ('Josh17', 11),
+ ('Josh17', 12),
+ ('Benji17', 10),
+ ('Arielle17', 10),
+ ('Molly17', 10),
+ ('Warren17', 16),
+ ('Warren17', 22),
+ ('Clayton17', 9),
+ ('Miles17', 11),
+ ('Zack17', 16),
+ ('Chris17', 11),
+ ('Martin17', 10),
+ ('Beau17', 11),
+ ('Tracy17', 10),
+ ('Rocky17', 11)
+ ('Rocky16', 11)
