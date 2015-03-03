@@ -1,5 +1,26 @@
+''' Preferred filtering conditions:
+freq = 20.0
+fs = 20.0
+lowcut = 0.5
+highcut =2.0
+order = 1
+df_filt = gr.plot_bandpass(df_num, fs, lowcut, highcut, order, sample)
+    correls = pd.rolling_corr(df_filt, 30)
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+# don't use the first 3 and last 2 seconds
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40) 
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+         np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.5
+pushup_window = df_filt[cond2 & cond7 & cond8 & cond9].index
+mph=0.20
+mpd=10+ 5*file_list.iloc[i]['female']
+'''
+
 # detect peak
-# on non-filtered pitch
+# on non-filtered pitch, with correls = pd.rolling_corr(df_filt, 40)
 mph=0.5
 mpd=10
 [('Tali_dp1', 22),
@@ -27,7 +48,7 @@ mpd=10
  ('Rocky_dp1', 11)]
 
 #dp1
- # on filtered pitch
+ # on filtered pitch, with correls = pd.rolling_corr(df_filt, 40)
 mph=0.1
 mpd=10
 ('Tali_dp1', 10),
@@ -55,7 +76,7 @@ mpd=10
  ('Rocky_dp1', 10)
 
 #dp2
- # filtered
+ # filtered with correls = pd.rolling_corr(df_filt, 40)
  # only front and end crop condition
  mph=0.15
  mpd=10
@@ -84,7 +105,7 @@ mpd=10
  ('Rocky_dp2', 10)]
 
 #dp3
-# filtered
+# filtered with correls = pd.rolling_corr(df_filt, 40)
 # only front and end crop condition
 mph=0.25 - 0.05*file_list.iloc[i]['female']
 mpd=10+ 5*file_list.iloc[i]['female']
@@ -113,7 +134,7 @@ mpd=10+ 5*file_list.iloc[i]['female']
  ('Rocky_dp3', 10)
 
 #dp4
-# filtered
+# filtered with correls = pd.rolling_corr(df_filt, 40)
 # only front and end crop condition
 mph=0.20
 mpd=10+ 5*file_list.iloc[i]['female']
@@ -142,8 +163,15 @@ mpd=10+ 5*file_list.iloc[i]['female']
  ('Rocky_dp4', 10)]
 
  #dp5
- # filtered
+ # filtered with correls = pd.rolling_corr(df_filt, 40)
  # use conditons cond2 & cond7 & cond8 & cond9
+ cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 80
+cond8 = df_filt.index < (df_filt.shape[0] - 40) 
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+         np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
  # pushup window is just between start and end time of condition (not all the indices)
  mph=0.20
  mpd=10+ 5*file_list.iloc[i]['female']
@@ -170,3 +198,166 @@ mpd=10+ 5*file_list.iloc[i]['female']
  ('Beau_dp5', 10),
  ('Tracy_dp5', 10),
  ('Rocky_dp5', 10)]
+
+# dp6
+# filtered with correls = pd.rolling_corr(df_filt, 40)
+# use conditons cond2 & cond7 & cond8 & cond9
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40) 
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+         np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+pushup_window = df_filt[cond2 & cond7 & cond8 & cond9].index
+mph=0.20
+mpd=10
+
+[('Tali_dp6', 10),
+ ('Jess_dp6', 11),
+ ('Sam_dp6', 9),
+ ('Nick_dp6', 9),
+ ('JustinS_dp6', 10),
+ ('Kelly_dp6', 10),
+ ('Kelly_dp6', 9),
+ ('Kelly_dp6', 10),
+ ('Josh_dp6', 10),
+ ('Josh_dp6', 10),
+ ('Benji_dp6', 10),
+ ('Arielle_dp6', 10),
+ ('Molly_dp6', 10),
+ ('Warren_dp6', 19),
+ ('Warren_dp6', 20),
+ ('Clayton_dp6', 9),
+ ('Miles_dp6', 10),
+ ('Zack_dp6', 10),
+ ('Chris_dp6', 10),
+ ('Martin_dp6', 9),
+ ('Beau_dp6', 10),
+ ('Tracy_dp6', 10),
+ ('Rocky_dp6', 10)]
+
+# dp7
+# filtered with correls = pd.rolling_corr(df_filt, 40)
+# use conditons cond2 & cond7 & cond8 & cond9
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40) 
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+         np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.5
+pushup_window = df_filt[cond2 & cond7 & cond8 & cond9].index
+mph=0.20
+mpd=10+ 5*file_list.iloc[i]['female']
+
+# dp8
+# filtered with correls = pd.rolling_corr(df_filt, 30)
+# use conditons cond2 & cond7 & cond8 & cond9
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40) 
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+         np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.5
+pushup_window = df_filt[cond2 & cond7 & cond8 & cond9].index
+mph=0.20
+mpd=10+ 5*file_list.iloc[i]['female']
+[('Tali_dp8', 10),
+ ('Jess_dp8', 10),
+ ('Sam_dp8', 10),
+ ('Nick_dp8', 10),
+ ('JustinS_dp8', 10),
+ ('Kelly_dp8', 10),
+ ('Kelly_dp8', 10),
+ ('Kelly_dp8', 10),
+ ('Josh_dp8', 10),
+ ('Josh_dp8', 10),
+ ('Benji_dp8', 10),
+ ('Arielle_dp8', 10),
+ ('Molly_dp8', 10),
+ ('Warren_dp8', 20),
+ ('Warren_dp8', 20),
+ ('Clayton_dp8', 10),
+ ('Miles_dp8', 10),
+ ('Zack_dp8', 10),
+ ('Chris_dp8', 10),
+ ('Martin_dp8', 10),
+ ('Beau_dp8', 10),
+ ('Tracy_dp8', 10),
+ ('Rocky_dp8', 10)]
+
+# dp9
+# filtered with correls = pd.rolling_corr(df_filt, 30)
+# use conditons cond2 & cond7 & cond8 & cond9
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40) 
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+         np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.7
+pushup_window = df_filt[cond2 & cond7 & cond8 & cond9].index
+mph=0.20
+mpd=10+ 5*file_list.iloc[i]['female']
+[('Tali_dp9', 10),
+ ('Jess_dp9', 10),
+ ('Sam_dp9', 9),
+ ('Nick_dp9', 10),
+ ('JustinS_dp9', 10),
+ ('Kelly_dp9', 10),
+ ('Kelly_dp9', 10),
+ ('Kelly_dp9', 10),
+ ('Josh_dp9', 10),
+ ('Josh_dp9', 10),
+ ('Benji_dp9', 10),
+ ('Arielle_dp9', 10),
+ ('Molly_dp9', 10),
+ ('Warren_dp9', 20),
+ ('Warren_dp9', 20),
+ ('Clayton_dp9', 10),
+ ('Miles_dp9', 10),
+ ('Zack_dp9', 10),
+ ('Chris_dp9', 10),
+ ('Martin_dp9', 10),
+ ('Beau_dp9', 10),
+ ('Tracy_dp9', 10),
+ ('Rocky_dp9', 10)]
+
+# dp10
+# filtered with correls = pd.rolling_corr(df_filt, 30)
+# use conditons cond2 & cond7 & cond8 & cond9
+cond2 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.65
+cond7 = df_filt.index > 60 
+cond8 = df_filt.index < (df_filt.shape[0] - 40) 
+cond9 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+         np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.5
+pushup_window = df_filt[cond2 & cond7 & cond8 & cond9].index
+mph=0.20
+mpd=10+ 5*file_list.iloc[i]['female']
+[('Tali_dp10', 10),
+ ('Jess_dp10', 10),
+ ('Sam_dp10', 10),
+ ('Nick_dp10', 10),
+ ('JustinS_dp10', 10),
+ ('Kelly_dp10', 10),
+ ('Kelly_dp10', 10),
+ ('Kelly_dp10', 10),
+ ('Josh_dp10', 10),
+ ('Josh_dp10', 10),
+ ('Benji_dp10', 10),
+ ('Arielle_dp10', 10),
+ ('Molly_dp10', 10),
+ ('Warren_dp10', 19),
+ ('Warren_dp10', 20),
+ ('Clayton_dp10', 10),
+ ('Miles_dp10', 10),
+ ('Zack_dp10', 10),
+ ('Chris_dp10', 10),
+ ('Martin_dp10', 10),
+ ('Beau_dp10', 10),
+ ('Tracy_dp10', 10),
+ ('Rocky_dp10', 10)]
