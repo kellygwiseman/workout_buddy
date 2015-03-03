@@ -115,11 +115,16 @@ def count_peaks(data, pushup_window, mph, mpd, freq):
     count = len(peakind)
     return peakind, count
 
-def average_amplitude():
-    #return amp
-    pass
-    
-def average_duration():
-    #return dur
-    pass
+def average_amplitude(data, peakind, pushup_window, freq):
+    ind = [int(x*freq) for x in peakind]
+    ind = [pushup_window[0] + x for x in ind]
+    amps = data.ix[ind]['motionPitch']
+    avg_amp = amps.mean()
+    return avg_amp
+
+def average_duration(peakind, count):
+    # don't include the first repetition duration because we are counting peaks (the end of the pushup)
+    duration = peakind[-1] - peakind[0]
+    avg_dur = duration / (count - 1)
+    return avg_dur
 
