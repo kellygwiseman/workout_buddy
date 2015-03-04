@@ -115,6 +115,16 @@ def count_peaks(data, pushup_window, feature, mph, mpd, freq, valley=False):
     count = len(peakind)
     return peakind, count
 
+def rep_metrics(data, peakind, pushup_window, feature, freq, female, height, form):
+    # don't include the first repetition because we are looking at duration between peaks (the end of the pushup)
+    ind = [int(x*freq) for x in peakind]
+    ind = [pushup_window[0] + x for x in ind]
+    amps = data.ix[ind][feature].values
+    amps = amps[1:]
+    durations = [peakind[n+1] - peakind[n] for n in xrange(len(peakind) - 1)]
+    sample_metrics = [[female, height, amps[n], durations[n], form] for n in xrange(len(amps))]
+    return sample_metrics
+
 def average_amplitude(data, peakind, pushup_window, feature, freq):
     ind = [int(x*freq) for x in peakind]
     ind = [pushup_window[0] + x for x in ind]
