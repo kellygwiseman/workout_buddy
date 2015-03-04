@@ -1,0 +1,58 @@
+# Armband placement differences
+
+# left arm
+• X acceleration component centered at -0.5
+• X-Z acc pos correlated, X-Y neg correlated
+• X-Y pos correlated, X-Z gyro neg correlated 
+• Yaw centered at 2, Roll centered at -1
+• Pitch-Roll and Roll-Yaw pos correlated
+• Z quat centered at -0.6
+• X-Y quat pos correlated, X-Z quat neg correlated, X-W, Y-W, Z-W messy in the  middle
+• Z acc filtered smaller
+
+# right arm
+• X acceleration component centered at ~0.7
+• X-Y acc pos correlated, X-Z neg correlated
+• X-Z gyro pos correlated, X-Y neg correlated
+• Yaw centered at -2, Roll centered at 1
+• Pitch-Roll and Roll-Yaw neg correlated
+• Z quat centered at 0.6
+• X-Z, X-W, Z-W quat pos correlated, X-Y, Y-W quat neg correlated
+
+##### Kelly Left/Right arm normal stance  comparison ########
+# comparable features for both Left and Right arm normal pushups
+• comparable: aY, gY (messy, not as useful waveform), pitch
+• fairly close: aZ (left has ~40% larger amp), gX (similar shape but left has ~30% larger amp),yaw
+• flipped but similar amp: qY (minor flipped component and L ~20% larger), qZ (out of sync and R ~15% larger), gZ, aX
+• flipped and different amp: qW (different shape and Right ~70% larger amp)
+• very different: qX (in synce different shape and L 200% size), roll (different shape, out of sync and R ~200% size)
+
+###### Beau normal/ narrow comparison (both right arm) ######
+• narrow 1/3 slower
+• Similar:
+	• aZ Norm more complex shape, similar amp
+	• aX Nar more complex shape, similar amp
+	• aY pretty similar
+	• qY 
+	• qZ Nar ~20% bigger
+	• pitch
+	• roll
+
+• Different:
+	• gX Norm ~250% size and simpler shape
+	• gY Norm ~200% size
+	• gZ Norm ~30% bigger and simpler shape, Nar has double peak
+	• qX similar amp but Nar has more complex shape (lower second peak)
+	• qW Nar 300% size
+	• Nar much bigger (1000%) sometimes
+
+### Overall similar features for Left/Right Normal/Narrow ########
+• pitch, aY, aZ, qY
+
+####### Dynamic Time Warping steps: ########
+• pull out the peaks and choose window to be +- average duration from last and first peak
+• scale the features
+• interpolate features to be same max length
+• calculate distances for pitch, aY, aZ, qY
+• do 1 KNN
+	

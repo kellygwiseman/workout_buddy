@@ -56,7 +56,10 @@ def plot1_acceleration(data, freq, sample):
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Meter / Second^2 (in G)')
     plt.xlim(0,time[-1])
-    plt.ylim(-1.5,1.5)
+    ymin, ymax = plt.ylim()
+    ydiff = ymax - ymin
+    plt.ylim(ymin - 0.1*ydiff, ymax)
+    #plt.ylim(-1.5,1.5)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/pu_accel-'+sample+'.png');
     
@@ -73,7 +76,9 @@ def plot1_quaternion(data, freq, sample):
     plt.ylabel('Radians')
     plt.xlim(0,time[-1])
     ymin, ymax = plt.ylim()
-    plt.ylim(-0.5, 1.0)
+    ydiff = ymax - ymin
+    plt.ylim(ymin - 0.1*ydiff, ymax)
+    #plt.ylim(-0.5, 1.0)
     plt.legend(loc='lower center', ncol=4, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/pu_quat-'+sample+'.png');
 
@@ -102,7 +107,10 @@ def plot1_gyro(data, freq, sample):
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Radians / Second')
     plt.xlim(0,time[-1])
-    plt.ylim(-5.0, 5.0)
+    #plt.ylim(-5.0, 5.0)
+    ymin, ymax = plt.ylim()
+    ydiff = ymax - ymin
+    plt.ylim(ymin - 0.1*ydiff, ymax)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/pu_gyro-'+sample+'.png');
     
@@ -117,7 +125,10 @@ def plot1_motion(data, freq, sample):
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Radians')
     plt.xlim(0,time[-1])
-    plt.ylim(-2.0,3.0)
+    #plt.ylim(-2.0,3.0)
+    ymin, ymax = plt.ylim()
+    ydiff = ymax - ymin
+    plt.ylim(ymin - 0.1*ydiff, ymax)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/pu_attitude-'+sample+'.png');
 
