@@ -240,7 +240,8 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.legend(loc='lower center', ncol=4, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
     plt.savefig('../figures/pu_bp_quat-'+sample+'.png');
 
-def plot_pushups(data, pushup_window, peakind, freq, sample):
+def plot_pushups(data, pushup_window, peakind, feature, freq, sample):
+    rcParams['axes.color_cycle'] = dark2_colors
     # separate out pushup data and convert everything to seconds (from frequency)
     time = data.index.values / freq
     pushup_start = pushup_window[0] / freq
@@ -249,16 +250,40 @@ def plot_pushups(data, pushup_window, peakind, freq, sample):
     
     # Plot complete time series and push-up duration overlay
     fig1 = plt.figure()
-    plt.plot(time, data.motionPitch, label='Raw data')
-    plt.plot(pushup_time, pushup_data['motionPitch'], label='Push-up duration')
+    plt.plot(time, data[feature], label='Raw data')
+    plt.plot(pushup_time, pushup_data[feature], label='Push-up duration')
     
     # Mark push-up repetitions
     plt.scatter(pushup_start + peakind,np.linspace(0.0,0.0,num=len(peakind)), color='r',marker='x', lw=2, label='Push-ups')
     plt.title('Push-up Repetitions')
-    plt.ylabel('BP Filtered Pitch (Radians)')
+    plt.ylabel('BP Filtered')
     plt.xlabel('Time (Seconds)')
     plt.xlim(0,time[-1])
     ymin, ymax = plt.ylim()
     plt.ylim(-1.0, 1.0)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/pu_reps-f'+sample+'.png');
+
+def plot_situps(data, situp_window, peakind, feature, freq, sample):
+    rcParams['axes.color_cycle'] = dark2_colors
+    # separate out pushup data and convert everything to seconds (from frequency)
+    time = data.index.values / freq
+    situp_start = situp_window[0] / freq
+    situp_time = time[situp_window[0]:(situp_window[-1]+1)]
+    situp_data = data.ix[situp_window[0]:situp_window[-1]]
+    
+    # Plot complete time series and push-up duration overlay
+    fig1 = plt.figure()
+    plt.plot(time, data[feature], label='Raw data')
+    plt.plot(situp_time, situp_data[feature], label='Sit-up duration')
+    
+    # Mark push-up repetitions
+    plt.scatter(situp_start + peakind,np.linspace(0.0,0.0,num=len(peakind)), color='r',marker='x', lw=2, label='Sit-ups')
+    plt.title('Sit-up Repetitions')
+    plt.ylabel('BP Filtered')
+    plt.xlabel('Time (Seconds)')
+    plt.xlim(0,time[-1])
+    ymin, ymax = plt.ylim()
+    #plt.ylim(-1.0, 1.0)
+    plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
+    plt.savefig('../figures/su_reps-'+sample+'.png');

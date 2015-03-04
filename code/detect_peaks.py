@@ -107,18 +107,18 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
 
     return ind
 
-def count_peaks(data, pushup_window, mph, mpd, freq):
+def count_peaks(data, pushup_window, feature, mph, mpd, freq, valley=False):
     # calculate timing of push-up reps since start of pushup window (in seconds)
     pushup_data = data.ix[pushup_window[0]:pushup_window[-1]]
-    peakind = detect_peaks(pushup_data['motionPitch'], mph = mph, mpd = mpd)
+    peakind = detect_peaks(pushup_data[feature], mph = mph, mpd = mpd, valley=valley)
     peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
     count = len(peakind)
     return peakind, count
 
-def average_amplitude(data, peakind, pushup_window, freq):
+def average_amplitude(data, peakind, pushup_window, feature, freq):
     ind = [int(x*freq) for x in peakind]
     ind = [pushup_window[0] + x for x in ind]
-    amps = data.ix[ind]['motionPitch']
+    amps = data.ix[ind][feature]
     avg_amp = amps.mean()
     return avg_amp
 
