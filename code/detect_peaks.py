@@ -125,6 +125,13 @@ def rep_metrics(data, peakind, pushup_window, feature, freq, female, height, for
     sample_metrics = [[female, height, amps[n], durations[n], form] for n in xrange(len(amps))]
     return sample_metrics
 
+def calculate_rep_window(peakind, pushup_window, avg_duration, freq):
+    start = pushup_window[0]/freq + peakind[0] - avg_duration
+    end = pushup_window[0]/freq + peakind[-1]
+    window_sec = (start, end)
+    window_ind = (int(start*freq), int(end*freq))
+    return window_ind, window_sec
+
 def average_amplitude(data, peakind, pushup_window, feature, freq):
     ind = [int(x*freq) for x in peakind]
     ind = [pushup_window[0] + x for x in ind]

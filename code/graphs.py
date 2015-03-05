@@ -251,13 +251,13 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.legend(loc='lower center', ncol=4, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
     plt.savefig('../figures/pu_bp_quat-'+sample+'.png');
 
-def plot_pushups(data, pushup_window, peakind, feature, freq, sample):
+def plot_pushups(data, pushup_window, window_ind, peakind, feature, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
     # separate out pushup data and convert everything to seconds (from frequency)
     time = data.index.values / freq
-    pushup_start = pushup_window[0] / freq
-    pushup_time = time[pushup_window[0]:(pushup_window[-1]+1)]
-    pushup_data = data.ix[pushup_window[0]:pushup_window[-1]]
+    pushup_start = pushup_window[0] / freq # for marking the peaks
+    pushup_time = time[window_ind[0]:(window_ind[1]+1)] # for plotting the duration
+    pushup_data = data.ix[window_ind[0]:window_ind[1]]
     
     # Plot complete time series and push-up duration overlay
     fig1 = plt.figure()
