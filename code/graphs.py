@@ -1,6 +1,7 @@
 """ Plot the Exercise data """
 
 import matplotlib.pyplot as plt
+plt.ioff()
 import numpy as np
 import brewer2mpl
 from matplotlib import rcParams
@@ -29,21 +30,24 @@ def plot3_acceleration(data, freq):
     plt.xlabel('Time (seconds)')
     plt.ylabel('Meter / Second^2 (in G)')
     plt.xlim(0,time[-1])
-    plt.savefig('../figures/pu_accelX-'+sample+'.png');
+    plt.savefig('../figures//acceleration/pu_accelX-'+sample+'.png');
+    plt.close(fig1)
     fig2 = plt.figure()
     plt.plot(time, data.accelerometerAccelerationY)
     plt.title('Y-component Acceleration')
     plt.xlabel('Time (seconds)')
     plt.ylabel('Meter / Second^2 (in G)')
     plt.xlim(0,time[-1])
-    plt.savefig('../figures/pu_accelY-'+sample+'.png');
+    plt.savefig('../figures//acceleration/pu_accelY-'+sample+'.png');
+    plt.close(fig2)
     fig3 = plt.figure()
     plt.plot(time, data.accelerometerAccelerationZ)
     plt.xlabel('Time (seconds)')
     plt.ylabel('Meter / Second^2 (in G)')
     plt.xlim(0,time[-1])
     plt.title('Z-component Acceleration');
-    plt.savefig('../figures/pu_accelZ-'+sample+'.png');
+    plt.savefig('../figures/acceleration/pu_accelZ-'+sample+'.png');
+    plt.close(fig3)
     
 def plot1_acceleration(data, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
@@ -61,7 +65,23 @@ def plot1_acceleration(data, freq, sample):
     plt.ylim(ymin - 0.1*ydiff, ymax)
     #plt.ylim(-1.5,1.5)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pu_accel-'+sample+'.png');
+    plt.savefig('../figures//acceleration/pu_accel-'+sample+'.png');
+    plt.close(fig1)
+
+def plot1_Uacceleration(data, freq, sample):
+    rcParams['axes.color_cycle'] = dark2_colors
+    time = data.index.values / freq
+    fig1 = plt.figure()
+    plt.plot(time, data.motionUserAccelerationX, label='X' )
+    plt.plot(time, data.motionUserAccelerationY, label='Y')
+    plt.plot(time, data.motionUserAccelerationZ, label='Z')
+    plt.title('User Acceleration')
+    plt.xlabel('Time (Seconds)')
+    plt.ylabel('Meter / Second^2 (in G)')
+    plt.xlim(0,time[-1])
+    plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
+    plt.savefig('../figures/user_acceleration/pu_Uaccel-'+sample+'.png');
+    plt.close(fig1)
     
 def plot1_quaternion(data, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
@@ -80,21 +100,8 @@ def plot1_quaternion(data, freq, sample):
     plt.ylim(ymin - 0.1*ydiff, ymax)
     #plt.ylim(-0.5, 1.0)
     plt.legend(loc='lower center', ncol=4, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pu_quat-'+sample+'.png');
-
-def plot1_Uacceleration(data, freq, sample):
-    rcParams['axes.color_cycle'] = dark2_colors
-    time = data.index.values / freq
-    fig1 = plt.figure()
-    plt.plot(time, data.motionUserAccelerationX, label='X' )
-    plt.plot(time, data.motionUserAccelerationY, label='Y')
-    plt.plot(time, data.motionUserAccelerationZ, label='Z')
-    plt.title('User Acceleration')
-    plt.xlabel('Time (Seconds)')
-    plt.ylabel('Meter / Second^2 (in G)')
-    plt.xlim(0,time[-1])
-    plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pu_Uaccel-'+sample+'.png');
+    plt.savefig('../figures/quaternion/pu_quat-'+sample+'.png');
+    plt.close(fig1)
 
 def plot1_gyro(data, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
@@ -112,7 +119,8 @@ def plot1_gyro(data, freq, sample):
     ydiff = ymax - ymin
     plt.ylim(ymin - 0.1*ydiff, ymax)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pu_gyro-'+sample+'.png');
+    plt.savefig('../figures/gyro/pu_gyro-'+sample+'.png');
+    plt.close(fig1)
     
 def plot1_motion(data, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
@@ -130,7 +138,8 @@ def plot1_motion(data, freq, sample):
     ydiff = ymax - ymin
     plt.ylim(ymin - 0.1*ydiff, ymax)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pu_attitude-'+sample+'.png');
+    plt.savefig('../figures/motion/pu_attitude-'+sample+'.png');
+    plt.close(fig1)
 
 def plot_corr(data, correls, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
@@ -146,7 +155,8 @@ def plot_corr(data, correls, freq, sample):
     plt.ylim(-1.5,1.25)
     plt.yticks(np.arange(-1.0,1.5,0.5))
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pu_corr_acc-'+sample+'.png');
+    plt.savefig('../figures/correlation/pu_corr_acc-'+sample+'.png');
+    plt.close(fig1)
 
     fig2 = plt.figure()
     plt.plot(time, correls.ix[:, 'gyroRotationX', 'gyroRotationY'], label='X-Y')
@@ -159,7 +169,8 @@ def plot_corr(data, correls, freq, sample):
     plt.ylim(-1.5,1.25)
     plt.yticks(np.arange(-1.0,1.5,0.5))
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pu_corr_gyro-'+sample+'.png');
+    plt.savefig('../figures/correlation/pu_corr_gyro-'+sample+'.png');
+    plt.close(fig2)
 
     fig3 = plt.figure()
     plt.plot(time, correls.ix[:, 'motionPitch', 'motionRoll'], label='Pitch-Roll')
@@ -172,7 +183,8 @@ def plot_corr(data, correls, freq, sample):
     plt.ylim(-1.5,1.25)
     plt.yticks(np.arange(-1.0,1.5,0.5))
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pu_corr_att-'+sample+'.png');
+    plt.savefig('../figures/correlation/pu_corr_att-'+sample+'.png');
+    plt.close(fig3)
 
     fig4 = plt.figure()
     plt.plot(time, correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'], label='X-Y')
@@ -188,7 +200,8 @@ def plot_corr(data, correls, freq, sample):
     plt.ylim(-1.75,1.25)
     plt.yticks(np.arange(-1.0,1.5,0.5))
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/pu_corr_quat-'+sample+'.png');
+    plt.savefig('../figures/correlation/pu_corr_quat-'+sample+'.png');
+    plt.close(fig4)
 
 def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     rcParams['axes.color_cycle'] = pair_colors
@@ -205,7 +218,8 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.ylabel('Meter / Second^2 (in G)')
     plt.ylim(-2.0, 1.5)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/pu_bp_acc-'+sample+'.png');
+    plt.savefig('../figures/bp_filter/pu_bp_acc-'+sample+'.png');
+    plt.close(fig1)
 
     fig2 = plt.figure(figsize=(10,6))
     plt.plot(time, data.gyroRotationX, label='X')
@@ -219,7 +233,8 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.ylabel('Radian / Second')
     plt.ylim(-5.0, 5.0)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/pu_bp_gyr-'+sample+'.png');
+    plt.savefig('../figures/bp_filter/pu_bp_gyr-'+sample+'.png');
+    plt.close(fig2)
 
     fig3 = plt.figure(figsize=(10,6))
     plt.plot(time, data.motionPitch, label='Pitch')
@@ -233,7 +248,8 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.ylabel('Radians')
     plt.ylim(-2.5,3.0)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/pu_bp_att-'+sample+'.png');
+    plt.savefig('../figures/bp_filter/pu_bp_att-'+sample+'.png');
+    plt.close(fig3)
 
     fig4 = plt.figure(figsize=(10,6))
     plt.plot(time, data.motionQuaternionX, label='X')
@@ -249,7 +265,8 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.ylabel('Radians')
     plt.ylim(-0.75, 1.0)
     plt.legend(loc='lower center', ncol=4, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/pu_bp_quat-'+sample+'.png');
+    plt.savefig('../figures/bp_filter/pu_bp_quat-'+sample+'.png');
+    plt.close(fig4)
 
 def plot_pushups(data, pushup_window, window_ind, peakind, feature, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
@@ -261,7 +278,7 @@ def plot_pushups(data, pushup_window, window_ind, peakind, feature, freq, sample
     
     # Plot complete time series and push-up duration overlay
     fig1 = plt.figure()
-    plt.plot(time, data[feature], label='Raw data')
+    plt.plot(time, data[feature], label='Pitch data')
     plt.plot(pushup_time, pushup_data[feature], label='Push-up duration')
     
     # Mark push-up repetitions
@@ -273,7 +290,8 @@ def plot_pushups(data, pushup_window, window_ind, peakind, feature, freq, sample
     ymin, ymax = plt.ylim()
     plt.ylim(-1.0, 1.0)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pu_reps-f'+sample+'.png');
+    plt.savefig('../figures/pushup_reps/pu_reps-'+sample+'.png');
+    plt.close(fig1)
 
 def plot_situps(data, situp_window, peakind, feature, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
@@ -297,7 +315,8 @@ def plot_situps(data, situp_window, peakind, feature, freq, sample):
     ymin, ymax = plt.ylim()
     #plt.ylim(-1.0, 1.0)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/su_reps-'+sample+'.png');
+    plt.savefig('../figures/situp_reps/su_reps-'+sample+'.png');
+    plt.close(fig1)
 
 def plot_oge_rep(ind, rep_window_list, data, features, freq, samples):
     rcParams['axes.color_cycle'] = dark2_colors
@@ -316,3 +335,4 @@ def plot_oge_rep(ind, rep_window_list, data, features, freq, samples):
         plt.ylim(ymin - 0.1*ydiff, ymax)
         plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
         plt.savefig('../figures/'+features[f]+ind[0]+'_'+ind[1]+'_'+ind[2]+'.png');
+        plt.close(fig1)
