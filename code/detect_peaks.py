@@ -121,9 +121,21 @@ def rep_metrics(data, peakind, pushup_window, feature, freq, female, height, for
     ind = [pushup_window[0] + x for x in ind]
     amps = data.ix[ind][feature].values
     amps = amps[1:]
+    amp_std = amps.std
     durations = [peakind[n+1] - peakind[n] for n in xrange(len(peakind) - 1)]
-    sample_metrics = [[female, height, amps[n], durations[n], form] for n in xrange(len(amps))]
+    dur_std = durations.std
+    sample_metrics = [[female, height, amps[n], durations[n], amp_std, dur_std, form] for n in xrange(len(amps))]
     return sample_metrics
+
+def one_rep_window(peakind, pushup_window, freq):
+    # use middle rep for example rep
+    middle_rep_ind = int(len(peakind) / 2)
+    rep_duration = peakind[middle_rep_ind] - peakind[middle_rep_ind-1] 
+    start = pushup_window[0]/freq + peakind[middle_rep_ind] - rep_duration
+    end = pushup_window[0]/freq + peakind[middle_rep_ind]
+    window_sec = (start, end)
+    window_ind = (int(start*freq), int(end*freq))
+    return window_ind, window_sec
 
 def calculate_rep_window(peakind, pushup_window, avg_duration, freq):
     start = pushup_window[0]/freq + peakind[0] - avg_duration

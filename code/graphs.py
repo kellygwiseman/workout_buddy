@@ -298,3 +298,21 @@ def plot_situps(data, situp_window, peakind, feature, freq, sample):
     #plt.ylim(-1.0, 1.0)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/su_reps-'+sample+'.png');
+
+def plot_oge_rep(ind, rep_window_list, data, features, freq, samples):
+    rcParams['axes.color_cycle'] = dark2_colors
+    fig1 = plt.figure()
+    for f in xrange(len(features)):
+        fig = plt.figure()
+        for i in xrange(len(ind)):
+            rep_data = data.ix[rep_window_list[i][0]:rep_window_list[i][1]]
+            time = np.arange(0,rep_data.shape[0],1) / freq
+            plt.plot(time, rep_data[features[f]], label=samples[i])
+        plt.title(features[f])
+        plt.xlabel('Time (Seconds)')
+        plt.xlim(0,time[-1])
+        ymin, ymax = plt.ylim()
+        ydiff = ymax - ymin
+        plt.ylim(ymin - 0.1*ydiff, ymax)
+        plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
+        plt.savefig('../figures/'+features[f]+ind[0]+'_'+ind[1]+'_'+ind[2]+'.png');
