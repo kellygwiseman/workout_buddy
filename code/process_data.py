@@ -232,7 +232,7 @@ class ProcessData(object):
 		window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
 		# Repetition windows
-		multiple_rep_windows = dp.calculate_multiple_rep_window(peakind, window_ind, freq)
+		multiple_rep_windows = dp.calculate_multiple_rep_window(peakind, pushup_window, window_ind, freq)
 
 		# add repetition metrics to list
 		sample_metrics = dp.rep_metrics(df_filt, peakind, pushup_window, feature, freq, female, height, form)

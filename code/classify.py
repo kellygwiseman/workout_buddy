@@ -141,7 +141,7 @@ class ClassifyRep(object):
 		X = np.array([xi - xi[0] for xi in X])
 		m = get_model(pickle_mdl)
 		y_pred, proba = m.predict(X)
-		return y_pred
+		return X, y_pred, proba
 		
 	def _print_iteration_metrics(self, y_test, y_pred, i):
 		acc = metrics.accuracy_score(y_test, y_pred)

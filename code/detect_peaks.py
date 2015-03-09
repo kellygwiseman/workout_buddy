@@ -136,8 +136,8 @@ def rep_metrics(data, peakind, pushup_window, feature, freq, female, height, for
     amps = data.ix[ind][feature].values
     durations = [peakind[n+1] - peakind[n] for n in xrange(len(peakind) - 1)]
     durations.insert(0, durations[0])
-    #sample_metrics = [[female, height, amps[n], durations[n], form] for n in xrange(len(amps))]
-    sample_metrics = [[female, height, amps[n] / height, durations[n], form] for n in xrange(len(amps))] # scale amplitude by height
+    sample_metrics = [[female, height, amps[n], durations[n], form] for n in xrange(len(amps))]
+    #sample_metrics = [[female, height, amps[n] * (1.0 / height), durations[n], form] for n in xrange(len(amps))] # scale amplitude by height
     return sample_metrics
 
 def avg_rep_metrics(data, peakind, pushup_window, feature, freq, female, height, form):
@@ -151,8 +151,8 @@ def avg_rep_metrics(data, peakind, pushup_window, feature, freq, female, height,
     durations = [peakind[n+1] - peakind[n] for n in xrange(len(peakind) - 1)]
     avg_dur = np.mean(durations)
     dur_std = np.std(durations)
-    #sample_metrics = [female, height, avg_amps, avg_dur, amp_std, dur_std, form]
-    sample_metrics = [female, height, avg_amps / height, avg_dur, amp_std, dur_std, form] # scale amplitude by height
+    sample_metrics = [female, height, avg_amps, avg_dur, amp_std, dur_std, form]
+    #sample_metrics = [female, height, avg_amps * (1.0 / height), avg_dur, amp_std, dur_std, form] # scale amplitude by height
     return sample_metrics
 
 def one_rep_window(peakind, pushup_window, freq):
@@ -172,9 +172,9 @@ def calculate_total_rep_window(peakind, pushup_window, avg_duration, freq):
     window_ind = (int(start*freq), int(end*freq))
     return window_ind
 
-def calculate_multiple_rep_window(peakind, window_ind, freq):
-    first = [(window_ind[0], window_ind[0]+int(peakind[0]*freq))]
-    multiple_window = [(window_ind[0]+int(peakind[n]*freq), window_ind[0]+int(peakind[n+1]*freq)) for n in xrange(len(peakind)-1)]
+def calculate_multiple_rep_window(peakind, pushup_window, window_ind, freq):
+    first = [(window_ind[0], pushup_window[0]+int(peakind[0]*freq))]
+    multiple_window = [(pushup_window[0]+int(peakind[n]*freq), pushup_window[0]+int(peakind[n+1]*freq)) for n in xrange(len(peakind)-1)]
     multiple_window.insert(0, first[0])
     return multiple_window
 

@@ -293,6 +293,19 @@ def plot_pushups(data, pushup_window, window_ind, peakind, feature, freq, sample
     plt.savefig('../figures/pushup_reps/pu_reps-'+sample+'.png');
     plt.close(fig1)
 
+def plot_ts(ts, component, sample, avg_length=34, freq=20.0):
+    
+    time = np.arange(0,avg_length,1)/freq
+    for c in xrange(len(component)):
+        fig = plt.figure(figsize=(12,5))
+        for t in xrange(len(ts[c])):
+            plt.xlim(0,2.0)
+            plt.plot(time, ts[c][t], label=component[c]+str(t+1))
+            plt.xlabel('Time (Seconds)')
+        plt.legend(loc='upper right', ncol=1, bbox_to_anchor=(1.0, 1.0), frameon=False, columnspacing=1, borderpad=0.1)
+        plt.savefig('../figures/pushup_ts/pu_ts-'+component[c]+'_'+sample+'.png');
+        plt.close(fig)
+
 def plot_situps(data, situp_window, peakind, feature, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
     # separate out pushup data and convert everything to seconds (from frequency)
@@ -317,22 +330,3 @@ def plot_situps(data, situp_window, peakind, feature, freq, sample):
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/situp_reps/su_reps-'+sample+'.png');
     plt.close(fig1)
-
-def plot_oge_rep(ind, rep_window_list, data, features, freq, samples):
-    rcParams['axes.color_cycle'] = dark2_colors
-    fig1 = plt.figure()
-    for f in xrange(len(features)):
-        fig = plt.figure()
-        for i in xrange(len(ind)):
-            rep_data = data.ix[rep_window_list[i][0]:rep_window_list[i][1]]
-            time = np.arange(0,rep_data.shape[0],1) / freq
-            plt.plot(time, rep_data[features[f]], label=samples[i])
-        plt.title(features[f])
-        plt.xlabel('Time (Seconds)')
-        plt.xlim(0,time[-1])
-        ymin, ymax = plt.ylim()
-        ydiff = ymax - ymin
-        plt.ylim(ymin - 0.1*ydiff, ymax)
-        plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-        plt.savefig('../figures/'+features[f]+ind[0]+'_'+ind[1]+'_'+ind[2]+'.png');
-        plt.close(fig1)
