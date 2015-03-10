@@ -1,6 +1,6 @@
 user_id,timestamp,name,exercise,hertz,count,phone,stance,height (inches), female, form, comments
 1, 2015-02-21_12-35-35, Tali, pushup, 20, 10, ip5, normal, 66, 1, ok, did not go down very far
-2, 2015-02-21_18-55-31, Jess, pushup, 20, 10, ip5, normal, 64, 1, ok, did not go down all the way
+2, 2015-02-21_18-55-31, Jess, pushup, 20, 10, ip5, normal, 64, 1, ok, went down medium with good form
 3, 2015-02-21_18-57-33, Sam, pushup, 20, 10, ip5, normal, 70, 0, good, pretty good form
 4, 2015-02-21_18-59-09, Nick, pushup, 20, 10, ip5, normal, 70, 0, good, pretty good form
 5, 2015-02-21_19-00-14, JustinS, pushup, 20, 10, ip5, normal, 78, 0, good, pretty good a little sloppy

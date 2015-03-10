@@ -11,6 +11,8 @@ dark2_colors = brewer2mpl.get_map('Dark2', 'Qualitative', 7).mpl_colors
 Idx = [0,1,2,3,6,4,5]
 dark2_colors = [dark2_colors[i] for i in Idx]
 pair_colors = brewer2mpl.get_map('Paired', 'Qualitative', 8).mpl_colors
+RYG_colors = brewer2mpl.get_map('RdYlGn', 'Diverging', 10).mpl_colors
+spectral_colors = brewer2mpl.get_map('Spectral', 'Diverging', 10).mpl_colors
 rcParams['figure.figsize'] = (8, 5)
 rcParams['figure.dpi'] = 150
 rcParams['axes.color_cycle'] = dark2_colors
@@ -293,14 +295,17 @@ def plot_pushups(data, pushup_window, window_ind, peakind, feature, freq, sample
     plt.savefig('../figures/pushup_reps/pu_reps-'+sample+'.png');
     plt.close(fig1)
 
-def plot_ts(ts, component, sample, avg_length=34, freq=20.0):
-    
+def plot_ts(B, ts, component, sample, avg_length=34, freq=20.0):
+    rcParams['axes.color_cycle'] = spectral_colors
     time = np.arange(0,avg_length,1)/freq
+    time2 = np.arange(0,avg_length-1,1)/freq
     for c in xrange(len(component)):
         fig = plt.figure(figsize=(12,5))
         for t in xrange(len(ts[c])):
+            if t == 0:
+                plt.plot(time, B[0], ':', lw=2, color='k', alpha=0.4, label='optimal')
             plt.xlim(0,2.0)
-            plt.plot(time, ts[c][t], label=component[c]+str(t+1))
+            plt.plot(time, ts[c][t], label='rep '+str(t+1))
             plt.xlabel('Time (Seconds)')
         plt.legend(loc='upper right', ncol=1, bbox_to_anchor=(1.0, 1.0), frameon=False, columnspacing=1, borderpad=0.1)
         plt.savefig('../figures/pushup_ts/pu_ts-'+component[c]+'_'+sample+'.png');

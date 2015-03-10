@@ -31,7 +31,7 @@ class ClassifyRep(object):
 		sss = StratifiedShuffleSplit(self.labels, n_iter = n_iter, test_size = test_size, random_state=random_state)
 		return sss
 
-	def random_forest(self, sss, stance, n_est=50, max_feat=2, max_depth=2, pickle=False):
+	def random_forest(self, sss, stance, n_est=50, max_feat=2, max_depth=2, prob=False, pickle=False):
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
@@ -45,8 +45,10 @@ class ClassifyRep(object):
 		    y_pred = rf.predict(X_test)
 		    y_prob = rf.predict_proba(X_test)
 		    self._print_iteration_metrics(y_test, y_pred, i)
-		    #pred_list.append(y_prob[:,1])
-		    pred_list.append(y_pred)
+		    if prob:
+		    	pred_list.append(y_prob[:,1])
+		    else:
+		    	pred_list.append(y_pred)
 		    i+=1
 
 		print 'Average accuracy and std:', np.mean(self.acc_list), np.std(self.acc_list)
@@ -58,7 +60,7 @@ class ClassifyRep(object):
 			rf.fit(self.X, self.labels)
 			save_model(rf, "../models/rf"+'_n'+str(n_est)+'_mf'+str(max_feat)+'_md'+str(max_depth)+'_'+stance+'.pkl' )
 
-	def support_vector_machine(self, sss, stance, C = 20, gamma = 0.1, pickle=False):
+	def support_vector_machine(self, sss, stance, C = 20, gamma = 0.1, prob=False, pickle=False):
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
@@ -67,11 +69,15 @@ class ClassifyRep(object):
 		for train_index, test_index in sss:
 		    X_train, X_test = self.X[train_index], self.X[test_index]
 		    y_train, y_test = self.labels[train_index], self.labels[test_index]
-		    svm = SVC(C=C, gamma=gamma)
+		    svm = SVC(class_weight = 'auto', C = C, gamma = gamma, probability = True)
 		    svm.fit(X_train, y_train)
 		    y_pred = svm.predict(X_test)
+		    y_prob = svm.predict_proba(X_test)
 		    self._print_iteration_metrics(y_test, y_pred, i)
-		    pred_list.append(y_pred)
+		    if prob:
+		    	pred_list.append(y_prob[:,1])
+		    else:
+		    	pred_list.append(y_pred)
 		    i+=1
 
 		print 'Average accuracy and std:', np.mean(self.acc_list), np.std(self.acc_list)
@@ -79,11 +85,11 @@ class ClassifyRep(object):
 		print 'Average recall and std:', np.mean(self.recall_list), np.std(self.recall_list)
 		self.pred_list.append(pred_list)
 		if pickle:      
-			svm = SVC(C=C, gamma=gamma)
+			svm = SVC(class_weight='auto', C = C, gamma = gamma, probability = True)
 			svm.fit(self.X, self.labels)
 			save_model(svm, "../models/svm"+'_C'+str(C)+'_g'+str(gamma)+'_'+stance+'.pkl')
 
-	def dtw_kNN(self, sss, ts, stance, component, avg_length=34, n_neighbors=4, max_warping_window=10, pickle=False):
+	def dtw_kNN(self, sss, ts, stance, component, avg_length=34, n_neighbors=4, max_warping_window=10, prob=False, pickle=False):
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
@@ -98,8 +104,14 @@ class ClassifyRep(object):
 			y_train, y_test = self.labels[train_index], self.labels[test_index]
 			m = KnnDtw(n_neighbors=n_neighbors, max_warping_window=max_warping_window)
 			m.fit(X_train, y_train)
-			y_pred, proba = m.predict(X_test)
-			pred_list.append(y_pred)
+			y_pred, y_prob = m.predict(X_test)
+			for i in xrange(len(y_pred)):
+				if y_pred[i] == 0:
+					y_prob[i] = 1 - y_prob[i]
+			if prob:
+				pred_list.append(y_prob)
+			else:
+				pred_list.append(y_pred)
 			self._print_iteration_metrics(y_test, y_pred, i)
 			i+=1
 
@@ -132,7 +144,8 @@ class ClassifyRep(object):
 	def predict(self, pickle_mdl, X):
 		m = get_model(pickle_mdl)
 		y_pred = m.predict(X)
-		return y_pred
+		y_prob = m.predict_proba(X)
+		return y_pred, y_prob
 
 	def predict_ts(self, pickle_mdl, ts, component, avg_length=34):
 		# resample to average length
@@ -140,8 +153,11 @@ class ClassifyRep(object):
 		# initialize rep to 0
 		X = np.array([xi - xi[0] for xi in X])
 		m = get_model(pickle_mdl)
-		y_pred, proba = m.predict(X)
-		return X, y_pred, proba
+		y_pred, y_prob = m.predict(X)
+		for i in xrange(len(y_pred)):
+			if y_pred[i] == 0:
+				y_prob[i] = 1 - y_prob[i]
+		return X, y_pred, y_prob
 		
 	def _print_iteration_metrics(self, y_test, y_pred, i):
 		acc = metrics.accuracy_score(y_test, y_pred)
