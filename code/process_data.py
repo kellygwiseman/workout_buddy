@@ -226,20 +226,36 @@ class ProcessData(object):
 		mpd = (0.5 * freq) + (0.25 * freq * female) # minimum peak separation distance
 		feature = 'motionPitch'
 		peakind, count = dp.count_peaks(df_filt, pushup_window, feature, mph, mpd, freq)
-		avg_amp = dp.average_amplitude(df_filt, peakind, pushup_window, feature, freq)
 		avg_dur = dp.average_duration(peakind, count)
 
 		# Final tight pushup repetition window
 		window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
+		print window_ind
+
+		# Final peak parameters using unfiltered data
+		mph = -0.6 # minimum peak height
+		mpd = (0.5 * freq) + (0.25 * freq * female) # minimum peak separation distance
+		peakmin, count_min = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=True)
+		print peakmin
+		print count_min
+
+		mph = 1.0 # minimum peak height
+		mpd = (0.5 * freq) + (0.6 * freq * female) # minimum peak separation distance
+		peakmax, count_max = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=False)
+		print peakmax
+		print count_max
 
 		# Repetition windows
-		multiple_rep_windows = dp.calculate_multiple_rep_window(peakind, pushup_window, window_ind, freq)
+		#multiple_rep_windows = dp.calculate_multiple_rep_window(peakind, pushup_window, window_ind, freq)
+		multiple_rep_windows = dp.calculate_multiple_rep_window(peakmax, window_ind, freq)
 
 		# add repetition metrics to list
-		sample_metrics = dp.rep_metrics(df_filt, peakind, pushup_window, feature, freq, female, height, form)
+		#sample_metrics = dp.rep_metrics(df_filt, peakind, pushup_window, feature, freq, female, height, form)
+		sample_metrics = dp.rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
+		avg_amp = dp.average_amplitude(df_num, peakmin, peakmax, window_ind, feature, freq)
 
 		# add results to dataframe
-		self.info.loc[0, 'Pcount'] = count
+		self.info.loc[0, 'Pcount'] = count_min
 		self.info.loc[0, 'avg_amp'] = avg_amp
 		self.info.loc[0, 'avg_dur'] = avg_dur
 
@@ -266,7 +282,8 @@ class ProcessData(object):
 			# Plot the feature correlations
 			gr.plot_corr(df_filt, correls, freq, sample)
 			# Plot pushup repetitions
-			gr.plot_pushups(df_filt, pushup_window, window_ind, peakind, feature, freq, sample)
+			#gr.plot_pushups(df_filt, pushup_window, window_ind, peakind, feature, freq, sample)
+			gr.plot_pushups(df_num, window_ind, peakmax, feature, freq, sample)
 
 		## Write processed data to files ##
 		# write processed data to csv file

@@ -9,14 +9,16 @@ from scipy import signal
 if __name__ == '__main__':
 	# process one sample
 	info = pd.read_csv('../data/test_sample.csv', skipinitialspace=True)
-	p = ProcessData(info,'all',plot=False)
+	p = ProcessData(info,'all',plot=True)
 	data_arr, ts_arr, timestamp, sample = p.process_one_sample()
 
 	# optimal pitch
-	example_ts = np.load('../processed/pushup_raw_ts_one_all_70h.npy')[0,34]
-	B = [signal.resample(example_ts, 34)]
+	example_ts = np.load('../processed/pushup_raw_ts_one_all.npy')[0,34]
+	#print(example_ts[0])
+	#B = [signal.resample(example_ts, 34)]
 	# initialize rep to 0
-	B = np.array([xi - xi[0] for xi in B])
+	B = np.array([xi - xi[0] for xi in [example_ts]])
+	#B = np.array(example_ts)
 
 	# select features to include in prediction model
 	X = data_arr[:,[2,3]].astype(float) # just the amplitude and duration
@@ -56,4 +58,4 @@ if __name__ == '__main__':
 	print 'ensemble probability:', w_prob
 	print 'ensemble prediction:', w_prob_true
 	pg.daily_reps(timestamp[0].hour, w_prob, sample)
-	pg.plot_ts(B, p, sample, avg_length=34, freq=20.0)
+	pg.plot_ts(B, p, sample, freq=20.0)

@@ -59,7 +59,7 @@ def daily_reps(timestamp, w_prob, sample):
     	)
 	)
 	fig = Figure(data=data, layout=layout)
-	py.image.save_as(fig, '../figures/daily/daily_'+sample+'.png')
+	py.image.save_as(fig, '../figures/daily/daily_'+sample+'.svg')
 	#plot_url = py.plot(fig, filename='daily_'+sample)
 
 def make_trace(x, y, name, color):  
@@ -70,24 +70,29 @@ def make_trace(x, y, name, color):
         line=dict(color='rgb('+str(color[0])+','+str(color[1])+','+str(color[2])+')')
     )
 
-def plot_ts(B, ts, sample, avg_length=34, freq=20.0):
-	time = np.arange(0,avg_length,1)/freq
-	traceB = make_trace(time, B[0], 'optimal', [200,200,200])
-	trace = [make_trace(time, ts[i], str(i+1), spectral_colors[i]) for i in xrange(len(ts))]
+def rad_to_degree(rad):
+	return [rad[r]*180.0 / np.pi for r in xrange(len(rad))]
+
+def calculate_time_axis(ts, freq):
+	return np.arange(0, len(ts), 1) / freq
+
+def plot_ts(B, ts, sample, freq=20.0):
+	traceB = make_trace(calculate_time_axis(B, freq), rad_to_degree(B[0]), 'optimal', [200,200,200])
+	trace = [make_trace(calculate_time_axis(ts[i], freq), rad_to_degree(ts[i]), str(i+1), spectral_colors[i]) for i in xrange(len(ts))]
 	trace.insert(0, traceB)
 	data = Data(trace)
 	layout = Layout(
 	    barmode='stack',
-	    title='Latest Reps',
+	    title='Last Set of Reps',
 	    yaxis=YAxis(
-        	title='Pitch (radians)',
+        	title='Pitch (degrees)',
         	titlefont=Font(
             	size=16,
             	color='rgb(107, 107, 107)'
         	)
     	),
     	xaxis=XAxis(
-    		title='Duration (Seconds)',
+    		title='Duration (seconds)',
     		titlefont=Font(
             	size=16,
             	color='rgb(107, 107, 107)'
@@ -97,7 +102,7 @@ def plot_ts(B, ts, sample, avg_length=34, freq=20.0):
     	width=400,
     	height=300,
     	margin=Margin(
-        	l=45,
+        	l=55,
         	r=45,
         	b=45,
         	t=30,
@@ -105,4 +110,4 @@ def plot_ts(B, ts, sample, avg_length=34, freq=20.0):
     	)
 	)
 	fig = Figure(data=data, layout=layout)
-	py.image.save_as(fig, '../figures/pushup_ts/pu_ts-Pitch_'+sample+'.png')
+	py.image.save_as(fig, '../figures/pushup_ts/pu_ts-Pitch_'+sample+'.svg')

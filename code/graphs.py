@@ -270,11 +270,11 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.savefig('../figures/bp_filter/pu_bp_quat-'+sample+'.png');
     plt.close(fig4)
 
-def plot_pushups(data, pushup_window, window_ind, peakind, feature, freq, sample):
+def plot_pushups(data, window_ind, peakmax, feature, freq, sample):
     rcParams['axes.color_cycle'] = dark2_colors
     # separate out pushup data and convert everything to seconds (from frequency)
     time = data.index.values / freq
-    pushup_start = pushup_window[0] / freq # for marking the peaks
+    pushup_start = window_ind[0] / freq # for marking the peaks
     pushup_time = time[window_ind[0]:(window_ind[1]+1)] # for plotting the duration
     pushup_data = data.ix[window_ind[0]:window_ind[1]]
     
@@ -284,13 +284,13 @@ def plot_pushups(data, pushup_window, window_ind, peakind, feature, freq, sample
     plt.plot(pushup_time, pushup_data[feature], label='Push-up duration')
     
     # Mark push-up repetitions
-    plt.scatter(pushup_start + peakind,np.linspace(0.0,0.0,num=len(peakind)), color='r',marker='x', lw=2, label='Push-ups')
+    plt.scatter([pushup_start + p for p in peakmax],np.linspace(0.0,0.0,num=len(peakmax)), color='r',marker='x', lw=2, label='Push-ups')
     plt.title('Push-up Repetitions')
     plt.ylabel('BP Filtered')
     plt.xlabel('Time (Seconds)')
     plt.xlim(0,time[-1])
     ymin, ymax = plt.ylim()
-    plt.ylim(-1.0, 1.0)
+    plt.ylim(-0.5, 1.5)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/pushup_reps/pu_reps-'+sample+'.png');
     plt.close(fig1)

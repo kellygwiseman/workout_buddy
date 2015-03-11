@@ -149,11 +149,13 @@ class ClassifyRep(object):
 
 	def predict_ts(self, pickle_mdl, ts, component, avg_length=34):
 		# resample to average length
-		X = [signal.resample(xi, avg_length) for xi in ts]
+		Xnorm = [signal.resample(xi, avg_length) for xi in ts]
 		# initialize rep to 0
-		X = np.array([xi - xi[0] for xi in X])
+		Xnorm = np.array([xi - xi[0] for xi in Xnorm])
+		# non-resampled data for plotting
+		X = np.array([xi - xi[0] for xi in ts])
 		m = get_model(pickle_mdl)
-		y_pred, y_prob = m.predict(X)
+		y_pred, y_prob = m.predict(Xnorm)
 		for i in xrange(len(y_pred)):
 			if y_pred[i] == 0:
 				y_prob[i] = 1 - y_prob[i]

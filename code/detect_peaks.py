@@ -115,68 +115,58 @@ def count_peaks(data, pushup_window, feature, mph, mpd, freq, valley=False):
     count = len(peakind)
     return peakind, count
 
-def average_amplitude(data, peakind, pushup_window, feature, freq):
-    ind = [int(x*freq) for x in peakind]
-    ind = [pushup_window[0] + x for x in ind]
-    amps = data.ix[ind][feature]
-    avg_amp = amps.mean()
-    return avg_amp
-
 def average_duration(peakind, count):
     # don't include the first repetition duration because we are counting peaks (the end of the pushup)
+    # for this initial average duration before we have the final pushup window
     duration = peakind[-1] - peakind[0]
     avg_dur = duration / (count - 1)
     return avg_dur
 
-def rep_metrics(data, peakind, pushup_window, feature, freq, female, height, form):
-    # Use the second duration for the first duration too because we don't have a 
-    # peak-to-peak time for the first repetition
-    ind = [int(x*freq) for x in peakind]
-    ind = [pushup_window[0] + x for x in ind]
-    amps = data.ix[ind][feature].values
-    durations = [peakind[n+1] - peakind[n] for n in xrange(len(peakind) - 1)]
-    durations.insert(0, durations[0])
+def average_amplitude(data, peakmin, peakmax, window_ind, feature, freq):
+    min_ind = [window_ind[0] + int(x*freq) for x in peakmin]
+    max_ind = [window_ind[0] + int(x*freq) for x in peakmax]
+    amps = [data.ix[max_ind[i]][feature] - data.ix[min_ind[i]][feature] for i in xrange(len(min_ind))]
+    avg_amp = np.mean(amps)
+    print(avg_amp)
+    return avg_amp
+
+def rep_metrics(data, peakmin, peakmax, window_ind, feature, freq, female, height, form):
+    min_ind = [window_ind[0] + int(x*freq) for x in peakmin]
+    max_ind = [window_ind[0] + int(x*freq) for x in peakmax]
+    amps = [data.ix[max_ind[i]][feature] - data.ix[min_ind[i]][feature] for i in xrange(len(min_ind))]
+    durations = [peakmax[n+1] - peakmax[n] for n in xrange(len(peakmax) - 1)]
     sample_metrics = [[female, height, amps[n], durations[n], form] for n in xrange(len(amps))]
-    #sample_metrics = [[female, height, amps[n] * (1.0 / height), durations[n], form] for n in xrange(len(amps))] # scale amplitude by height
     return sample_metrics
 
-def avg_rep_metrics(data, peakind, pushup_window, feature, freq, female, height, form):
-    # don't include the first repetition because we are looking at duration between peaks (the end of the pushup)
-    ind = [int(x*freq) for x in peakind]
-    ind = [pushup_window[0] + x for x in ind]
-    amps = data.ix[ind][feature].values
-    amps = amps[1:]
+def avg_rep_metrics(data, peakmin, peakmax, window_ind, feature, freq, female, height, form):
+    min_ind = [window_ind[0] + int(x*freq) for x in peakmin]
+    max_ind = [window_ind[0] + int(x*freq) for x in peakmax]
+    amps = [data.ix[max_ind[i]][feature] - data.ix[min_ind[i]][feature] for i in xrange(len(min_ind))]
     avg_amps = np.mean(amps)
     amp_std = np.std(amps)
-    durations = [peakind[n+1] - peakind[n] for n in xrange(len(peakind) - 1)]
+    durations = [peakmax[n+1] - peakmax[n] for n in xrange(len(peakmax) - 1)]
     avg_dur = np.mean(durations)
     dur_std = np.std(durations)
     sample_metrics = [female, height, avg_amps, avg_dur, amp_std, dur_std, form]
-    #sample_metrics = [female, height, avg_amps * (1.0 / height), avg_dur, amp_std, dur_std, form] # scale amplitude by height
     return sample_metrics
 
-def one_rep_window(peakind, pushup_window, freq):
+def one_rep_window(peakmax, window_ind, freq):
     # use middle rep for example rep
-    middle_rep_ind = int(len(peakind) / 2)
-    rep_duration = peakind[middle_rep_ind] - peakind[middle_rep_ind-1] 
-    start = pushup_window[0]/freq + peakind[middle_rep_ind] - rep_duration
-    end = pushup_window[0]/freq + peakind[middle_rep_ind]
+    middle_rep_ind = int(len(peakmax) / 2)
+    rep_duration = peakmax[middle_rep_ind] - peakmax[middle_rep_ind-1] 
+    start = window_ind[0]/freq + peakmax[middle_rep_ind] - rep_duration
+    end = window_ind[0]/freq + peakmax[middle_rep_ind]
     window_sec = (start, end)
     window_ind = (int(start*freq), int(end*freq))
     return window_ind
 
 def calculate_total_rep_window(peakind, pushup_window, avg_duration, freq):
-    start = pushup_window[0]/freq + peakind[0] - avg_duration
-    end = pushup_window[0]/freq + peakind[-1]
+    start = pushup_window[0]/freq + peakind[0] - avg_duration - 0.75
+    end = pushup_window[0]/freq + peakind[-1] + (avg_duration / 2)
     window_sec = (start, end)
     window_ind = (int(start*freq), int(end*freq))
     return window_ind
 
-def calculate_multiple_rep_window(peakind, pushup_window, window_ind, freq):
-    first = [(window_ind[0], pushup_window[0]+int(peakind[0]*freq))]
-    multiple_window = [(pushup_window[0]+int(peakind[n]*freq), pushup_window[0]+int(peakind[n+1]*freq)) for n in xrange(len(peakind)-1)]
-    multiple_window.insert(0, first[0])
+def calculate_multiple_rep_window(peakmax, window_ind, freq):
+    multiple_window = [(window_ind[0]+int(peakmax[n]*freq), window_ind[0]+int(peakmax[n+1]*freq)) for n in xrange(len(peakmax)-1)]
     return multiple_window
-
-
-
