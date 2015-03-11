@@ -108,7 +108,8 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
     return ind
 
 def count_peaks_initial(data, pushup_window, feature, mph, mpd, freq, valley=False, edge='falling'):
-    # calculate timing of push-up reps since start of pushup window (in seconds)
+    ''' Calculate initial timing of the press-up position since start of pushup window. 
+    Because the data is filtered, this won't include the starting up position. '''
     pushup_data = data.ix[pushup_window[0]:pushup_window[-1]]
     peakind = detect_peaks(pushup_data[feature], mph = mph, mpd = mpd, valley=valley)
     peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
@@ -116,7 +117,7 @@ def count_peaks_initial(data, pushup_window, feature, mph, mpd, freq, valley=Fal
     return peakind, count
 
 def count_peak_min(data, window_ind, feature, mph, mpd, freq, valley=False, edge='falling'):
-    # calculate timing of push-up reps since start of pushup window (in seconds)
+    ''' Calculate timing of the press-down position since start of pushup window'''
     pushup_data = data.ix[window_ind[0]:window_ind[-1]][feature].values
     # force the push-up reps to start at about 0 pitch amplitude
     pushup_data = [pushup_data[i] - pushup_data[0] for i in xrange(len(pushup_data))]
@@ -131,7 +132,8 @@ def count_peak_min(data, window_ind, feature, mph, mpd, freq, valley=False, edge
     return peakind, count, pushup_data
 
 def count_peak_max(data, peakmin_count, window_ind, feature, mph, mpd, freq, valley=False, edge='falling'):
-    # calculate timing of push-up reps since start of pushup window (in seconds)
+    ''' Calculate timing of the press-up position since start of pushup window.  This also include the starting
+    up position, so there is one more peak_max than peak_min.'''
     pushup_data = data.ix[window_ind[0]:window_ind[-1]][feature].values
     # force the push-up reps to start at about 0 pitch amplitude
     pushup_data = [pushup_data[i] - pushup_data[0] for i in xrange(len(pushup_data))]
@@ -195,8 +197,6 @@ def one_rep_window(peakmax, window_ind, freq):
     return window_ind
 
 def calculate_total_rep_window(peakind, pushup_window, avg_duration, freq):
-    #start = pushup_window[0]/freq + peakind[0] - avg_duration - 0.9
-    #end = pushup_window[0]/freq + peakind[-1] + (avg_duration / 2)
     start = pushup_window[0]/freq + peakind[0] - avg_duration - 0.6
     end = pushup_window[0]/freq + peakind[-1] + (avg_duration / 3)
     window_sec = (start, end)

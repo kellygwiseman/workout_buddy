@@ -77,15 +77,15 @@ def calculate_time_axis(ts, freq):
 	return np.arange(0, len(ts), 1) / freq
 
 def plot_ts(B, ts, sample, freq=20.0):
-	traceB = make_trace(calculate_time_axis(B, freq), rad_to_degree(B[0]), 'optimal', [200,200,200])
-	trace = [make_trace(calculate_time_axis(ts[i], freq), rad_to_degree(ts[i]), str(i+1), spectral_colors[i]) for i in xrange(len(ts))]
+	traceB = make_trace(calculate_time_axis(B[0], freq), rad_to_degree(B[0]), 'optimal', [150,150,150])
+	trace = [make_trace(calculate_time_axis(ts[i], freq), rad_to_degree(ts[i]), str(i+1), spectral_colors[i%10]) for i in xrange(len(ts))]
 	trace.insert(0, traceB)
 	data = Data(trace)
 	layout = Layout(
-	    barmode='stack',
 	    title='Last Set of Reps',
 	    yaxis=YAxis(
         	title='Pitch (degrees)',
+        	range = [-90, 10],
         	titlefont=Font(
             	size=16,
             	color='rgb(107, 107, 107)'
