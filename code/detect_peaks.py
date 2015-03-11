@@ -107,13 +107,22 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
 
     return ind
 
-def count_peaks(data, pushup_window, feature, mph, mpd, freq, valley=False):
+def count_peaks_initial(data, pushup_window, feature, mph, mpd, freq, valley=False, edge='falling'):
     # calculate timing of push-up reps since start of pushup window (in seconds)
     pushup_data = data.ix[pushup_window[0]:pushup_window[-1]]
     peakind = detect_peaks(pushup_data[feature], mph = mph, mpd = mpd, valley=valley)
     peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
     count = len(peakind)
     return peakind, count
+
+def count_peaks(data, window_ind, feature, mph, mpd, freq, valley=False, edge='falling'):
+    # calculate timing of push-up reps since start of pushup window (in seconds)
+    pushup_data = data.ix[window_ind[0]:window_ind[-1]][feature].values
+    pushup_data = [pushup_data[i] - pushup_data[0] for i in xrange(len(pushup_data))]
+    peakind = detect_peaks(pushup_data, mph = mph, mpd = mpd, valley=valley)
+    peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
+    count = len(peakind)
+    return peakind, count, pushup_data
 
 def average_duration(peakind, count):
     # don't include the first repetition duration because we are counting peaks (the end of the pushup)
@@ -161,7 +170,7 @@ def one_rep_window(peakmax, window_ind, freq):
     return window_ind
 
 def calculate_total_rep_window(peakind, pushup_window, avg_duration, freq):
-    start = pushup_window[0]/freq + peakind[0] - avg_duration - 0.75
+    start = pushup_window[0]/freq + peakind[0] - avg_duration - 0.9
     end = pushup_window[0]/freq + peakind[-1] + (avg_duration / 2)
     window_sec = (start, end)
     window_ind = (int(start*freq), int(end*freq))

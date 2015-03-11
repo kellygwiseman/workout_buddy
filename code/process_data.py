@@ -65,89 +65,103 @@ class ProcessData(object):
 
 		# Iterate through all the samples in info
 		for i in xrange(self.info.shape[0]):
-		    df = pd.read_csv('../data/sensor/'+ self.info.loc[i,'file'] + '.csv')
-		    sample = self.info.loc[i,'name'] + '_' + self.info.loc[i,'stance']
-		    female = self.info.loc[i,'female']
-		    freq = float(self.info.loc[i,'hertz'])
-		    height = self.info.loc[i,'height (inches)']
-		    form = self.info.loc[i,'form']
-		    df_num = df[numeric_features]
-		    
-		    # Bandpass filter the data to separate the noise from the pushup signal
-		    lowcut = 0.5
-		    highcut = 2.0
-		    order = 1
-		    df_filt = filter_features(df_num, numeric_features, lowcut, highcut, freq, order)
+			df = pd.read_csv('../data/sensor/'+ self.info.loc[i,'file'] + '.csv')
+			sample = self.info.loc[i,'name'] + '_' + self.info.loc[i,'stance']
+			female = self.info.loc[i,'female']
+			freq = float(self.info.loc[i,'hertz'])
+			height = self.info.loc[i,'height (inches)']
+			form = self.info.loc[i,'form']
+			df_num = df[numeric_features]
 
-		    # Calculate feature correlations
-		    rolling_window = 30
-		    correls = pd.rolling_corr(df_filt, rolling_window)
+			# Bandpass filter the data to separate the noise from the pushup signal
+			lowcut = 0.5
+			highcut = 2.0
+			order = 1
+			df_filt = filter_features(df_num, numeric_features, lowcut, highcut, freq, order)
 
-		    # Filter based on strength of feature correlations
-		    cond1 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
-		    cond2 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
-		             np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
-		             np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
-		             np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.5
+			# Calculate feature correlations
+			rolling_window = 30
+			correls = pd.rolling_corr(df_filt, rolling_window)
 
-		    # Trim the noisy first 2.5 seconds and last 1 seconds of sample record
-		    cond3 = df_filt.index > int(freq*2.5) 
-		    cond4 = df_filt.index < (df_filt.shape[0] - int(freq)) 
+			# Filter based on strength of feature correlations
+			cond1 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
+			cond2 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
+			         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
+			         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+			         np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.5
 
-		    # Initial pushup repetition window
-		    pushup_window = df_filt[cond1 & cond2 & cond3 & cond4].index
+			# Trim the noisy first 2.5 seconds and last 1 seconds of sample record
+			cond3 = df_filt.index > int(freq*2.5) 
+			cond4 = df_filt.index < (df_filt.shape[0] - int(freq)) 
 
-		    ## Count the number of pushup repetitions ##
-		    # Peak parameters
-		    mph = 0.2 - (0.025 * female) # minimum peak height
-		    mpd = (0.5 * freq) + (0.25 * freq * female) # minimum peak separation distance
-		    feature = 'motionPitch'
-		    peakind, count = dp.count_peaks(df_filt, pushup_window, feature, mph, mpd, freq)
-		    avg_amp = dp.average_amplitude(df_filt, peakind, pushup_window, feature, freq)
-		    avg_dur = dp.average_duration(peakind, count)
+			# Initial pushup repetition window
+			pushup_window = df_filt[cond1 & cond2 & cond3 & cond4].index
 
-		    # Final tight pushup repetition window
-		    window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
-		    # Middle repetition window
-		    rep_window_ind = dp.one_rep_window(peakind, pushup_window, freq)
+			## Count the number of pushup repetitions ##
+			# Calculate initial peak parameters using filtered data
+			mph = 0.2 - (0.025 * female) # minimum peak height
+			mpd = (0.5 * freq) + (0.25 * freq * female) # minimum peak separation distance
+			feature = 'motionPitch'
+			peakind, count = dp.count_peaks_initial(df_filt, pushup_window, feature, mph, mpd, freq)
+			avg_dur = dp.average_duration(peakind, count)
 
-		    # add repetition metrics to list
-		    sample_metrics = dp.rep_metrics(df_filt, peakind, pushup_window, feature, freq, female, height, form)
-		    rep_metrics_list.append([np.array(sample_metrics),form])
-		    avg_metrics = dp.avg_rep_metrics(df_filt, peakind, pushup_window, feature, freq, female, height, form)
-		    avg_metrics_list.append(avg_metrics)
+			# Final tight pushup repetition window
+			window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
-		    # add results to dataframe
-		    self.info.loc[i, 'Pcount'] = count
-		    self.info.loc[i, 'avg_amp'] = avg_amp
-		    self.info.loc[i, 'avg_dur'] = avg_dur
+			# Calculate final peak parameters using unfiltered data
+			mph = 0.5 # minimum peak height
+			mpd = (0.7 * freq) + (0.5 * freq * female) # minimum peak separation distance
+			peakmin, count_min, pushup_data = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=True)
+			print count_min
+			mph = -0.5 # minimum peak height
+			mpd = (0.7 * freq) + (0.6 * freq * female) # minimum peak separation distance
+			peakmax, count_max, pushup_data = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=False)
+			print count_max
+			gr.plot_pushups(df_num, pushup_data, window_ind, peakmax, feature, freq, sample)
 
-		    # add repetition time series to feature lists
-		    pushup_data = df_num.ix[window_ind[0]:window_ind[1]]
-		    pitch_ts.append(pushup_data['motionPitch'].tolist())
-		    accY_ts.append(pushup_data['accelerometerAccelerationY'].tolist())
-		    accZ_ts.append(pushup_data['accelerometerAccelerationZ'].tolist())
-		    quatY_ts.append(pushup_data['motionQuaternionY'].tolist())
-		    
-		    # add middle repetition time series to feature lists
-		    rep_data = df_num.ix[rep_window_ind[0]:rep_window_ind[1]]
-		    pitch_one_ts.append(rep_data['motionPitch'].tolist())
-		    accY_one_ts.append(rep_data['accelerometerAccelerationY'].tolist())
-		    accZ_one_ts.append(rep_data['accelerometerAccelerationZ'].tolist())
-		    quatY_one_ts.append(rep_data['motionQuaternionY'].tolist())
+			# Middle repetition window
+			rep_window_ind = dp.one_rep_window(peakmax, window_ind, freq)
 
-		    if self.plot:
-		    	# Plot raw data #
-		    	gr.plot1_acceleration(df_num, freq, sample)
-		    	gr.plot1_gyro(df_num, freq, sample)
-		    	gr.plot1_motion(df_num, freq, sample)
-		    	gr.plot1_quaternion(df_num, freq, sample)
-		    	# Plot the filtered data
-		    	gr.plot_bandpass(df_num, df_filt, freq, lowcut, highcut, sample)
-		    	# Plot the feature correlations
-		    	gr.plot_corr(df_filt, correls, freq, sample)
-		    	# Plot pushup repetitions
-		    	gr.plot_pushups(df_filt, pushup_window, window_ind, peakind, feature, freq, sample)
+			# add repetition metrics to list
+			avg_amp = dp.average_amplitude(df_num, peakmin, peakmax, window_ind, feature, freq)
+			sample_metrics = dp.rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
+			rep_metrics_list.append([np.array(sample_metrics),form])
+			avg_metrics = dp.avg_rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
+			avg_metrics_list.append(avg_metrics)
+
+			# add results to dataframe
+			self.info.loc[i, 'Pcount'] = count_min
+			self.info.loc[i, 'avg_amp'] = avg_amp
+			self.info.loc[i, 'avg_dur'] = avg_dur
+
+			# add repetition time series to feature lists
+			pushup_data = df_num.ix[window_ind[0]:window_ind[1]]
+			pitch_ts.append(pushup_data['motionPitch'].tolist())
+			accY_ts.append(pushup_data['accelerometerAccelerationY'].tolist())
+			accZ_ts.append(pushup_data['accelerometerAccelerationZ'].tolist())
+			quatY_ts.append(pushup_data['motionQuaternionY'].tolist())
+
+			# add middle repetition time series to feature lists
+			rep_data = df_num.ix[rep_window_ind[0]:rep_window_ind[1]]
+			pitch_one_ts.append(rep_data['motionPitch'].tolist())
+			accY_one_ts.append(rep_data['accelerometerAccelerationY'].tolist())
+			accZ_one_ts.append(rep_data['accelerometerAccelerationZ'].tolist())
+			quatY_one_ts.append(rep_data['motionQuaternionY'].tolist())
+
+			if self.plot:
+				# Plot raw data #
+				gr.plot1_acceleration(df_num, freq, sample)
+				gr.plot1_gyro(df_num, freq, sample)
+				gr.plot1_motion(df_num, freq, sample)
+				gr.plot1_quaternion(df_num, freq, sample)
+				# Plot the filtered data
+				gr.plot_bandpass(df_num, df_filt, freq, lowcut, highcut, sample)
+				# Plot the feature correlations
+				gr.plot_corr(df_filt, correls, freq, sample)
+				# Plot pushup repetitions
+				#gr.plot_pushups(df_filt, pushup_window, window_ind, peakind, feature, freq, sample)
+				#gr.plot_pushups(df_num, window_ind, peakmax, feature, freq, sample)
+				#gr.plot_pushups(df_num, window_ind, peakmin, feature, freq, sample)
 
 	    ## Write processed data to files ##
 	    # write processed data to csv file
@@ -221,29 +235,26 @@ class ProcessData(object):
 		pushup_window = df_filt[cond1 & cond2 & cond3 & cond4].index
 
 		## Count the number of pushup repetitions ##
-		# Peak parameters
+		# Calculate initial peak parameters using filtered data
 		mph = 0.2 - (0.025 * female) # minimum peak height
 		mpd = (0.5 * freq) + (0.25 * freq * female) # minimum peak separation distance
 		feature = 'motionPitch'
-		peakind, count = dp.count_peaks(df_filt, pushup_window, feature, mph, mpd, freq)
+		peakind, count = dp.count_peaks_initial(df_filt, pushup_window, feature, mph, mpd, freq)
 		avg_dur = dp.average_duration(peakind, count)
 
 		# Final tight pushup repetition window
 		window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
-		print window_ind
 
-		# Final peak parameters using unfiltered data
-		mph = -0.6 # minimum peak height
-		mpd = (0.5 * freq) + (0.25 * freq * female) # minimum peak separation distance
-		peakmin, count_min = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=True)
-		print peakmin
+		# Calculate final peak parameters using unfiltered data
+		mph = 0.5 # minimum peak height
+		mpd = (0.7 * freq) + (0.6 * freq * female) # minimum peak separation distance
+		peakmin, count_min, pushup_data = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 		print count_min
-
-		mph = 1.0 # minimum peak height
-		mpd = (0.5 * freq) + (0.6 * freq * female) # minimum peak separation distance
-		peakmax, count_max = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=False)
-		print peakmax
+		mph = -0.5 # minimum peak height
+		mpd = (0.8 * freq) + (0.6 * freq * female) # minimum peak separation distance
+		peakmax, count_max, pushup_data = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=False)
 		print count_max
+		gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, feature, freq, sample)
 
 		# Repetition windows
 		#multiple_rep_windows = dp.calculate_multiple_rep_window(peakind, pushup_window, window_ind, freq)
@@ -283,7 +294,7 @@ class ProcessData(object):
 			gr.plot_corr(df_filt, correls, freq, sample)
 			# Plot pushup repetitions
 			#gr.plot_pushups(df_filt, pushup_window, window_ind, peakind, feature, freq, sample)
-			gr.plot_pushups(df_num, window_ind, peakmax, feature, freq, sample)
+			#gr.plot_pushups(df_num, window_ind, peakmax, feature, freq, sample)
 
 		## Write processed data to files ##
 		# write processed data to csv file

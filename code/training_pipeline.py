@@ -5,13 +5,13 @@ import numpy as np
 
 if __name__ == '__main__':
 	# process samples
-	#info = pd.read_csv('../data/pushup_info.csv', skipinitialspace=True)
-	#p = ProcessData(info,'normal',plot=False)
-	#data_arr, ts_arr = p.batch_process_samples()
+	info = pd.read_csv('../data/pushup_info.csv', skipinitialspace=True)
+	p = ProcessData(info,'all',plot=True)
+	data_arr, ts_arr = p.batch_process_samples()
 
 	# select features to include in to training model
-	data_arr = np.load('../processed/pushup_avg_metrics_all.npy')
-	ts_arr = np.load('../processed/pushup_raw_ts_one_all.npy')
+	#data_arr = np.load('../processed/pushup_avg_metrics_all.npy')
+	#ts_arr = np.load('../processed/pushup_raw_ts_one_all.npy')
 	X = data_arr[:,[2,3]].astype(float) # just the amplitude and duration
 	labels = data_arr[:,-1]
 	labels[labels =='excellent'] = 1
