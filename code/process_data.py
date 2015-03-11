@@ -172,6 +172,7 @@ class ProcessData(object):
 
 	def process_one_sample(self):
 		self._process_info()
+		timestamp = self.info['timestamp']
 		numeric_features = ['motionUserAccelerationX', 'motionUserAccelerationY', 'motionUserAccelerationZ',
                     'motionRotationRateX', 'motionRotationRateY', 'motionRotationRateZ',
                     'accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
@@ -280,4 +281,4 @@ class ProcessData(object):
 		ts_arr = np.array([pitch_ts, accY_ts, accZ_ts, quatY_ts])
 		np.save('../processed/pushup_raw_ts_'+sample+'.npy', ts_arr)
 
-		return data_arr, ts_arr
+		return data_arr, ts_arr, self.info['timestamp'], sample

@@ -298,17 +298,18 @@ def plot_pushups(data, pushup_window, window_ind, peakind, feature, freq, sample
 def plot_ts(B, ts, component, sample, avg_length=34, freq=20.0):
     rcParams['axes.color_cycle'] = spectral_colors
     time = np.arange(0,avg_length,1)/freq
-    time2 = np.arange(0,avg_length-1,1)/freq
     for c in xrange(len(component)):
-        fig = plt.figure(figsize=(12,5))
+        fig = plt.figure(figsize=(10,5))
         for t in xrange(len(ts[c])):
             if t == 0:
                 plt.plot(time, B[0], ':', lw=2, color='k', alpha=0.4, label='optimal')
+                plt.ylabel('Pitch (radians)')
             plt.xlim(0,2.0)
-            plt.plot(time, ts[c][t], label='rep '+str(t+1))
-            plt.xlabel('Time (Seconds)')
-        plt.legend(loc='upper right', ncol=1, bbox_to_anchor=(1.0, 1.0), frameon=False, columnspacing=1, borderpad=0.1)
-        plt.savefig('../figures/pushup_ts/pu_ts-'+component[c]+'_'+sample+'.png');
+            plt.plot(time, ts[c][t], label=str(t+1))
+            plt.xlabel('Time (seconds)')
+        plt.title('Push-up Repetitions')
+        plt.legend(loc='upper right', title = 'Push-up Reps', ncol=1, bbox_to_anchor=(1.0, 1.0), fontsize=14, frameon=False, columnspacing=1, borderpad=0.1)
+        plt.savefig('../figures/pushup_ts/pu_ts-'+component[c]+'_'+sample+'.png')
         plt.close(fig)
 
 def plot_situps(data, situp_window, peakind, feature, freq, sample):

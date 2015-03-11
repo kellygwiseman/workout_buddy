@@ -3,20 +3,20 @@ from classify import ClassifyRep
 import graphs as gr
 import pandas as pd
 import numpy as np
+import plotly_graphs as pg
 from scipy import signal
 
 if __name__ == '__main__':
 	# process one sample
 	info = pd.read_csv('../data/test_sample.csv', skipinitialspace=True)
 	p = ProcessData(info,'all',plot=False)
-	data_arr, ts_arr = p.process_one_sample()
+	data_arr, ts_arr, timestamp, sample = p.process_one_sample()
 
 	# optimal pitch
-	example_ts = np.load('../processed/pushup_raw_ts_one_all_70h.npy')[0,33]
+	example_ts = np.load('../processed/pushup_raw_ts_one_all_70h.npy')[0,34]
 	B = [signal.resample(example_ts, 34)]
 	# initialize rep to 0
 	B = np.array([xi - xi[0] for xi in B])
-	print(B)
 
 	# select features to include in prediction model
 	X = data_arr[:,[2,3]].astype(float) # just the amplitude and duration
@@ -53,6 +53,7 @@ if __name__ == '__main__':
 	weights = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
 	w_prob = np.dot(weights,ensemble_prob_arr)
 	w_prob_true = (w_prob > 0.5)* 1.0
-	print w_prob
-	print w_prob_true
-	gr.plot_ts(B, [p,y,z], ['pitch','accY','accZ'], sample='Kelly_normal', avg_length=34, freq=20.0)
+	print 'ensemble probability:', w_prob
+	print 'ensemble prediction:', w_prob_true
+	pg.daily_reps(timestamp[0].hour, w_prob, sample)
+	pg.plot_ts(B, p, sample, avg_length=34, freq=20.0)
