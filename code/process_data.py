@@ -104,26 +104,27 @@ class ProcessData(object):
 			feature = 'motionPitch'
 			peakind, count = dp.count_peaks_initial(df_filt, pushup_window, feature, mph, mpd, freq)
 			avg_dur = dp.average_duration(peakind, count)
+			avg_amp_initial = dp.average_amplitude_initial(df_filt, peakind, pushup_window, feature, freq)
 
 			# Final tight pushup repetition window
 			window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
 			# Calculate final peak parameters using unfiltered data
-			mph = 0.5 # minimum peak height
-			mpd = (0.7 * freq) + (0.5 * freq * female) # minimum peak separation distance
-			peakmin, count_min, pushup_data = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=True)
+			mph = avg_amp_initial # minimum peak height
+			mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+			peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 			print count_min
-			mph = -0.5 # minimum peak height
-			mpd = (0.7 * freq) + (0.6 * freq * female) # minimum peak separation distance
-			peakmax, count_max, pushup_data = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=False)
+			mph = None # minimum peak height
+			mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+			peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
 			print count_max
-			gr.plot_pushups(df_num, pushup_data, window_ind, peakmax, feature, freq, sample)
 
 			# Middle repetition window
 			rep_window_ind = dp.one_rep_window(peakmax, window_ind, freq)
 
 			# add repetition metrics to list
 			avg_amp = dp.average_amplitude(df_num, peakmin, peakmax, window_ind, feature, freq)
+			print avg_amp
 			sample_metrics = dp.rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
 			rep_metrics_list.append([np.array(sample_metrics),form])
 			avg_metrics = dp.avg_rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
@@ -159,9 +160,7 @@ class ProcessData(object):
 				# Plot the feature correlations
 				gr.plot_corr(df_filt, correls, freq, sample)
 				# Plot pushup repetitions
-				#gr.plot_pushups(df_filt, pushup_window, window_ind, peakind, feature, freq, sample)
-				#gr.plot_pushups(df_num, window_ind, peakmax, feature, freq, sample)
-				#gr.plot_pushups(df_num, window_ind, peakmin, feature, freq, sample)
+				gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, feature, freq, sample)
 
 	    ## Write processed data to files ##
 	    # write processed data to csv file
@@ -241,29 +240,28 @@ class ProcessData(object):
 		feature = 'motionPitch'
 		peakind, count = dp.count_peaks_initial(df_filt, pushup_window, feature, mph, mpd, freq)
 		avg_dur = dp.average_duration(peakind, count)
+		avg_amp_initial = dp.average_amplitude_initial(df_filt, peakind, pushup_window, feature, freq)
 
 		# Final tight pushup repetition window
 		window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
 		# Calculate final peak parameters using unfiltered data
-		mph = 0.5 # minimum peak height
-		mpd = (0.7 * freq) + (0.6 * freq * female) # minimum peak separation distance
-		peakmin, count_min, pushup_data = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=True)
+		mph = avg_amp_initial # minimum peak height
+		mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+		peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 		print count_min
-		mph = -0.5 # minimum peak height
-		mpd = (0.8 * freq) + (0.6 * freq * female) # minimum peak separation distance
-		peakmax, count_max, pushup_data = dp.count_peaks(df_num, window_ind, feature, mph, mpd, freq, valley=False)
+		mph = None # minimum peak height
+		mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+		peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
 		print count_max
-		gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, feature, freq, sample)
 
 		# Repetition windows
-		#multiple_rep_windows = dp.calculate_multiple_rep_window(peakind, pushup_window, window_ind, freq)
 		multiple_rep_windows = dp.calculate_multiple_rep_window(peakmax, window_ind, freq)
 
 		# add repetition metrics to list
-		#sample_metrics = dp.rep_metrics(df_filt, peakind, pushup_window, feature, freq, female, height, form)
 		sample_metrics = dp.rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
 		avg_amp = dp.average_amplitude(df_num, peakmin, peakmax, window_ind, feature, freq)
+		print avg_amp
 
 		# add results to dataframe
 		self.info.loc[0, 'Pcount'] = count_min
@@ -293,8 +291,7 @@ class ProcessData(object):
 			# Plot the feature correlations
 			gr.plot_corr(df_filt, correls, freq, sample)
 			# Plot pushup repetitions
-			#gr.plot_pushups(df_filt, pushup_window, window_ind, peakind, feature, freq, sample)
-			#gr.plot_pushups(df_num, window_ind, peakmax, feature, freq, sample)
+			gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, feature, freq, sample)
 
 		## Write processed data to files ##
 		# write processed data to csv file

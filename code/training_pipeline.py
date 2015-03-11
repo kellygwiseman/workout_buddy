@@ -6,7 +6,7 @@ import numpy as np
 if __name__ == '__main__':
 	# process samples
 	info = pd.read_csv('../data/pushup_info.csv', skipinitialspace=True)
-	p = ProcessData(info,'all',plot=True)
+	p = ProcessData(info,'all',plot=False)
 	data_arr, ts_arr = p.batch_process_samples()
 
 	# select features to include in to training model

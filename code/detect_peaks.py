@@ -115,12 +115,31 @@ def count_peaks_initial(data, pushup_window, feature, mph, mpd, freq, valley=Fal
     count = len(peakind)
     return peakind, count
 
-def count_peaks(data, window_ind, feature, mph, mpd, freq, valley=False, edge='falling'):
+def count_peak_min(data, window_ind, feature, mph, mpd, freq, valley=False, edge='falling'):
     # calculate timing of push-up reps since start of pushup window (in seconds)
     pushup_data = data.ix[window_ind[0]:window_ind[-1]][feature].values
+    # force the push-up reps to start at about 0 pitch amplitude
     pushup_data = [pushup_data[i] - pushup_data[0] for i in xrange(len(pushup_data))]
     peakind = detect_peaks(pushup_data, mph = mph, mpd = mpd, valley=valley)
     peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
+    # check to max sure there are no local minimums on the edges
+    if (peakind[0] < 0.2):
+        peakind = peakind[1:]
+    if (window_ind[-1] - window_ind[0])/freq - peakind[-1] < 0.3:
+        peakind = peakind[:-1]
+    count = len(peakind)
+    return peakind, count, pushup_data
+
+def count_peak_max(data, peakmin_count, window_ind, feature, mph, mpd, freq, valley=False, edge='falling'):
+    # calculate timing of push-up reps since start of pushup window (in seconds)
+    pushup_data = data.ix[window_ind[0]:window_ind[-1]][feature].values
+    # force the push-up reps to start at about 0 pitch amplitude
+    pushup_data = [pushup_data[i] - pushup_data[0] for i in xrange(len(pushup_data))]
+    peakind = detect_peaks(pushup_data, mph = mph, mpd = mpd, valley=valley)
+    count = len(peakind)
+    peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
+    if (peakind[0] > 1.0) and (count <= peakmin_count):
+        peakind.insert(0, 0)
     count = len(peakind)
     return peakind, count, pushup_data
 
@@ -131,12 +150,18 @@ def average_duration(peakind, count):
     avg_dur = duration / (count - 1)
     return avg_dur
 
+def average_amplitude_initial(data, peakind, pushup_window, feature, freq):
+    ind = [int(x*freq) for x in peakind]
+    ind = [pushup_window[0] + x for x in ind]
+    amps = data.ix[ind][feature]
+    avg_amp = amps.mean()
+    return avg_amp
+
 def average_amplitude(data, peakmin, peakmax, window_ind, feature, freq):
     min_ind = [window_ind[0] + int(x*freq) for x in peakmin]
     max_ind = [window_ind[0] + int(x*freq) for x in peakmax]
     amps = [data.ix[max_ind[i]][feature] - data.ix[min_ind[i]][feature] for i in xrange(len(min_ind))]
     avg_amp = np.mean(amps)
-    print(avg_amp)
     return avg_amp
 
 def rep_metrics(data, peakmin, peakmax, window_ind, feature, freq, female, height, form):
@@ -170,8 +195,10 @@ def one_rep_window(peakmax, window_ind, freq):
     return window_ind
 
 def calculate_total_rep_window(peakind, pushup_window, avg_duration, freq):
-    start = pushup_window[0]/freq + peakind[0] - avg_duration - 0.9
-    end = pushup_window[0]/freq + peakind[-1] + (avg_duration / 2)
+    #start = pushup_window[0]/freq + peakind[0] - avg_duration - 0.9
+    #end = pushup_window[0]/freq + peakind[-1] + (avg_duration / 2)
+    start = pushup_window[0]/freq + peakind[0] - avg_duration - 0.6
+    end = pushup_window[0]/freq + peakind[-1] + (avg_duration / 3)
     window_sec = (start, end)
     window_ind = (int(start*freq), int(end*freq))
     return window_ind
