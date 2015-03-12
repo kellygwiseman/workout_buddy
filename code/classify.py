@@ -10,15 +10,13 @@ from scipy import signal
 import cPickle as pickle
 
 class ClassifyRep(object):
-	def __init__(self, X, labels):
+	def __init__(self):
 		'''
 		INPUT:
 		- X: pushup feature array
 		- labels: pushup form labels
 
 		'''
-		self.X = X
-		self.labels = labels
 		self.pred_list = []
 		self.ensemble_pred = []
 		self.acc_list = []
@@ -26,20 +24,20 @@ class ClassifyRep(object):
 		self.prec_list = []
 		self.n_iter = 5
 
-	def split_data(self, n_iter=5, test_size=0.3, random_state=100):
+	def split_data(self, labels, n_iter=5, test_size=0.3, random_state=100):
 		self.n_iter = n_iter
-		sss = StratifiedShuffleSplit(self.labels, n_iter = n_iter, test_size = test_size, random_state=random_state)
+		sss = StratifiedShuffleSplit(labels, n_iter = n_iter, test_size = test_size, random_state=random_state)
 		return sss
 
-	def random_forest(self, sss, stance, n_est=50, max_feat=2, max_depth=2, prob=False, pickle=False):
+	def random_forest(self, sss, X, labels, stance, n_est=50, max_feat=2, max_depth=2, prob=False, pickle=False):
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
 		pred_list = []
 		i=1
 		for train_index, test_index in sss:
-		    X_train, X_test = self.X[train_index], self.X[test_index]
-		    y_train, y_test = self.labels[train_index], self.labels[test_index]
+		    X_train, X_test = X[train_index], X[test_index]
+		    y_train, y_test = labels[train_index], labels[test_index]
 		    rf = RandomForestClassifier(n_estimators=n_est, max_features=max_feat, max_depth=max_depth)
 		    rf.fit(X_train, y_train)
 		    y_pred = rf.predict(X_test)
@@ -57,18 +55,18 @@ class ClassifyRep(object):
 		self.pred_list.append(pred_list)
 		if pickle:      
 			rf = RandomForestClassifier(n_estimators=n_est, max_features=max_feat, max_depth=max_depth)
-			rf.fit(self.X, self.labels)
+			rf.fit(X, labels)
 			save_model(rf, "../models/rf"+'_n'+str(n_est)+'_mf'+str(max_feat)+'_md'+str(max_depth)+'_'+stance+'.pkl' )
 
-	def support_vector_machine(self, sss, stance, C = 20, gamma = 0.1, prob=False, pickle=False):
+	def support_vector_machine(self, sss, X, labels, stance, C = 20, gamma = 0.1, prob=False, pickle=False):
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
 		pred_list = []
 		i = 1
 		for train_index, test_index in sss:
-		    X_train, X_test = self.X[train_index], self.X[test_index]
-		    y_train, y_test = self.labels[train_index], self.labels[test_index]
+		    X_train, X_test = X[train_index], X[test_index]
+		    y_train, y_test = labels[train_index], labels[test_index]
 		    svm = SVC(class_weight = 'auto', C = C, gamma = gamma, probability = True)
 		    svm.fit(X_train, y_train)
 		    y_pred = svm.predict(X_test)
@@ -86,10 +84,10 @@ class ClassifyRep(object):
 		self.pred_list.append(pred_list)
 		if pickle:      
 			svm = SVC(class_weight='auto', C = C, gamma = gamma, probability = True)
-			svm.fit(self.X, self.labels)
+			svm.fit(X, labels)
 			save_model(svm, "../models/svm"+'_C'+str(C)+'_g'+str(gamma)+'_'+stance+'.pkl')
 
-	def dtw_kNN(self, sss, ts, stance, component, avg_length=34, n_neighbors=4, max_warping_window=10, prob=False, pickle=False):
+	def dtw_kNN(self, sss, ts, labels, stance, component, avg_length=34, n_neighbors=4, max_warping_window=10, prob=False, pickle=False):
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
@@ -101,7 +99,7 @@ class ClassifyRep(object):
 		i = 1
 		for train_index, test_index in sss:
 			X_train, X_test = X[train_index], X[test_index]
-			y_train, y_test = self.labels[train_index], self.labels[test_index]
+			y_train, y_test = labels[train_index], labels[test_index]
 			m = KnnDtw(n_neighbors=n_neighbors, max_warping_window=max_warping_window)
 			m.fit(X_train, y_train)
 			y_pred, y_prob = m.predict(X_test)
@@ -121,10 +119,10 @@ class ClassifyRep(object):
 		self.pred_list.append(pred_list)
 		if pickle:      
 			m = KnnDtw(n_neighbors=n_neighbors, max_warping_window=max_warping_window)
-			m.fit(X, self.labels)
+			m.fit(X, labels)
 			save_model(m, "../models/dtw_kNN"+component+'_n'+str(n_neighbors)+'_w'+str(max_warping_window)+'_'+stance+'.pkl' )
 
-	def ensemble(self, sss, weights):
+	def ensemble(self, sss, labels, weights):
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
@@ -134,7 +132,7 @@ class ClassifyRep(object):
 			temp_arr = pred_arr[:,i-1,:]
 			w_pred = np.dot(weights,temp_arr) 
 			w_pred = w_pred > 0.5
-			y_test = self.labels[test_index]
+			y_test = labels[test_index]
 			self._print_iteration_metrics(y_test, w_pred, i)
 			i+=1
 		print 'Average accuracy and std:', np.mean(self.acc_list), np.std(self.acc_list)

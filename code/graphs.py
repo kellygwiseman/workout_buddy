@@ -276,7 +276,7 @@ def plot_pushups(data, pushup_data, window_ind, peakmax, feature, freq, sample):
     time = data.index.values / freq
     pushup_start = window_ind[0] / freq # for marking the peaks
     pushup_time = time[window_ind[0]:(window_ind[1]+1)] # for plotting the duration
-    #pushup_data = data.ix[window_ind[0]:window_ind[1]]
+    pushup_data = data.ix[window_ind[0]:window_ind[1]][feature]
     
     # Plot complete time series and push-up duration overlay
     fig1 = plt.figure()

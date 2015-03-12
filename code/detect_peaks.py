@@ -166,12 +166,12 @@ def average_amplitude(data, peakmin, peakmax, window_ind, feature, freq):
     avg_amp = np.mean(amps)
     return avg_amp
 
-def rep_metrics(data, peakmin, peakmax, window_ind, feature, freq, female, height, form):
+def rep_metrics(data, peakmin, peakmax, window_ind, feature, freq, female, height):
     min_ind = [window_ind[0] + int(x*freq) for x in peakmin]
     max_ind = [window_ind[0] + int(x*freq) for x in peakmax]
     amps = [data.ix[max_ind[i]][feature] - data.ix[min_ind[i]][feature] for i in xrange(len(min_ind))]
     durations = [peakmax[n+1] - peakmax[n] for n in xrange(len(peakmax) - 1)]
-    sample_metrics = [[female, height, amps[n], durations[n], form] for n in xrange(len(amps))]
+    sample_metrics = [[female, height, amps[n], durations[n]] for n in xrange(len(amps))]
     return sample_metrics
 
 def avg_rep_metrics(data, peakmin, peakmax, window_ind, feature, freq, female, height, form):

@@ -1,34 +1,20 @@
 from process_data import ProcessData
 from classify import ClassifyRep
-import graphs as gr
 import pandas as pd
 import numpy as np
 import plotly_graphs as pg
-from scipy import signal
 
 if __name__ == '__main__':
 	# process one sample
 	info = pd.read_csv('../data/test_sample.csv', skipinitialspace=True)
-	p = ProcessData(info,'all',plot=False)
-	data_arr, ts_arr, timestamp, sample = p.process_one_sample()
-
-	# optimal pitch
-	#example_ts = np.load('../processed/pushup_raw_ts_one_all.npy')[0,31] #narrow stance Beau
-	example_ts = np.load('../processed/pushup_raw_ts_one_all.npy')[0,32] #normal stance Beau
-	# initialize rep to 0
-	B = np.array([xi - xi[0] for xi in [example_ts]])
-
+	p = ProcessData(info,'all',plot=True)
+	rep_arr, ts_arr, timestamp, sample = p.process_one_sample()
 
 	# select features to include in prediction model
-	X = data_arr[:,[2,3]].astype(float) # just the amplitude and duration
-	labels = data_arr[:,-1]
-	labels[labels =='excellent'] = 1
-	labels[labels == 'good'] = 1
-	labels[labels == 'ok'] = 0
-	labels = labels.astype(int)
+	X = rep_arr[:,[2,3]].astype(float) # just the amplitude and duration
 
 	# classify sequence of pushup repetitions
-	c = ClassifyRep(X, labels)
+	c = ClassifyRep()
 	pred_rf, prob_rf = c.predict('../models/rf_n50_mf2_md2_all.pkl', X)
 	pred_svm, prob_svm = c.predict('../models/svm_C10_g1.0_all.pkl', X)
 	p, pred_tsP, prob_tsP = c.predict_ts('../models/dtw_kNNpitch_n4_w10_all.pkl', ts_arr[0,:], component='pitch', avg_length=34)
@@ -57,4 +43,4 @@ if __name__ == '__main__':
 	print 'ensemble probability:', w_prob
 	print 'ensemble prediction:', w_prob_true
 	pg.daily_reps(timestamp[0].hour, w_prob, sample)
-	pg.plot_ts(B, p, sample, freq=20.0)
+	pg.plot_ts(p, sample, freq=20.0)
