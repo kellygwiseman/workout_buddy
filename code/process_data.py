@@ -113,11 +113,11 @@ class ProcessData(object):
 
 			# Calculate final peak parameters using unfiltered data
 			mph = avg_amp_initial # minimum peak height
-			mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 			peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 			print count_min
 			mph = -0.8 # minimum peak height
-			mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 			peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
 			print count_max
 
@@ -240,11 +240,11 @@ class ProcessData(object):
 
 		# Calculate final peak parameters using unfiltered data
 		mph = avg_amp_initial # minimum peak height
-		mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+		mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 		peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 		print count_min
 		mph = -0.8 # minimum peak height
-		mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+		mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 		peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
 		print count_max
 		gr.plot_pushups(df_num, pushup_data, window_ind, peakmax, feature, freq, sample)

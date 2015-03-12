@@ -7,9 +7,11 @@ from scipy import signal
 
 if __name__ == '__main__':
 	# process one sample
+	user = 21
 	info = pd.read_csv('../data/full_dataset_info.csv', skipinitialspace=True)
-	p = UserPrediction(info, user = 6)
-	p.batch_process_user_samples()
+	p = UserPrediction(info, user = user)
+	prob_history, bin_history = p.batch_process_user_samples()
+	pg.monthly_reps(bin_history, user)
 
 
 

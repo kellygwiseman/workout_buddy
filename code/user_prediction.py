@@ -38,10 +38,14 @@ class UserPrediction(object):
 	def batch_process_user_samples(self):
 		self._process_info()
 		numeric_features = ['motionUserAccelerationX', 'motionUserAccelerationY', 'motionUserAccelerationZ',
-                    'motionRotationRateX', 'motionRotationRateY', 'motionRotationRateZ',
-                    'accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
-                    'gyroRotationX','gyroRotationY','gyroRotationZ','motionYaw','motionRoll','motionPitch',
-                    'motionQuaternionX','motionQuaternionY','motionQuaternionZ','motionQuaternionW']
+		            'motionRotationRateX', 'motionRotationRateY', 'motionRotationRateZ',
+		            'accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
+		            'gyroRotationX','gyroRotationY','gyroRotationZ','motionYaw','motionRoll','motionPitch',
+		            'motionQuaternionX','motionQuaternionY','motionQuaternionZ','motionQuaternionW']
+
+		# Initiate rep_history list
+		rep_prob_history = []
+		rep_bin_history = []
 
 		# Iterate through all the samples in info
 		for i in xrange(self.info.shape[0]):
@@ -101,11 +105,11 @@ class UserPrediction(object):
 
 			# Calculate final peak parameters using unfiltered data
 			mph = avg_amp_initial # minimum peak height
-			mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 			peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 			print count_min
 			mph = -0.8 # minimum peak height
-			mpd = min((avg_dur*freq - 0.4*freq), 1.5*freq) # minimum peak separation distance
+			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 			peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
 			print count_max
 
@@ -151,6 +155,13 @@ class UserPrediction(object):
 			w_prob_true = (w_prob > 0.5)* 1.0
 			print 'ensemble probability:', w_prob
 			print 'ensemble prediction:', w_prob_true
+			good = w_prob[(w_prob > 0.5)]
+			ok = w_prob[(w_prob <= 0.5)]
+
+			rep_prob_history.append((w_prob, timestamp))
+			rep_bin_history.append(([len(ok),len(good)], timestamp))
 
 			pg.daily_reps(timestamp.hour, w_prob, sample)
 			pg.plot_ts(p, sample, freq=20.0)
+
+		return rep_prob_history, rep_bin_history

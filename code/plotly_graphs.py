@@ -1,6 +1,8 @@
 import plotly.plotly as py
 from plotly.graph_objs import *
 import numpy as np
+from datetime import date, timedelta
+import pandas as pd
 import brewer2mpl
 
 spectral_colors = brewer2mpl.get_map('Spectral', 'Diverging', 10).colors
@@ -62,12 +64,21 @@ def daily_reps(timestamp, w_prob, sample):
 	py.image.save_as(fig, '../figures/daily/daily_'+sample+'.svg')
 	#plot_url = py.plot(fig, filename='daily_'+sample)
 
-def monthly_reps(timestamp, w_prob, sample):
-	good = w_prob[(w_prob > 0.5)]
-	ok = w_prob[(w_prob <= 0.5)]
-	x = np.arange(0,24,1)
-	y1 = np.linspace(0,0,24)
-	y1[timestamp] = len(ok)
+def monthly_reps(bin_history, sample):
+	start = date.today() - timedelta(days=29)
+	end = date.today()
+	x = pd.date_range(start, end)
+	x = [y.strftime("%m/%d") for y in x]
+	dates = [bin_history[i][1].strftime("%m/%d") for i in range(len(bin_history))]
+	ok = [bin_history[i][0][0] for i in range(len(bin_history))]
+	good = [bin_history[i][0][1] for i in range(len(bin_history))]
+	y1 = np.linspace(0,0,30)
+	y2 = np.linspace(0,0,30)
+	for i, d in enumerate(dates):
+		ind = x.index(d)
+		y1[ind] += ok[i]
+		y2[ind] += good[i]
+
 	trace1 = Bar(
 	    x=x,
 	    y=y1,
@@ -76,8 +87,6 @@ def monthly_reps(timestamp, w_prob, sample):
         	color='rgb(204, 0, 0)'
     	)
 	)
-	y2 = np.linspace(0,0,24)
-	y2[timestamp] = len(good)
 	trace2 = Bar(
 	    x=x,
 	    y=y2,
@@ -89,7 +98,7 @@ def monthly_reps(timestamp, w_prob, sample):
 	data = Data([trace1, trace2])
 	layout = Layout(
 	    barmode='stack',
-	    title='Daily Activity',
+	    title='30 Day Activity',
 	    yaxis=YAxis(
         	title='Reps',
         	titlefont=Font(
@@ -97,26 +106,19 @@ def monthly_reps(timestamp, w_prob, sample):
             	color='rgb(107, 107, 107)'
         	)
     	),
-    	xaxis=XAxis(
-    		title='Hour',
-    		titlefont=Font(
-            	size=16,
-            	color='rgb(107, 107, 107)'
-        	)
-        ),
         autosize=False,
-    	width=400,
+    	width=600,
     	height=300,
     	margin=Margin(
         	l=40,
         	r=40,
-        	b=40,
+        	b=60,
         	t=30,
         	pad=4
     	)
 	)
 	fig = Figure(data=data, layout=layout)
-	py.image.save_as(fig, '../figures/daily/daily_'+sample+'.svg')
+	py.image.save_as(fig, '../figures/monthly/monthly_user'+str(sample)+'.svg')
 	#plot_url = py.plot(fig, filename='daily_'+sample)
 
 def make_trace(x, y, name, color):  
