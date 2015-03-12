@@ -10,9 +10,7 @@ class UserPrediction(object):
 		'''
 		INPUT:
 		- info: dataframe with user and sample data
-		- pushup_type: 'all', '10_count', normal', 'narrow'
-		- plot: create plots of different stages of processed data
-
+		- user: user_id
 		'''
 		self.info = info
 		self.user = user
@@ -66,6 +64,7 @@ class UserPrediction(object):
 			timestamp = self.info.loc[i, 'timestamp']
 			form = self.info.loc[i,'form']
 			df_num = df[numeric_features]
+			exercise = self.info.loc[i, 'exercise']
 
 			# Bandpass filter the data to separate the noise from the pushup signal
 			lowcut = 0.5
@@ -157,11 +156,30 @@ class UserPrediction(object):
 			print 'ensemble prediction:', w_prob_true
 			good = w_prob[(w_prob > 0.5)]
 			ok = w_prob[(w_prob <= 0.5)]
+			overall = len(good) > len(ok)
+			if overall == True:
+				form = 'good'
+			else:
+				form = 'ok'
 
 			rep_prob_history.append((w_prob, timestamp))
 			rep_bin_history.append(([len(ok),len(good)], timestamp))
 
-			pg.daily_reps(timestamp.hour, w_prob, sample)
-			pg.plot_ts(p, sample, freq=20.0)
+			daily_url = pg.daily_reps(timestamp.hour, w_prob, sample)
+			ts_url = pg.plot_ts(p, sample, freq=20.0)
 
-		return rep_prob_history, rep_bin_history
+			# Determine appropriate tip message
+			if avg_metrics[4] > 0.1:
+				tip =  "You're doing "+form+". Next time try to have more consistent press-downs depths."
+			elif avg_metrics[5] > 0.2:
+				tip =  "You're doing "+form+". Next time try to keep an even pace throughout your set."
+			elif avg_metrics[2] < 1.0:
+				tip = "You're doing "+form+". Next time try to go lower next time."
+			elif (avg_metrics[2] > 0.75) and (exercise == 'Kpushup'):
+				tip = "You're doing "+form+". Try to switch to regular pushups next time."
+			elif (avg_metrics[2] > 1.0) and (avg_metrics[2] < 1.4):
+				tip = "You're doing "+form+". Next time try pressing down even lower next time."
+			elif avg_metrics[2] > 1.4:
+				tip = "Great form! Next time add more reps or try a different pushup stance."
+
+		return rep_prob_history, rep_bin_history, tip, daily_url, ts_url

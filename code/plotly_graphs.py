@@ -5,6 +5,7 @@ from datetime import date, timedelta
 import pandas as pd
 import brewer2mpl
 
+py.sign_in('kellygwiseman', 'mejy9ho32u')
 spectral_colors = brewer2mpl.get_map('Spectral', 'Diverging', 10).colors
 
 def daily_reps(timestamp, w_prob, sample):
@@ -61,8 +62,9 @@ def daily_reps(timestamp, w_prob, sample):
     	)
 	)
 	fig = Figure(data=data, layout=layout)
-	py.image.save_as(fig, '../figures/daily/daily_'+sample+'.svg')
-	#plot_url = py.plot(fig, filename='daily_'+sample)
+	#py.image.save_as(fig, '../figures/daily/daily_'+sample+'.svg')
+	plot_url = py.plot(fig, filename='daily_user'+str(sample), file_opt = 'overwrite', world_readable=True, auto_open=False)
+	return plot_url
 
 def monthly_reps(bin_history, sample):
 	start = date.today() - timedelta(days=29)
@@ -118,8 +120,9 @@ def monthly_reps(bin_history, sample):
     	)
 	)
 	fig = Figure(data=data, layout=layout)
-	py.image.save_as(fig, '../figures/monthly/monthly_user'+str(sample)+'.svg')
-	#plot_url = py.plot(fig, filename='daily_'+sample)
+	#py.image.save_as(fig, '../figures/monthly/monthly_user'+str(sample)+'.svg')
+	plot_url = py.plot(fig, filename='daily_user'+str(sample), file_opt = 'overwrite', world_readable=True, auto_open=False)
+	return plot_url
 
 def make_trace(x, y, name, color):  
     return dict(
@@ -175,4 +178,6 @@ def plot_ts(ts, sample, freq=20.0):
     	)
 	)
 	fig = Figure(data=data, layout=layout)
-	py.image.save_as(fig, '../figures/pushup_ts/Pitch_'+sample+'.svg')
+	#py.image.save_as(fig, '../figures/pushup_ts/Pitch_'+sample+'.svg')
+	plot_url = py.plot(fig, filename='Pitch_user'+str(sample), file_opt = 'overwrite', world_readable=True, auto_open=False)
+	return plot_url
