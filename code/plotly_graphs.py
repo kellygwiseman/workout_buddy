@@ -63,7 +63,7 @@ def daily_reps(timestamp, w_prob, sample):
 	)
 	fig = Figure(data=data, layout=layout)
 	#py.image.save_as(fig, '../figures/daily/daily_'+sample+'.svg')
-	plot_url = py.plot(fig, filename='daily_user'+str(sample), file_opt = 'overwrite', world_readable=True, auto_open=False)
+	plot_url = py.plot(fig, filename='daily_user'+str(sample), file_opt = 'new', world_readable=True, auto_open=False)
 	return plot_url
 
 def monthly_reps(bin_history, sample):
@@ -121,7 +121,7 @@ def monthly_reps(bin_history, sample):
 	)
 	fig = Figure(data=data, layout=layout)
 	#py.image.save_as(fig, '../figures/monthly/monthly_user'+str(sample)+'.svg')
-	plot_url = py.plot(fig, filename='daily_user'+str(sample), file_opt = 'overwrite', world_readable=True, auto_open=False)
+	plot_url = py.plot(fig, filename='daily_user'+str(sample), file_opt = 'new', world_readable=True, auto_open=False)
 	return plot_url
 
 def make_trace(x, y, name, color):  
@@ -179,5 +179,5 @@ def plot_ts(ts, sample, freq=20.0):
 	)
 	fig = Figure(data=data, layout=layout)
 	#py.image.save_as(fig, '../figures/pushup_ts/Pitch_'+sample+'.svg')
-	plot_url = py.plot(fig, filename='Pitch_user'+str(sample), file_opt = 'overwrite', world_readable=True, auto_open=False)
+	plot_url = py.plot(fig, filename='Pitch_user'+str(sample), file_opt = 'new', world_readable=True, auto_open=False)
 	return plot_url
