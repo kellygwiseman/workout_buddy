@@ -164,9 +164,9 @@ class UserPrediction(object):
 
 			rep_prob_history.append((w_prob, timestamp))
 			rep_bin_history.append(([len(ok),len(good)], timestamp))
-
 			daily_url = pg.daily_reps(timestamp.hour, w_prob, sample)
 			ts_url = pg.plot_ts(p, sample, freq=20.0)
+			bar_url = pg.reps_bar_chart(w_prob, sample)
 
 			# Determine appropriate tip message
 			if avg_metrics[4] > 0.1:
@@ -182,4 +182,4 @@ class UserPrediction(object):
 			elif avg_metrics[2] > 1.4:
 				tip = "Great form! Next time add more reps or try a different pushup stance."
 
-		return rep_prob_history, rep_bin_history, tip, daily_url, ts_url
+		return rep_prob_history, rep_bin_history, tip, daily_url, ts_url, bar_url

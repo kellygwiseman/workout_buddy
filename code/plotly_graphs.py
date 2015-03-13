@@ -8,6 +8,108 @@ import brewer2mpl
 py.sign_in('kellygwiseman', 'mejy9ho32u')
 spectral_colors = brewer2mpl.get_map('Spectral', 'Diverging', 10).colors
 
+def reps_bar_chart(w_prob, sample):
+	w_prob_true = (w_prob > 0.5)* 1.0
+	w_prob_false = (w_prob <= 0.5)* 1.0
+	trace1 = dict(
+		x=np.arange(1, len(w_prob)+1, 1.0),
+		y=np.multiply(w_prob_false, w_prob)*100,
+		type = 'bar',
+		name='Ok',
+		marker=Marker(
+			color='rgb(204, 0, 0)'
+			)
+		)
+	trace2 = dict(
+		x=np.arange(1, len(w_prob)+1, 1.0),
+		y=np.multiply(w_prob_true, w_prob)*100,
+		type = 'bar',
+		name='Good',
+		marker=Marker(
+			color='rgb(0, 204, 102)'
+			)
+		)
+	data = Data([trace1, trace2])
+	layout = Layout(
+	    title='Form Breakdown of Last Set of Reps',
+        autosize=False,
+    	width=400,
+    	height=400,
+    	margin=Margin(
+        	l=50,
+        	r=50,
+        	b=50,
+        	t=70,
+        	pad=4
+    	),
+    	yaxis=YAxis(
+    		title='Repetition Rating (percent)',
+    		titlefont=Font(
+            	size=16,
+            	color='rgb(107, 107, 107)'
+        		),
+        	range = [0.0,100.0]
+    	),
+    	xaxis=XAxis(
+    		title='Repetition',
+    		titlefont=Font(
+            	size=16,
+            	color='rgb(107, 107, 107)'
+        	),
+    		range = [0,len(w_prob)]
+    	)
+	)
+	fig = Figure(data=data, layout=layout)
+	plot_url = py.plot(fig, filename='rep_rating'+str(sample), file_opt = 'new', world_readable=True, auto_open=False)
+	return plot_url
+
+def reps_polar_chart(w_prob, sample):
+	w_prob_true = (w_prob > 0.5)* 1.0
+	w_prob_false = (w_prob <= 0.5)* 1.0
+	trace1 = dict(
+		t=np.arange(0.5, len(w_prob)+0.5, 1.0),
+		r=np.multiply(w_prob_false, w_prob)*100,
+		type = 'area',
+		name='Ok',
+		marker=Marker(
+			color='rgb(204, 0, 0)'
+			)
+		)
+	trace2 = dict(
+		t=np.arange(0.5, len(w_prob)+0.5, 1.0),
+		r=np.multiply(w_prob_true, w_prob)*100,
+		type = 'area',
+		name='Good',
+		marker=Marker(
+			color='rgb(0, 204, 102)'
+			)
+		)
+	data = Data([trace1, trace2])
+	layout = Layout(
+	    title='Form Breakdown of Latest Reps',
+        autosize=False,
+    	width=400,
+    	height=400,
+    	margin=Margin(
+        	l=50,
+        	r=50,
+        	b=50,
+        	t=50,
+        	pad=4
+    	),
+    	radialaxis=RadialAxis(
+        	ticksuffix='%',
+        	range = [0.0,100.0]
+    	),
+    	angularaxis=AngularAxis(
+    		range = [0,len(w_prob)]
+    	)
+	)
+	fig = Figure(data=data, layout=layout)
+	plot_url = py.plot(fig, filename='polar_rep_'+str(sample), file_opt = 'new', world_readable=True, auto_open=False)
+	return plot_url
+    
+
 def daily_reps(timestamp, w_prob, sample):
 	good = w_prob[(w_prob > 0.5)]
 	ok = w_prob[(w_prob <= 0.5)]
@@ -102,7 +204,7 @@ def monthly_reps(bin_history, sample):
 	    barmode='stack',
 	    title='30 Day Activity',
 	    yaxis=YAxis(
-        	title='Reps',
+        	title='Number of Repetitions',
         	titlefont=Font(
             	size=16,
             	color='rgb(107, 107, 107)'
@@ -110,12 +212,12 @@ def monthly_reps(bin_history, sample):
     	),
         autosize=False,
     	width=600,
-    	height=300,
+    	height=400,
     	margin=Margin(
-        	l=40,
-        	r=40,
-        	b=60,
-        	t=30,
+        	l=50,
+        	r=50,
+        	b=50,
+        	t=70,
         	pad=4
     	)
 	)
@@ -153,27 +255,27 @@ def plot_ts(ts, sample, freq=20.0):
 	    title='Last Set of Reps',
 	    yaxis=YAxis(
         	title='Pitch (degrees)',
-        	range = [-90, 10],
+        	range = [-100, 10],
         	titlefont=Font(
             	size=16,
             	color='rgb(107, 107, 107)'
         	)
     	),
     	xaxis=XAxis(
-    		title='Duration (seconds)',
+    		title='Rep Duration (seconds)',
     		titlefont=Font(
             	size=16,
             	color='rgb(107, 107, 107)'
         	)
         ),
         autosize=False,
-    	width=400,
-    	height=300,
+    	width=600,
+    	height=400,
     	margin=Margin(
-        	l=55,
-        	r=45,
-        	b=45,
-        	t=30,
+        	l=50,
+        	r=50,
+        	b=50,
+        	t=60,
         	pad=4
     	)
 	)

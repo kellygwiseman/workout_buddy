@@ -32,7 +32,7 @@ def allowed_file(filename):
 @app.route('/')
 def index():
     global user
-    return render_template('index.html', user = user, daily_fig = daily_urls, ts_fig = ts_urls, monthly_fig = monthly_urls, tip_text = tips)
+    return render_template('index.html', user = user, bar_fig = bar_urls, ts_fig = ts_urls, monthly_fig = monthly_urls, tip_text = tips)
 
 
 # Route that will process the file upload
@@ -52,14 +52,14 @@ def upload():
         # run sample
         info = pd.read_table('uploads/'+filename, sep=',', skipinitialspace=True)
         p = UserPrediction(info, 100)
-        prob_history, bin_history, tip, daily_url, ts_url = p.batch_process_user_samples()
+        prob_history, bin_history, tip, daily_url, ts_url, bar_url = p.batch_process_user_samples()
         monthly_url = pg.monthly_reps(bin_history, 100)
         ts_urls.append(str(ts_url))
-        daily_urls.append(str(daily_url))
+        bar_urls.append(str(bar_url))
         monthly_urls.append(str(monthly_url))
         tips.append(tip)
         user += 1
-        return render_template('index.html', user = user, daily_fig = daily_urls, ts_fig = ts_urls, monthly_fig = monthly_urls, tip_text = tips)
+        return render_template('index.html', user = user, bar_fig = bar_urls, ts_fig = ts_urls, monthly_fig = monthly_urls, tip_text = tips)
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
@@ -72,7 +72,7 @@ def uploaded_file(filename):
 if __name__ == '__main__':
     # Orderd by pro, good, novice
     ts_urls = ['https://plot.ly/~kellygwiseman/220','https://plot.ly/~kellygwiseman/207', 'https://plot.ly/~kellygwiseman/160']
-    daily_urls = ['https://plot.ly/~kellygwiseman/219', 'https://plot.ly/~kellygwiseman/206', 'https://plot.ly/~kellygwiseman/159']
+    bar_urls = ['https://plot.ly/~kellygwiseman/287', 'https://plot.ly/~kellygwiseman/304', 'https://plot.ly/~kellygwiseman/290']
     monthly_urls = ['https://plot.ly/~kellygwiseman/221', 'https://plot.ly/~kellygwiseman/208', 'https://plot.ly/~kellygwiseman/161']
     tips = ["You're doing good. Next time try to keep an even pace throughout your set.","You're doing good. Try to switch to regular pushups next time.", "You're doing ok. Next time try to keep an even pace throughout your set."]
 

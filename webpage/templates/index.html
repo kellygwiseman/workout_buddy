@@ -53,14 +53,14 @@
                     <li class="hidden">
                         <a href="#page-top"></a>
                     </li>
-                    <li class="page-scroll">
-                        <a href="#dashboard">Dashboard</a>
-                    </li>
+                    <!--<li class="page-scroll">
+                        <a href="#about">About</a>
+                    </li>-->
                     <li class="page-scroll">
                         <a href="#data">Data</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#about">About</a>
+                        <a href="#dashboard">Dashboard</a>
                     </li>
                 </ul>
             </div>
@@ -80,70 +80,28 @@
                         <hr class="star-light">
                         <span class="skills">A personal trainer at your fingertips</span>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-lg-offset-2 text-left">
+                            <br></br>
+                            <p>Workout Buddy counts exercise repetitions and assesses move quality to provide real-time feedback and tracking capabilities to fitness lovers. The beta version starts out tracking pushups, with more moves to come!</p>
+                        </div>
+                        <div class="col-lg-4 text-left">
+                            <br></br>
+                            <p>All you need is your iPhone and an armaband to get started analyzing your fitness cabalities. Workout Buddy uses your phone's accelerometer and gyro sensor, along with an ensemble of signal processing filters and classification models, to rate your workout.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Dashboard Grid Section -->
-    <section id="dashboard">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2>Dashboard</h2>
-                    <hr class="star-primary">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-2 col-sm-offset-1 portfolio-item">
-                    <img class="img-responsive" src="../static/img/female_trainer_xsmall.png" alt="">
-                </div>
-                <div class="col-sm-2 col-sm-offset-0 portfolio-item">
-                    <p>Trainer Tip:</p>
-                    <p id="trainer_tip"></p>
-                </div>
-                
-                <div class="col-sm-6 col-sm-offset-1 portfolio-item">
-                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <iframe id="ts_rep" width="400" height="300" frameborder="0" seamless="seamless" scrolling="no"></iframe>
-                    </a>
-                </div>
-                <div class="col-sm-5 col-sm-offset-1 portfolio-item">
-                    <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <iframe id="daily_rep" width="400" height="300" frameborder="0" seamless="seamless" scrolling="no"></iframe>
-                    </a>
-                </div>
-                <div class="col-sm-6 portfolio-item">
-                    <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
-                        <div class="caption">
-                            <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <iframe id="monthly_rep" width="600" height="300" frameborder="0" seamless="seamless" scrolling="no"></iframe>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Data Section -->
-    <section class="success" id="data">
+    <section id="data">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
                     <h2>Data</h2>
-                    <hr class="star-light">
+                    <hr class="star-primary">
                 </div>
             </div>
             <div class="row">
@@ -170,8 +128,66 @@
         </div>
     </section>
 
+    <!-- Dashboard Grid Section -->
+    <section class="success" id="dashboard">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Dashboard</h2>
+                    <hr class="star-light">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-1 portfolio-item">
+                    <br></br>
+                    <br></br>
+                    <img class="img-responsive" src="../static/img/female_trainer_small.png" alt="">
+                </div>
+                <div class="col-sm-2 col-sm-offset-0 portfolio-item">
+                    <br></br>
+                    <br></br>
+                    <p>Trainer Tip:</p>
+                    <p id="trainer_tip"></p>
+                </div>
+                
+                <div class="col-sm-6 col-sm-offset-1 portfolio-item">
+                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <iframe id="ts_rep" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                    </a>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1 portfolio-item">
+                    <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <iframe id="bar_rep" width="400" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                    </a>
+                </div>
+                <div class="col-sm-6 portfolio-item">
+                    <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <iframe id="monthly_rep" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
     <!-- About Section -->
-    <section id="about">
+    <!-- <section id="about">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -187,7 +203,7 @@
                     <p>All you need is your iPhone and an armaband to get started analyzing your fitness cabalities. Workout Buddy uses your phone's accelerometer and gyro sensor, along with an ensemble of signal processing filters and classification models, to rate your workout.</p>
                 </div>
         </div>
-    </section>
+    </section> -->
 
     <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
     <div class="scroll-top page-scroll visible-xs visble-sm">
@@ -211,7 +227,7 @@
                         <div class="modal-body">
                             <h2>Latest Pushup Reps</h2>
                             <hr class="star-primary">
-                            <iframe id="ts_repZ" width="400" height="300" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                            <iframe id="ts_repZ" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
                             <p>Pushup reps are plotted sequentially.  The pitch amplitude is correlated with press-down depth. The larger the amplitude, the better the pushup. Try to have consistent form for all your reps!</p>
                         </div>
                     </div>
@@ -231,9 +247,10 @@
                 <div class="row">
                     <div class="col-lg-8 col-lg-offset-2">
                         <div class="modal-body">
-                            <h2>Daily Rep Counts</h2>
+                            <h2>Form Breakdown</h2>
                             <hr class="star-primary">
-                            <iframe id="daily_repZ" width="400" height="300" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                            <iframe id="bar_repZ" width="400" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                            <p>Pushup reps are plotted sequentially.  The size of the bar corresponds to the rating of the repeition, with 0% being poor and 100% being excellent form.</p>
                         </div>
                     </div>
                 </div>
@@ -254,7 +271,7 @@
                         <div class="modal-body">
                             <h2>30 Day Rep Counts</h2>
                             <hr class="star-primary">
-                            <iframe id="monthly_repZ" width="600" height="300" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                            <iframe id="monthly_repZ" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
                         </div>
                     </div>
                 </div>
@@ -287,15 +304,15 @@
     var user = {{user | safe}};
     var trainer_tip_lst = {{tip_text | safe}}
     var ts_fig_lst = {{ts_fig | safe}};
-    var daily_fig_lst = {{daily_fig | safe}};
+    var bar_fig_lst = {{bar_fig | safe}};
     var monthly_fig_lst = {{monthly_fig | safe}};
 
     $('#trainer_tip').html(trainer_tip_lst[user]);    
     $('#ts_rep').attr('src', ts_fig_lst[user]);
-    $('#daily_rep').attr('src', daily_fig_lst[user]);
+    $('#bar_rep').attr('src', bar_fig_lst[user]);
     $('#monthly_rep').attr('src', monthly_fig_lst[user]);
     $('#ts_repZ').attr('src', ts_fig_lst[user]);
-    $('#daily_repZ').attr('src', daily_fig_lst[user]);
+    $('#bar_repZ').attr('src', bar_fig_lst[user]);
     $('#monthly_repZ').attr('src', monthly_fig_lst[user]);
 
     // changes the dashboard to Fitness Pro user
@@ -303,10 +320,10 @@
     user = 0;
     $('#trainer_tip').html(trainer_tip_lst[user]);    
     $('#ts_rep').attr('src', ts_fig_lst[user]);
-    $('#daily_rep').attr('src', daily_fig_lst[user]);
+    $('#bar_rep').attr('src', bar_fig_lst[user]);
     $('#monthly_rep').attr('src', monthly_fig_lst[user]);
     $('#ts_repZ').attr('src', ts_fig_lst[user]);
-    $('#daily_repZ').attr('src', daily_fig_lst[user]);
+    $('#bar_repZ').attr('src', bar_fig_lst[user]);
     $('#monthly_repZ').attr('src', monthly_fig_lst[user]);
     });
 
@@ -315,10 +332,10 @@
     user = 1;
     $('#trainer_tip').html(trainer_tip_lst[user]);    
     $('#ts_rep').attr('src', ts_fig_lst[user]);
-    $('#daily_rep').attr('src', daily_fig_lst[user]);
+    $('#bar_rep').attr('src', bar_fig_lst[user]);
     $('#monthly_rep').attr('src', monthly_fig_lst[user]);
     $('#ts_repZ').attr('src', ts_fig_lst[user]);
-    $('#daily_repZ').attr('src', daily_fig_lst[user]);
+    $('#bar_repZ').attr('src', bar_fig_lst[user]);
     $('#monthly_repZ').attr('src', monthly_fig_lst[user]);
     });
 
@@ -327,10 +344,10 @@
     user = 2;
     $('#trainer_tip').html(trainer_tip_lst[user]);    
     $('#ts_rep').attr('src', ts_fig_lst[user]);
-    $('#daily_rep').attr('src', daily_fig_lst[user]);
+    $('#bar_rep').attr('src', bar_fig_lst[user]);
     $('#monthly_rep').attr('src', monthly_fig_lst[user]);
     $('#ts_repZ').attr('src', ts_fig_lst[user]);
-    $('#daily_repZ').attr('src', daily_fig_lst[user]);
+    $('#bar_repZ').attr('src', bar_fig_lst[user]);
     $('#monthly_repZ').attr('src', monthly_fig_lst[user]);
     });
     
