@@ -35,7 +35,7 @@ def daily_reps(timestamp, w_prob, sample):
 	data = Data([trace1, trace2])
 	layout = Layout(
 	    barmode='stack',
-	    title='Daily Activity',
+	    title='Form Breakdown of Latest Reps',
 	    yaxis=YAxis(
         	title='Reps',
         	titlefont=Font(

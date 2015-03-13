@@ -174,11 +174,11 @@ class UserPrediction(object):
 			elif avg_metrics[5] > 0.2:
 				tip =  "You're doing "+form+". Next time try to keep an even pace throughout your set."
 			elif avg_metrics[2] < 1.0:
-				tip = "You're doing "+form+". Next time try to go lower next time."
+				tip = "You're doing "+form+". Next time try to go lower."
 			elif (avg_metrics[2] > 0.75) and (exercise == 'Kpushup'):
 				tip = "You're doing "+form+". Try to switch to regular pushups next time."
 			elif (avg_metrics[2] > 1.0) and (avg_metrics[2] < 1.4):
-				tip = "You're doing "+form+". Next time try pressing down even lower next time."
+				tip = "You're doing "+form+". Next time try pressing down even lower."
 			elif avg_metrics[2] > 1.4:
 				tip = "Great form! Next time add more reps or try a different pushup stance."
 
