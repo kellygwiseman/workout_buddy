@@ -1,0 +1,13 @@
+user_id,timestamp,name,exercise,hertz,count,phone,stance,height (inches), female, form, comments
+6, 2015-03-08_12-34-58, Kelly, Kpushup, 20, 10, ip5, narrow, 65, 1, ok, left arm medium-low depth not sure if ok or good
+6, 2015-03-08_17-23-54, Kelly, pushup, 20, 5, ip5, normal, 65, 1, ok, left arm ok 
+6, 2015-03-08_17-25-14, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, ok, right arm inbetween ok and good
+6, 2015-03-09_08-10-05, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, ok, right arm fast speed and inbetween good and ok depth
+7, 2015-03-09_08-06-54, Josh, pushup, 20, 20, ip5, normal, 68, 0, good, right arm first 10 excellent then start to degrade to good and ok around 13-18. The last two are good again.
+7, 2015-03-12_08-56-29, Josh, pushup, 20, 10, ip5, narrow, 68, 0, good, left arm consistent pace
+25, 2015-03-08_18-13-06, Manoo, pushup, 20, 10, ip5, normal, 72, 0, good, left arm and slightly narrow stance
+26, 2015-03-10_17-29-17, Ken, pushup, 20, 10, ip5, normal, 74, 0, good, right arm pretty good form probably mix of good and ok
+
+**6, 2015-03-04_08-04-10, Kelly, pushup, 20, 10, ip5, narrow, 65, 1, ok, Left arm very shallow depth ** first filter is cutting out part of the signal but it works with less reps (only 6 counted)
+
+*7, 2015-03-03_19-57-56, Josh, pushup, 20, 10, ip5, normal, 68, 0, excellent, left arm medium pace * initial filter is cutting off first peak max - still problematic because of min amplitude

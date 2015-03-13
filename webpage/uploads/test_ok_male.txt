@@ -1,0 +1,3 @@
+user_id, timestamp, name, exercise, hertz, count, phone, stance, height (inches), female, form, comments
+100, 2015-03-10_17-29-17, Ken, pushup, 20, 10, ip5, normal, 74, 0, good, right arm pretty good form probably mix of good and ok
+100, 2015-03-10_17-30-20, Ken, pushup, 20, 8, ip5, narrow, 74, 0, ok, right arm inbetween wide and narrow not very low the second half

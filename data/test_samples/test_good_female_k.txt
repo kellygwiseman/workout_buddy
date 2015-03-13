@@ -1,0 +1,3 @@
+user_id, timestamp, name, exercise, hertz, count, phone, stance, height (inches), female, form, comments
+100, 2015-03-01_20-03-15, Tracy, Kpushup, 20, 10, ip5, normal, 65, 1, good, right arm good form
+100, 2015-03-01_20-03-47, Tracy, Kpushup, 20, 10, ip5, narrow, 65, 1, good, right arm good form first half and slowed down second half

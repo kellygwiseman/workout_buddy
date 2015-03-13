@@ -1,0 +1,2 @@
+user_id, timestamp, name, exercise, hertz, count, phone, stance, height (inches), female, form, comments
+100, 2015-02-21_18-55-31, Jess, pushup, 20, 10, ip5, normal, 64, 1, ok, went down medium with good form better in beginning than end
