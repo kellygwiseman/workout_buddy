@@ -241,11 +241,18 @@ def monthly_reps(bin_history, sample):
 	return plot_url
 
 def make_trace(x, y, name, color):  
-    return dict(
+    return Scatter(
         x=x,     
         y=y,
         name=name,
-        line=dict(color='rgb('+str(color[0])+','+str(color[1])+','+str(color[2])+')')
+        mode = 'lines',
+        marker=Marker(
+        	color = 'rgb('+str(color[0])+','+str(color[1])+','+str(color[2])+')',
+        	line = Line(
+        		color = 'rgb('+str(color[0])+','+str(color[1])+','+str(color[2])+')',
+        		width = 1.0
+        		)
+        	)
     )
 
 def rad_to_degree(rad):
@@ -260,7 +267,7 @@ def plot_ts(ts, sample, freq=20.0):
 	# initialize rep to 0
 	B = np.array([xi - xi[0] for xi in [example_ts]])
 	traceB = make_trace(calculate_time_axis(B[0], freq), rad_to_degree(B[0]), 'optimal rep', [150,150,150])
-	
+
 	# user pitch
 	trace = [make_trace(calculate_time_axis(ts[i], freq), rad_to_degree(ts[i]), str(i+1), spectral_colors[i%10]) for i in xrange(len(ts))]
 	trace.insert(0, traceB)

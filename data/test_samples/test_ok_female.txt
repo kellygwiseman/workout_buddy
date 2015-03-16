@@ -1,2 +1,0 @@
-user_id, timestamp, name, exercise, hertz, count, phone, stance, height (inches), female, form, comments
-100, 2015-03-03_08-11-21, Kelly, pushup, 20, 10, ip5, normal, 65, 1, ok, Left arm with medium lowering. Second set so ok form

@@ -276,21 +276,26 @@ def plot_pushups(data, pushup_data, window_ind, peakmax, feature, freq, sample):
     time = data.index.values / freq
     pushup_start = window_ind[0] / freq # for marking the peaks
     pushup_time = time[window_ind[0]:(window_ind[1]+1)] # for plotting the duration
-    pushup_data = data.ix[window_ind[0]:window_ind[1]][feature]
+    data_arr = data[feature].values
+    data_lst = [data_arr[r]*180.0 / np.pi for r in xrange(len(data_arr))]
+    pushup_arr = data.ix[window_ind[0]:window_ind[1]][feature].values
+    pushup_lst = [pushup_arr[r]*180.0 / np.pi for r in xrange(len(pushup_arr))]
+    plotting_amp = np.min(pushup_lst) - 5.0
+    
     
     # Plot complete time series and push-up duration overlay
     fig1 = plt.figure()
-    plt.plot(time, data[feature], label='Pitch data')
-    plt.plot(pushup_time, pushup_data, label='Push-up duration')
+    plt.plot(time, data_lst, label='Full time series')
+    plt.plot(pushup_time, pushup_lst, label='Pushup duration')
     
     # Mark push-up repetitions
-    plt.scatter([pushup_start + p for p in peakmax],np.linspace(0.0,0.0,num=len(peakmax)), color='r',marker='x', lw=2, label='Push-ups')
-    plt.title('Push-up Repetitions')
-    plt.ylabel('Raw Data')
+    plt.scatter([pushup_start + p for p in peakmax],np.linspace(plotting_amp,plotting_amp,num=len(peakmax)), color='r',marker='x', lw=2, label='Pushups')
+    plt.title('Pushup Repetitions')
+    plt.ylabel('Phone Pitch (degrees)')
     plt.xlabel('Time (Seconds)')
     plt.xlim(0,time[-1])
     ymin, ymax = plt.ylim()
-    #plt.ylim(-, 1.5)
+    plt.ylim(-40.0, 100.0) # keep the ylim the same for all samples so you can easily compare amplitudes
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/pushup_reps/pu_reps-'+sample+'.png');
     plt.close(fig1)

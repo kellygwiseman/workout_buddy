@@ -16,10 +16,10 @@ from werkzeug import secure_filename, SharedDataMiddleware
 app = Flask(__name__)
 user = 2
 # Orderd by pro, good, novice
-ts_urls = ['https://plot.ly/~kellygwiseman/220','https://plot.ly/~kellygwiseman/207', 'https://plot.ly/~kellygwiseman/160']
-bar_urls = ['https://plot.ly/~kellygwiseman/287', 'https://plot.ly/~kellygwiseman/304', 'https://plot.ly/~kellygwiseman/290']
+ts_urls = ['https://plot.ly/~kellygwiseman/220','https://plot.ly/~kellygwiseman/310', 'https://plot.ly/~kellygwiseman/160']
+bar_urls = ['https://plot.ly/~kellygwiseman/287', 'https://plot.ly/~kellygwiseman/311', 'https://plot.ly/~kellygwiseman/290']
 monthly_urls = ['https://plot.ly/~kellygwiseman/221', 'https://plot.ly/~kellygwiseman/208', 'https://plot.ly/~kellygwiseman/161']
-tips = ["You're doing good. Next time try to keep an even pace throughout your set.","You're doing good. Try to switch to regular pushups next time.", "You're doing ok. Next time try to keep an even pace throughout your set."]
+tips = ["Great form! Next time add more reps or try a different pushup stance.","You're doing good. Next time try to keep an even pace throughout your set.", "You're doing ok. Next time try to keep an even pace throughout your set."]
 
 # This is the path to the upload directory
 app.config['UPLOAD_FOLDER'] = 'uploads/'

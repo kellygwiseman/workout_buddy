@@ -23,19 +23,6 @@ if __name__ == '__main__':
 	ensemble_arr = np.array([pred_rf, pred_svm, pred_tsP, pred_tsY, pred_tsZ])
 	ensemble_prob_arr = np.array([prob_rf[:,1], prob_svm[:,1], prob_tsP, prob_tsY, prob_tsZ])
 
-	#print out predictions and probabilities for each model
-	#print 'RF:', pred_rf
-	#print 'RF prob:', prob_rf
-	#print 'SVM:', pred_svm
-	#print 'SVM prob:', prob_svm
-	#print 'ts pitch:', pred_tsP
-	#print 'ts pitch prob:', prob_tsP
-	#print 'ts accY:', pred_tsY
-	#print 'ts accY prob:', prob_tsY
-	#print 'ts accZ:', pred_tsZ
-	#print 'ts accZ prob:', prob_tsZ
-	#print ''
-
 	# use weighted ensemble probability model 
 	weights = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
 	w_prob = np.dot(weights,ensemble_prob_arr)

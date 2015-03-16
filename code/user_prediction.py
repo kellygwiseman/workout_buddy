@@ -14,24 +14,22 @@ class UserPrediction(object):
 		'''
 		self.info = info
 		self.user = user
+		self.female = 0
+		self.form = 'unknown'
+		self.sample = user
+		self.w_prob = []
+		self.p = []
+		self.timestamp = None
 
 	def _process_info(self):
 		'''
 		Process info dataframe and initialize exercise statistics
 		''' 
-
 		self.info['file'] = self.info['timestamp'].copy()
 		self.info['timestamp'] = pd.to_datetime(self.info['timestamp'],format='%Y-%m-%d_%H-%M-%S')
 		cond = self.info['user_id'] == self.user
 		self.info = self.info[cond]
 		self.info.reset_index(inplace=True)
-		self.info['form'] = 'unknown'
-		self.info.drop(['phone','comments'], axis=1, inplace=True)
-		self.info['Pcount'] = 0
-		self.info['avg_amp'] = 0.0
-		self.info['avg_dur'] = 0.0
-		self.info['amp_std'] = 0.0
-		self.info['dur_std'] = 0.0
 
 	def batch_process_user_samples(self):
 		self._process_info()
@@ -42,13 +40,10 @@ class UserPrediction(object):
 		            'motionQuaternionX','motionQuaternionY','motionQuaternionZ','motionQuaternionW']
 
 		# Initiate rep_history list
-		rep_prob_history = []
 		rep_bin_history = []
 
 		# Iterate through all the samples in info
 		for i in xrange(self.info.shape[0]):
-			# Initialize metrics lists
-			rep_metrics_list = []
 
 			# Initialize time series lists
 			pitch_ts = []
@@ -57,12 +52,11 @@ class UserPrediction(object):
 			quatY_ts = []
 
 			df = pd.read_csv('../data/sensor/'+ self.info.loc[i,'file'] + '.csv')
-			sample = 'user_'+str(self.user) + '_' + str(self.info.loc[i,'file'])
-			female = self.info.loc[i,'female']
+			self.sample = 'user_'+str(self.user) + '_' + str(self.info.loc[i,'file'])
+			self.female = self.info.loc[i,'female']
 			freq = float(self.info.loc[i,'hertz'])
 			height = self.info.loc[i,'height (inches)']
-			timestamp = self.info.loc[i, 'timestamp']
-			form = self.info.loc[i,'form']
+			self.timestamp = self.info.loc[i, 'timestamp']
 			df_num = df[numeric_features]
 			exercise = self.info.loc[i, 'exercise']
 
@@ -92,8 +86,8 @@ class UserPrediction(object):
 
 			## Count the number of pushup repetitions ##
 			# Calculate initial peak parameters using filtered data
-			mph = 0.2 - (0.025 * female) # minimum peak height
-			mpd = (0.5 * freq) + (0.25 * freq * female) # minimum peak separation distance
+			mph = 0.18 # minimum peak height
+			mpd = (0.5 * freq)  # minimum peak separation distance
 			feature = 'motionPitch'
 			peakind, count = dp.count_peaks_initial(df_filt, pushup_window, feature, mph, mpd, freq)
 			avg_dur = dp.average_duration(peakind, count)
@@ -103,26 +97,21 @@ class UserPrediction(object):
 			window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
 			# Calculate final peak parameters using unfiltered data
+			# min peaks (middle of the rep when you reach lowest press-down)
 			mph = avg_amp_initial # minimum peak height
 			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 			peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 			print count_min
+			# max peaks (start and end of rep)
 			mph = -0.8 # minimum peak height
 			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 			peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
 			print count_max
 
 			# add repetition metrics to list
-			avg_metrics = dp.avg_rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
-			sample_metrics = dp.rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height)
+			avg_metrics = dp.avg_rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, self.female, height, self.form)
+			sample_metrics = dp.rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, self.female, height)
 			sample_metrics = np.array(sample_metrics)
-
-			# add results to dataframe
-			self.info.loc[i, 'Pcount'] = count_min
-			self.info.loc[i, 'avg_amp'] = avg_metrics[2]
-			self.info.loc[i, 'avg_dur'] = avg_metrics[3]
-			self.info.loc[i, 'amp_std'] = avg_metrics[4]
-			self.info.loc[i, 'dur_std'] = avg_metrics[5]
 
 			# Repetition windows
 			multiple_rep_windows = dp.calculate_multiple_rep_window(peakmax, window_ind, freq)
@@ -142,7 +131,7 @@ class UserPrediction(object):
 			c = ClassifyRep()
 			pred_rf, prob_rf = c.predict('../models/rf_n50_mf2_md2_all.pkl', X)
 			pred_svm, prob_svm = c.predict('../models/svm_C10_g1.0_all.pkl', X)
-			p, pred_tsP, prob_tsP = c.predict_ts('../models/dtw_kNNpitch_n4_w10_all.pkl', pitch_ts, component='pitch', avg_length=34)
+			self.p, pred_tsP, prob_tsP = c.predict_ts('../models/dtw_kNNpitch_n4_w10_all.pkl', pitch_ts, component='pitch', avg_length=34)
 			y, pred_tsY, prob_tsY = c.predict_ts('../models/dtw_kNNaccY_n4_w10_all.pkl', accY_ts, component='accY', avg_length=34)
 			z, pred_tsZ, prob_tsZ  = c.predict_ts('../models/dtw_kNNaccZ_n4_w10_all.pkl', accZ_ts, component='accZ', avg_length=34)
 			ensemble_arr = np.array([pred_rf, pred_svm, pred_tsP, pred_tsY, pred_tsZ])
@@ -150,36 +139,43 @@ class UserPrediction(object):
 
 			# use weighted ensemble probability model 
 			weights = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
-			w_prob = np.dot(weights,ensemble_prob_arr)
-			w_prob_true = (w_prob > 0.5)* 1.0
-			print 'ensemble probability:', w_prob
+			self.w_prob = np.dot(weights,ensemble_prob_arr)
+			w_prob_true = (self.w_prob > 0.5)* 1.0
+			print 'ensemble probability:', self.w_prob
 			print 'ensemble prediction:', w_prob_true
-			good = w_prob[(w_prob > 0.5)]
-			ok = w_prob[(w_prob <= 0.5)]
+			good = self.w_prob[(self.w_prob > 0.5)]
+			ok = self.w_prob[(self.w_prob <= 0.5)]
 			overall = len(good) > len(ok)
 			if overall == True:
-				form = 'good'
+				self.form = 'good'
 			else:
-				form = 'ok'
-
-			rep_prob_history.append((w_prob, timestamp))
-			rep_bin_history.append(([len(ok),len(good)], timestamp))
-			daily_url = pg.daily_reps(timestamp.hour, w_prob, sample)
-			ts_url = pg.plot_ts(p, sample, freq=20.0)
-			bar_url = pg.reps_bar_chart(w_prob, sample)
+				self.form = 'ok'
 
 			# Determine appropriate tip message
 			if avg_metrics[4] > 0.1:
-				tip =  "You're doing "+form+". Next time try to have more consistent press-downs depths."
+				tip =  "You're doing "+self.form+". Next time try to have more consistent press-downs depths."
 			elif avg_metrics[5] > 0.2:
-				tip =  "You're doing "+form+". Next time try to keep an even pace throughout your set."
+				tip =  "You're doing "+self.form+". Next time try to keep an even pace throughout your set."
 			elif avg_metrics[2] < 1.0:
-				tip = "You're doing "+form+". Next time try to go lower."
+				tip = "You're doing "+self.form+". Next time try to go lower."
 			elif (avg_metrics[2] > 0.75) and (exercise == 'Kpushup'):
-				tip = "You're doing "+form+". Try to switch to regular pushups next time."
+				tip = "You're doing "+self.form+". Try to switch to regular pushups next time."
 			elif (avg_metrics[2] > 1.0) and (avg_metrics[2] < 1.4):
-				tip = "You're doing "+form+". Next time try pressing down even lower."
+				tip = "You're doing "+self.form+". Next time try pressing down even lower."
 			elif avg_metrics[2] > 1.4:
 				tip = "Great form! Next time add more reps or try a different pushup stance."
 
-		return rep_prob_history, rep_bin_history, tip, daily_url, ts_url, bar_url
+			print tip
+
+			# append rep ratings to rep history list
+			rep_bin_history.append(([len(ok),len(good)], self.timestamp))
+
+		# make plotly figures of lastest reps
+		daily_url = pg.daily_reps(self.timestamp.hour, self.w_prob, self.sample)
+		ts_url = pg.plot_ts(self.p, self.sample, freq=20.0)
+		bar_url = pg.reps_bar_chart(self.w_prob, self.sample)
+
+		# make plotly aggregate monthly figure
+		monthly_url = pg.monthly_reps(rep_bin_history, self.user)
+
+		return tip, daily_url, ts_url, bar_url, monthly_url

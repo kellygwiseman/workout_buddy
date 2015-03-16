@@ -1,4 +1,0 @@
-user_id, timestamp, name, exercise, hertz, count, phone, stance, height (inches), female, form, comments
-100, 2015-03-01_11-11-36, Beau, pushup, 20, 10, ip5, narrow, 76, 0, excellent, excellent form
-100, 2015-03-01_11-13-22, Beau, pushup, 20, 10, ip5, normal, 76, 0, excellent, excellent form
-100, 2015-03-01_11-13-51, Beau, pushup, 20, 10, ip5, inward, 76, 0, excellent, excellent form

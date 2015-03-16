@@ -1,5 +1,0 @@
-Situp notes
-
-•yaw can have big spikes - maybe moving elbows?
-•if you move your elbows a lot it shows up as spike in the z component of acceleration on high order (>= 3)
-•if arms are in and steady, there’s little gyroX

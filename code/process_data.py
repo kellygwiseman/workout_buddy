@@ -101,8 +101,8 @@ class ProcessData(object):
 
 			## Count the number of pushup repetitions ##
 			# Calculate initial peak parameters using filtered data
-			mph = 0.2 - (0.025 * female) # minimum peak height
-			mpd = (0.5 * freq) + (0.25 * freq * female) # minimum peak separation distance
+			mph = 0.18  # minimum peak height
+			mpd = (0.5 * freq) # minimum peak separation distance
 			feature = 'motionPitch'
 			peakind, count = dp.count_peaks_initial(df_filt, pushup_window, feature, mph, mpd, freq)
 			avg_dur = dp.average_duration(peakind, count)
@@ -112,10 +112,12 @@ class ProcessData(object):
 			window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
 			# Calculate final peak parameters using unfiltered data
+			# min peaks (middle of the rep when you reach lowest press-down)
 			mph = avg_amp_initial # minimum peak height
 			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 			peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 			print count_min
+			# max peaks (start and end of rep)
 			mph = -0.8 # minimum peak height
 			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 			peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
@@ -228,8 +230,8 @@ class ProcessData(object):
 
 		## Count the number of pushup repetitions ##
 		# Calculate initial peak parameters using filtered data
-		mph = 0.2 - (0.025 * female) # minimum peak height
-		mpd = (0.5 * freq) + (0.25 * freq * female) # minimum peak separation distance
+		mph = 0.18  # minimum peak height
+		mpd = (0.5 * freq) # minimum peak separation distance
 		feature = 'motionPitch'
 		peakind, count = dp.count_peaks_initial(df_filt, pushup_window, feature, mph, mpd, freq)
 		avg_dur = dp.average_duration(peakind, count)
@@ -239,10 +241,12 @@ class ProcessData(object):
 		window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
 		# Calculate final peak parameters using unfiltered data
+		# min peaks (middle of the rep when you reach lowest press-down)
 		mph = avg_amp_initial # minimum peak height
 		mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 		peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 		print count_min
+		# max peaks (start and end of rep)
 		mph = -0.8 # minimum peak height
 		mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 		peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
