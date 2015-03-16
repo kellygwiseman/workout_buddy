@@ -142,6 +142,9 @@ def count_peak_max(data, peakmin_count, window_ind, feature, mph, mpd, freq, val
     peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
     if (peakind[0] > 1.0) and (count <= peakmin_count):
         peakind.insert(0, 0)
+    # try to deal with the problem of the first max peak (start of reps) being picked too late.
+    if (peakind[1] - peakind[0]) > 1.15*(peakind[2] - peakind[1]):
+        peakind[0]+= ((peakind[1] - peakind[0]) - (peakind[2] - peakind[1]))/2
     count = len(peakind)
     return peakind, count, pushup_data
 

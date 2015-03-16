@@ -6,7 +6,7 @@ import numpy as np
 if __name__ == '__main__':
 	# process samples
 	info = pd.read_csv('../data/pushup_info.csv', skipinitialspace=True)
-	p = ProcessData(info,'normal',plot=False)
+	p = ProcessData(info,'all',plot=True)
 	avg_arr, rep_arr, ts_arr = p.batch_process_samples()
 
 	# select features to include in to training model
@@ -20,7 +20,7 @@ if __name__ == '__main__':
 	labels = labels.astype(int)
 
 	# train classifier
-	stance = 'normal'
+	stance = 'all'
 	prob = True
 	c = ClassifyRep()
 	sss = c.split_data(labels, n_iter=5, test_size=0.3, random_state=50)

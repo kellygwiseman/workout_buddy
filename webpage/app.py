@@ -1,6 +1,6 @@
 import sys
 sys.path.append(r'../code')
-from user_prediction import UserPrediction
+from anonymous_user_prediction import UserPrediction
 import pandas as pd
 import plotly_graphs as pg
 import os
@@ -15,6 +15,11 @@ from werkzeug import secure_filename, SharedDataMiddleware
 # Initialize the Flask application
 app = Flask(__name__)
 user = 2
+# Orderd by pro, good, novice
+ts_urls = ['https://plot.ly/~kellygwiseman/220','https://plot.ly/~kellygwiseman/207', 'https://plot.ly/~kellygwiseman/160']
+bar_urls = ['https://plot.ly/~kellygwiseman/287', 'https://plot.ly/~kellygwiseman/304', 'https://plot.ly/~kellygwiseman/290']
+monthly_urls = ['https://plot.ly/~kellygwiseman/221', 'https://plot.ly/~kellygwiseman/208', 'https://plot.ly/~kellygwiseman/161']
+tips = ["You're doing good. Next time try to keep an even pace throughout your set.","You're doing good. Try to switch to regular pushups next time.", "You're doing ok. Next time try to keep an even pace throughout your set."]
 
 # This is the path to the upload directory
 app.config['UPLOAD_FOLDER'] = 'uploads/'
@@ -50,9 +55,9 @@ def upload():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         # run sample
-        info = pd.read_table('uploads/'+filename, sep=',', skipinitialspace=True)
+        data = 'uploads/'+filename
         p = UserPrediction(info, 100)
-        prob_history, bin_history, tip, daily_url, ts_url, bar_url = p.batch_process_user_samples()
+        prob_history, bin_history, tip, daily_url, ts_url, bar_url = p.process_user_sample()
         monthly_url = pg.monthly_reps(bin_history, 100)
         ts_urls.append(str(ts_url))
         bar_urls.append(str(bar_url))
@@ -70,12 +75,6 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == '__main__':
-    # Orderd by pro, good, novice
-    ts_urls = ['https://plot.ly/~kellygwiseman/220','https://plot.ly/~kellygwiseman/207', 'https://plot.ly/~kellygwiseman/160']
-    bar_urls = ['https://plot.ly/~kellygwiseman/287', 'https://plot.ly/~kellygwiseman/304', 'https://plot.ly/~kellygwiseman/290']
-    monthly_urls = ['https://plot.ly/~kellygwiseman/221', 'https://plot.ly/~kellygwiseman/208', 'https://plot.ly/~kellygwiseman/161']
-    tips = ["You're doing good. Next time try to keep an even pace throughout your set.","You're doing good. Try to switch to regular pushups next time.", "You're doing ok. Next time try to keep an even pace throughout your set."]
-
     app.run(
         host="0.0.0.0",
         port=8080,

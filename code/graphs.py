@@ -286,11 +286,11 @@ def plot_pushups(data, pushup_data, window_ind, peakmax, feature, freq, sample):
     # Mark push-up repetitions
     plt.scatter([pushup_start + p for p in peakmax],np.linspace(0.0,0.0,num=len(peakmax)), color='r',marker='x', lw=2, label='Push-ups')
     plt.title('Push-up Repetitions')
-    plt.ylabel('BP Filtered')
+    plt.ylabel('Raw Data')
     plt.xlabel('Time (Seconds)')
     plt.xlim(0,time[-1])
     ymin, ymax = plt.ylim()
-    plt.ylim(-1.5, 1.5)
+    #plt.ylim(-, 1.5)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/pushup_reps/pu_reps-'+sample+'.png');
     plt.close(fig1)

@@ -53,9 +53,6 @@
                     <li class="hidden">
                         <a href="#page-top"></a>
                     </li>
-                    <!--<li class="page-scroll">
-                        <a href="#about">About</a>
-                    </li>-->
                     <li class="page-scroll">
                         <a href="#data">Data</a>
                     </li>
@@ -74,7 +71,6 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <!-- <img class="img-responsive" src="../static/img/female_trainer_small.png" alt=""> -->
                     <div class="intro-text">
                         <span class="name">Workout Buddy</span>
                         <hr class="star-light">
@@ -141,40 +137,39 @@
                 <div class="col-sm-2 col-sm-offset-1 portfolio-item">
                     <br></br>
                     <br></br>
-                    <img class="img-responsive" src="../static/img/female_trainer_small.png" alt="">
+                    <img src="../static/img/female_trainer_small.png">
                 </div>
-                <div class="col-sm-2 col-sm-offset-0 portfolio-item">
+                <div class="col-sm-2 col-sm-offset-0">
                     <br></br>
                     <br></br>
-                    <p>Trainer Tip:</p>
-                    <p id="trainer_tip"></p>
+                    <p style="padding:10px; color: grey; background-color: white" id="trainer_tip"></p>
                 </div>
                 
                 <div class="col-sm-6 col-sm-offset-1 portfolio-item">
-                    <a href="#portfolioModal3" class="portfolio-link" data-toggle="modal">
+                    <a href="#dashboard2" class="portfolio-link" data-toggle="modal">
                         <div class="caption">
                             <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
+                                <i class="fa fa-search-plus fa-3x fa-inverse"></i>
                             </div>
                         </div>
                         <iframe id="ts_rep" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
                     </a>
                 </div>
                 <div class="col-sm-5 col-sm-offset-1 portfolio-item">
-                    <a href="#portfolioModal2" class="portfolio-link" data-toggle="modal">
+                    <a href="#dashboard3" class="portfolio-link" data-toggle="modal">
                         <div class="caption">
                             <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
+                                <i class="fa fa-search-plus fa-3x fa-inverse"></i>
                             </div>
                         </div>
                         <iframe id="bar_rep" width="400" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
                     </a>
                 </div>
                 <div class="col-sm-6 portfolio-item">
-                    <a href="#portfolioModal4" class="portfolio-link" data-toggle="modal">
+                    <a href="#dashboard4" class="portfolio-link" data-toggle="modal">
                         <div class="caption">
                             <div class="caption-content">
-                                <i class="fa fa-search-plus fa-3x"></i>
+                                <i class="fa fa-search-plus fa-3x fa-inverse"></i>
                             </div>
                         </div>
                         <iframe id="monthly_rep" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
@@ -184,27 +179,6 @@
         </div>
     </section>
 
-    
-
-    <!-- About Section -->
-    <!-- <section id="about">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <h2>About</h2>
-                    <hr class="star-primary">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-lg-offset-2">
-                    <p>Workout Buddy counts exercise repetitions and assesses move quality to provide real-time feedback and tracking capabilities to fitness lovers. The beta version starts out tracking pushups, with more moves to come!</p>
-                </div>
-                <div class="col-lg-4">
-                    <p>All you need is your iPhone and an armaband to get started analyzing your fitness cabalities. Workout Buddy uses your phone's accelerometer and gyro sensor, along with an ensemble of signal processing filters and classification models, to rate your workout.</p>
-                </div>
-        </div>
-    </section> -->
-
     <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
     <div class="scroll-top page-scroll visible-xs visble-sm">
         <a class="btn btn-primary" href="#page-top">
@@ -213,7 +187,7 @@
     </div>
 
     <!-- Portfolio Modals -->
-    <div class="portfolio-modal modal fade" id="portfolioModal3" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="portfolio-modal modal fade" id="dashboard2" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
                 <div class="lr">
@@ -228,14 +202,14 @@
                             <h2>Latest Pushup Reps</h2>
                             <hr class="star-primary">
                             <iframe id="ts_repZ" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
-                            <p>Pushup reps are plotted sequentially.  The pitch amplitude is correlated with press-down depth. The larger the amplitude, the better the pushup. Try to have consistent form for all your reps!</p>
+                            <p>Pushup reps are plotted sequentially.  The pitch amplitude is correlated with press-down depth. The larger the amplitude, the better the pushup. An optimal basic-stance pushup rep is plotted in gray.  How do your reps compare? Try to have consistent form for all your reps!</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="portfolio-modal modal fade" id="portfolioModal2" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="portfolio-modal modal fade" id="dashboard3" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
                 <div class="lr">
@@ -257,7 +231,7 @@
             </div>
         </div>
     </div>
-    <div class="portfolio-modal modal fade" id="portfolioModal4" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="portfolio-modal modal fade" id="dashboard4" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-content">
             <div class="close-modal" data-dismiss="modal">
                 <div class="lr">

@@ -11,7 +11,20 @@ spectral_colors = brewer2mpl.get_map('Spectral', 'Diverging', 10).colors
 def reps_bar_chart(w_prob, sample):
 	w_prob_true = (w_prob > 0.5)* 1.0
 	w_prob_false = (w_prob <= 0.5)* 1.0
-	trace1 = dict(
+	trace1 = Scatter(
+		x=np.arange(1, len(w_prob)+1, 1.0),
+		y=np.linspace(50,50,len(w_prob)),
+		name='Good threshold',
+		mode = 'lines',
+		marker=Marker(
+			color = 'grey',
+			line=Line(
+				color = 'grey',
+				width = 1.0
+				)
+			)
+		)
+	trace2 = dict(
 		x=np.arange(1, len(w_prob)+1, 1.0),
 		y=np.multiply(w_prob_false, w_prob)*100,
 		type = 'bar',
@@ -20,7 +33,7 @@ def reps_bar_chart(w_prob, sample):
 			color='rgb(204, 0, 0)'
 			)
 		)
-	trace2 = dict(
+	trace3 = dict(
 		x=np.arange(1, len(w_prob)+1, 1.0),
 		y=np.multiply(w_prob_true, w_prob)*100,
 		type = 'bar',
@@ -29,7 +42,8 @@ def reps_bar_chart(w_prob, sample):
 			color='rgb(0, 204, 102)'
 			)
 		)
-	data = Data([trace1, trace2])
+	
+	data = Data([trace1, trace2, trace3])
 	layout = Layout(
 	    title='Form Breakdown of Last Set of Reps',
         autosize=False,
@@ -56,7 +70,7 @@ def reps_bar_chart(w_prob, sample):
             	size=16,
             	color='rgb(107, 107, 107)'
         	),
-    		range = [0,len(w_prob)]
+    		range = [0,len(w_prob)+1]
     	)
 	)
 	fig = Figure(data=data, layout=layout)
@@ -245,14 +259,14 @@ def plot_ts(ts, sample, freq=20.0):
 	example_ts = np.load('../processed/pushup_raw_ts_one_all.npy')[0,31] #normal stance Beau
 	# initialize rep to 0
 	B = np.array([xi - xi[0] for xi in [example_ts]])
-	traceB = make_trace(calculate_time_axis(B[0], freq), rad_to_degree(B[0]), 'optimal', [150,150,150])
+	traceB = make_trace(calculate_time_axis(B[0], freq), rad_to_degree(B[0]), 'optimal rep', [150,150,150])
 	
 	# user pitch
 	trace = [make_trace(calculate_time_axis(ts[i], freq), rad_to_degree(ts[i]), str(i+1), spectral_colors[i%10]) for i in xrange(len(ts))]
 	trace.insert(0, traceB)
 	data = Data(trace)
 	layout = Layout(
-	    title='Last Set of Reps',
+	    title='Time Series of Last Set of Reps',
 	    yaxis=YAxis(
         	title='Pitch (degrees)',
         	range = [-100, 10],
