@@ -1,8 +1,6 @@
 import sys
 sys.path.append(r'../code')
-from anonymous_user_prediction import UserPrediction
-import pandas as pd
-import plotly_graphs as pg
+from anonymous_user_prediction import AnonPrediction
 import os
 # We'll render HTML templates and access data sent by POST
 # using the request object from flask. Redirect and url_for
@@ -14,12 +12,12 @@ from werkzeug import secure_filename, SharedDataMiddleware
 
 # Initialize the Flask application
 app = Flask(__name__)
-user = 2
-# Orderd by pro, good, novice
+# Example user plots, orderd by pro, good, novice
 ts_urls = ['https://plot.ly/~kellygwiseman/220','https://plot.ly/~kellygwiseman/310', 'https://plot.ly/~kellygwiseman/160']
 bar_urls = ['https://plot.ly/~kellygwiseman/287', 'https://plot.ly/~kellygwiseman/311', 'https://plot.ly/~kellygwiseman/290']
 monthly_urls = ['https://plot.ly/~kellygwiseman/221', 'https://plot.ly/~kellygwiseman/208', 'https://plot.ly/~kellygwiseman/161']
 tips = ["Great form! Next time add more reps or try a different pushup stance.","You're doing good. Next time try to keep an even pace throughout your set.", "You're doing ok. Next time try to keep an even pace throughout your set."]
+user = 2 # start off plotting novice user
 
 # This is the path to the upload directory
 app.config['UPLOAD_FOLDER'] = 'uploads/'
@@ -36,14 +34,14 @@ def allowed_file(filename):
 # value of the operation
 @app.route('/')
 def index():
-    global user
+    global user, ts_urls, bar_urls, monthly_urls, tips
     return render_template('index.html', user = user, bar_fig = bar_urls, ts_fig = ts_urls, monthly_fig = monthly_urls, tip_text = tips)
 
 
 # Route that will process the file upload
 @app.route('/upload', methods=['POST'])
 def upload():
-    global user
+    global user, ts_urls, bar_urls, monthly_urls, tips
     # Get the name of the uploaded file
     file = request.files['file']
     # Check if the file is one of the allowed types/extensions
@@ -55,10 +53,9 @@ def upload():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         # run sample
-        data = 'uploads/'+filename
-        p = UserPrediction(info, 100)
-        prob_history, bin_history, tip, daily_url, ts_url, bar_url = p.process_user_sample()
-        monthly_url = pg.monthly_reps(bin_history, 100)
+        data = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        p = AnonPrediction(data)
+        tip, daily_url, ts_url, bar_url, monthly_url = p.process_user_sample()
         ts_urls.append(str(ts_url))
         bar_urls.append(str(bar_url))
         monthly_urls.append(str(monthly_url))

@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import graphs as gr
+import matplotlib_graphs as gr
 from filter import filter_features
 import detect_peaks as dp
 

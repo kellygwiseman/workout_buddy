@@ -107,6 +107,9 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
 
     return ind
 
+
+""" My functions below """
+
 def count_peaks_initial(data, pushup_window, feature, mph, mpd, freq, valley=False, edge='falling'):
     ''' Calculate initial timing of the press-up position since start of pushup window. 
     Because the data is filtered, this won't include the starting up position. '''
