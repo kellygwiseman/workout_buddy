@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Workout Buddy</title>
+
+    <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../static/css/freelancer.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#page-top">Workout Buddy</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#data">Data</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#dashboard">Dashboard</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="intro-text">
+                        <span class="name">Workout Buddy</span>
+                        <hr class="star-light">
+                        <span class="skills">A personal trainer at your fingertips</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-lg-offset-2 text-left">
+                            <br></br>
+                            <p>Workout Buddy counts exercise repetitions and provides detailed move assessments to keep all levels of users motivated and improving. The beta version starts out tracking pushups, with more moves to come!</p>
+                        </div>
+                        <div class="col-lg-4 text-left">
+                            <br></br>
+                            <p>All you need is your iPhone and an armaband to get started analyzing your fitness cabalities. Workout Buddy uses your phone's accelerometer and gyro sensor, along with an ensemble of signal processing filters and classification models, to rate your workout.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Data Section -->
+    <section id="data">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Data</h2>
+                    <hr class="star-primary">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-lg-offset-3">
+                    <p>View example user profiles.</p>
+                </div>
+                <div class="col-lg-6">
+                    <p>Upload your own sensor data.</p>
+                </div>
+                <div class="col-lg-2 col-lg-offset-1 text-center">
+                    <button class="button-zero btn-lg btn-outline">Fitness Pro</button>
+                </div>
+                <div class="col-lg-2 col-lg-offset-0 text-center">
+                    <button class="button-one btn-lg btn-outline">Good</button>
+                </div>
+                <div class="col-lg-2 col-lg-offset-0 text-center">
+                    <button class="button-two btn-lg btn-outline">Novice</button>
+                </div>
+                <form class="col-lg-2 text-center" id="uploadform" action="upload" method="post" enctype="multipart/form-data">
+                    <input id="uploadinput" type="file" name="file" class="btn btn-lg btn-outline">
+                </form>
+               
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Grid Section -->
+    <section class="success" id="dashboard">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2>Dashboard</h2>
+                    <hr class="star-light">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 col-sm-offset-1 portfolio-item">
+                    <br></br>
+                    <br></br>
+                    <img src="../static/img/female_trainer_small.png">
+                </div>
+                <div class="col-sm-2 col-sm-offset-0">
+                    <br></br>
+                    <br></br>
+                    <p style="padding:10px; color: grey; background-color: white" id="trainer_tip"></p>
+                </div>
+                
+                <div class="col-sm-6 col-sm-offset-1 portfolio-item">
+                    <a href="#dashboard2" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x fa-inverse"></i>
+                            </div>
+                        </div>
+                        <iframe id="ts_rep" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                    </a>
+                </div>
+                <div class="col-sm-5 col-sm-offset-1 portfolio-item">
+                    <a href="#dashboard3" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x fa-inverse"></i>
+                            </div>
+                        </div>
+                        <iframe id="bar_rep" width="400" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                    </a>
+                </div>
+                <div class="col-sm-6 portfolio-item">
+                    <a href="#dashboard4" class="portfolio-link" data-toggle="modal">
+                        <div class="caption">
+                            <div class="caption-content">
+                                <i class="fa fa-search-plus fa-3x fa-inverse"></i>
+                            </div>
+                        </div>
+                        <iframe id="monthly_rep" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top page-scroll visible-xs visble-sm">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+    <!-- Portfolio Modals -->
+    <div class="portfolio-modal modal fade" id="dashboard2" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Latest Pushup Reps</h2>
+                            <hr class="star-primary">
+                            <iframe id="ts_repZ" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                            <p>Pushup reps are plotted sequentially.  The pitch amplitude is correlated with press-down depth. The larger the amplitude, the better the pushup. An optimal basic-stance pushup rep is plotted in gray.  How do your reps compare? Try to have consistent form for all your reps!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="dashboard3" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Form Breakdown</h2>
+                            <hr class="star-primary">
+                            <iframe id="bar_repZ" width="400" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                            <p>Pushup reps are plotted sequentially.  The size of the bar corresponds to the rating of the repeition, with 0% being poor and 100% being excellent form.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portfolio-modal modal fade" id="dashboard4" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>30 Day Rep Counts</h2>
+                            <hr class="star-primary">
+                            <iframe id="monthly_repZ" width="600" height="400" frameborder="0" seamless="seamless" scrolling="no"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="../static/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../static/js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="../static/js/classie.js"></script>
+    <script src="../static/js/cbpAnimatedHeader.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../static/js/freelancer.js"></script>
+
+</body>
+<script type="text/javascript">
+    // allows for automatic upload onces you've chosen a file
+    $('#uploadinput').change(function() {
+        $('#uploadform').submit();
+    });
+
+    // initializes the dashboard user
+    var user = {{user | safe}};
+    var trainer_tip_lst = {{tip_text | safe}}
+    var ts_fig_lst = {{ts_fig | safe}};
+    var bar_fig_lst = {{bar_fig | safe}};
+    var monthly_fig_lst = {{monthly_fig | safe}};
+
+    $('#trainer_tip').html(trainer_tip_lst[user]);    
+    $('#ts_rep').attr('src', ts_fig_lst[user]);
+    $('#bar_rep').attr('src', bar_fig_lst[user]);
+    $('#monthly_rep').attr('src', monthly_fig_lst[user]);
+    $('#ts_repZ').attr('src', ts_fig_lst[user]);
+    $('#bar_repZ').attr('src', bar_fig_lst[user]);
+    $('#monthly_repZ').attr('src', monthly_fig_lst[user]);
+
+    // changes the dashboard to Fitness Pro user
+    $(".button-zero").click(function () {
+    user = 0;
+    $('#trainer_tip').html(trainer_tip_lst[user]);    
+    $('#ts_rep').attr('src', ts_fig_lst[user]);
+    $('#bar_rep').attr('src', bar_fig_lst[user]);
+    $('#monthly_rep').attr('src', monthly_fig_lst[user]);
+    $('#ts_repZ').attr('src', ts_fig_lst[user]);
+    $('#bar_repZ').attr('src', bar_fig_lst[user]);
+    $('#monthly_repZ').attr('src', monthly_fig_lst[user]);
+    });
+
+    // changes the dashboard to Good user
+    $(".button-one").click(function () {
+    user = 1;
+    $('#trainer_tip').html(trainer_tip_lst[user]);    
+    $('#ts_rep').attr('src', ts_fig_lst[user]);
+    $('#bar_rep').attr('src', bar_fig_lst[user]);
+    $('#monthly_rep').attr('src', monthly_fig_lst[user]);
+    $('#ts_repZ').attr('src', ts_fig_lst[user]);
+    $('#bar_repZ').attr('src', bar_fig_lst[user]);
+    $('#monthly_repZ').attr('src', monthly_fig_lst[user]);
+    });
+
+    // changes the dashboard to Novice user
+    $(".button-two").click(function () {
+    user = 2;
+    $('#trainer_tip').html(trainer_tip_lst[user]);    
+    $('#ts_rep').attr('src', ts_fig_lst[user]);
+    $('#bar_rep').attr('src', bar_fig_lst[user]);
+    $('#monthly_rep').attr('src', monthly_fig_lst[user]);
+    $('#ts_repZ').attr('src', ts_fig_lst[user]);
+    $('#bar_repZ').attr('src', bar_fig_lst[user]);
+    $('#monthly_repZ').attr('src', monthly_fig_lst[user]);
+    });
+    
+</script>
+</html>
