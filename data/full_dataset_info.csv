@@ -13,9 +13,9 @@ user_id, timestamp, name, exercise, hertz, count, phone, stance, height (inches)
 6, 2015-03-04_08-05-28, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, excellent, Left arm with great depth
 6, 2015-03-08_12-34-58, Kelly, Kpushup, 20, 10, ip5, narrow, 65, 1, ok, left arm medium-low depth not sure if ok or good
 6, 2015-03-08_17-23-54, Kelly, pushup, 20, 5, ip5, normal, 65, 1, ok, left arm ok 
-6, 2015-03-08_17-25-14, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, ok, right arm inbetween ok and good
-6, 2015-03-09_08-10-05, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, ok, right arm fast speed and inbetween good and ok depth
-6, 2015-03-09_08-10-05, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, ok, right arm fast speed and inbetween good and ok depth
+6, 2015-03-08_17-25-14, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, good, right arm inbetween ok and good
+6, 2015-03-09_08-10-05, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, good, right arm fast speed and inbetween good and ok depth
+6, 2015-03-09_08-10-05, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, good, right arm fast speed and inbetween good and ok depth
 6, 2015-03-13_09-26-45, Kelly, Kpushup, 20, 10, ip5, normal, 65, 1, good, right arm
 7, 2015-03-01_09-53-05, Josh, pushup, 20, 10, ip5, normal, 68, 0, excellent, excellent form and medium pace
 7, 2015-03-01_09-53-39, Josh, pushup, 20, 10, ip5, normal, 68, 0, good, good form and slow pace

@@ -11,7 +11,6 @@ class ProcessData(object):
 		- info: dataframe with user and sample data
 		- pushup_type: 'all', '10_count', normal', 'narrow'
 		- plot: create plots of different stages of processed data
-
 		'''
 		self.info = info
 		self.pushup_type = pushup_type

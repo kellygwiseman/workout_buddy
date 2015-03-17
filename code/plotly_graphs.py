@@ -260,7 +260,7 @@ def calculate_time_axis(ts, freq):
 
 def plot_ts(ts, sample, freq=20.0):
 	# optimal pitch
-	example_ts = np.load('../processed/pushup_raw_ts_one_all.npy')[0,31] #normal stance Beau
+	example_ts = np.load('../processed/pushup_raw_ts_Beau_normal.npy')[0,4] #normal stance Beau
 	# initialize rep to 0
 	B = np.array([xi - xi[0] for xi in [example_ts]])
 	traceB = make_trace(calculate_time_axis(B[0], freq), rad_to_degree(B[0]), 'optimal rep', [150,150,150])

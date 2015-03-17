@@ -1,6 +1,4 @@
 from anonymous_user_prediction import AnonPrediction
-import pandas as pd
-import plotly_graphs as pg
 
 if __name__ == '__main__':
 	p = AnonPrediction('../data/test_samples/test_expert_male_basic.txt')

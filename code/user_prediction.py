@@ -26,7 +26,7 @@ class UserPrediction(object):
 		Process info dataframe and initialize exercise statistics
 		''' 
 		self.info['file'] = self.info['timestamp'].copy()
-		self.info['timestamp'] = pd.to_datetime(self.info['timestamp'],format='%Y-%m-%d_%H-%M-%S')
+		self.info['timestamp'] = pd.to_datetime(self.info['timestamp'], format='%Y-%m-%d_%H-%M-%S')
 		cond = self.info['user_id'] == self.user
 		self.info = self.info[cond]
 		self.info.reset_index(inplace=True)
@@ -72,13 +72,13 @@ class UserPrediction(object):
 
 			# Filter based on strength of feature correlations
 			cond1 = np.abs(correls.ix[:, 'accelerometerAccelerationX', 'accelerometerAccelerationY']) > 0.6
-			cond2 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW'])+
-			         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY'])+
-			         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ'])+
+			cond2 = (np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionW']) +
+			         np.abs(correls.ix[:, 'motionQuaternionX', 'motionQuaternionY']) +
+			         np.abs(correls.ix[:, 'motionQuaternionY', 'motionQuaternionZ']) +
 			         np.abs(correls.ix[:, 'gyroRotationX', 'gyroRotationZ'])) > 2.5
 
 			# Trim the noisy first 2.5 seconds and last 1 seconds of sample record
-			cond3 = df_filt.index > int(freq*2.5) 
+			cond3 = df_filt.index > int(freq * 2.5) 
 			cond4 = df_filt.index < (df_filt.shape[0] - int(freq)) 
 
 			# Initial pushup repetition window
@@ -99,12 +99,12 @@ class UserPrediction(object):
 			# Calculate final peak parameters using unfiltered data
 			# min peaks (middle of the rep when you reach lowest press-down)
 			mph = avg_amp_initial # minimum peak height
-			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
+			mpd = min((avg_dur * freq - 0.45 * freq), 1.5 * freq) # minimum peak separation distance
 			peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 			print count_min
 			# max peaks (start and end of rep)
 			mph = -0.8 # minimum peak height
-			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
+			mpd = min((avg_dur * freq - 0.45 * freq), 1.5 * freq) # minimum peak separation distance
 			peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
 			print count_max
 
@@ -130,7 +130,7 @@ class UserPrediction(object):
 			X = sample_metrics[:,[2,3]]
 			c = ClassifyRep()
 			pred_rf, prob_rf = c.predict('../models/rf_n50_mf2_md2_all.pkl', X)
-			pred_svm, prob_svm = c.predict('../models/svm_C10_g1.0_all.pkl', X)
+			pred_svm, prob_svm = c.predict('../models/svm_C10.0_g1.0_all.pkl', X)
 			self.p, pred_tsP, prob_tsP = c.predict_ts('../models/dtw_kNNpitch_n4_w10_all.pkl', pitch_ts, component='pitch', avg_length=34)
 			y, pred_tsY, prob_tsY = c.predict_ts('../models/dtw_kNNaccY_n4_w10_all.pkl', accY_ts, component='accY', avg_length=34)
 			z, pred_tsZ, prob_tsZ  = c.predict_ts('../models/dtw_kNNaccZ_n4_w10_all.pkl', accZ_ts, component='accZ', avg_length=34)
@@ -138,9 +138,9 @@ class UserPrediction(object):
 			ensemble_prob_arr = np.array([prob_rf[:,1], prob_svm[:,1], prob_tsP, prob_tsY, prob_tsZ])
 
 			# use weighted ensemble probability model 
-			weights = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
+			weights = np.array([0.25, 0.25, 0.25, 0.25, 0.0])
 			self.w_prob = np.dot(weights,ensemble_prob_arr)
-			w_prob_true = (self.w_prob > 0.5)* 1.0
+			w_prob_true = (self.w_prob > 0.5) * 1.0
 			print 'ensemble probability:', self.w_prob
 			print 'ensemble prediction:', w_prob_true
 			good = self.w_prob[(self.w_prob > 0.5)]
@@ -153,15 +153,15 @@ class UserPrediction(object):
 
 			# Determine appropriate tip message
 			if avg_metrics[4] > 0.1:
-				tip =  "You're doing "+self.form+". Next time try to have more consistent press-downs depths."
+				tip =  "You're doing " + self.form + ". Next time try to have more consistent press-downs depths."
 			elif avg_metrics[5] > 0.2:
-				tip =  "You're doing "+self.form+". Next time try to keep an even pace throughout your set."
+				tip =  "You're doing " + self.form + ". Next time try to keep an even pace throughout your set."
 			elif avg_metrics[2] < 1.0:
-				tip = "You're doing "+self.form+". Next time try to go lower."
+				tip = "You're doing " + self.form + ". Next time try to go lower."
 			elif (avg_metrics[2] > 0.75) and (exercise == 'Kpushup'):
-				tip = "You're doing "+self.form+". Try to switch to regular pushups next time."
+				tip = "You're doing " + self.form + ". Try to switch to regular pushups next time."
 			elif (avg_metrics[2] > 1.0) and (avg_metrics[2] < 1.4):
-				tip = "You're doing "+self.form+". Next time try pressing down even lower."
+				tip = "You're doing " + self.form + ". Next time try pressing down even lower."
 			elif avg_metrics[2] > 1.4:
 				tip = "Great form! Next time add more reps or try a different pushup stance."
 

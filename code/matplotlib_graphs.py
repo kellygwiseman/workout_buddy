@@ -1,4 +1,8 @@
-""" Plot the Exercise data """
+""" 
+This library is used to make plots to help with the signal processing and repetition detection
+stage of modeling process.  They are intended to help with data analysis, and are
+not the visualizations used in the webapp.
+"""
 
 import matplotlib.pyplot as plt
 plt.ioff()
@@ -8,7 +12,7 @@ from matplotlib import rcParams
 
 # Set defaults for matplotlib
 dark2_colors = brewer2mpl.get_map('Dark2', 'Qualitative', 7).mpl_colors
-Idx = [0,1,2,3,6,4,5]
+Idx = [0, 1, 2, 3, 6, 4, 5]
 dark2_colors = [dark2_colors[i] for i in Idx]
 pair_colors = brewer2mpl.get_map('Paired', 'Qualitative', 8).mpl_colors
 RYG_colors = brewer2mpl.get_map('RdYlGn', 'Diverging', 10).mpl_colors
@@ -24,6 +28,8 @@ rcParams['patch.facecolor'] = dark2_colors[0]
 rcParams['font.family'] = 'StixGeneral'
 
 def plot3_acceleration(data, freq):
+    """ Plot the raw acceleration data. Split the three components into different plots. """
+
     rcParams['axes.color_cycle'] = dark2_colors
     time = data.index.values / freq
     fig1 = plt.figure()
@@ -31,27 +37,29 @@ def plot3_acceleration(data, freq):
     plt.title('X-component Acceleration')
     plt.xlabel('Time (seconds)')
     plt.ylabel('Meter / Second^2 (in G)')
-    plt.xlim(0,time[-1])
-    plt.savefig('../figures//acceleration/pu_accelX-'+sample+'.png');
+    plt.xlim(0, time[-1])
+    plt.savefig('../figures//acceleration/pu_accelX-' + sample + '.png');
     plt.close(fig1)
     fig2 = plt.figure()
     plt.plot(time, data.accelerometerAccelerationY)
     plt.title('Y-component Acceleration')
     plt.xlabel('Time (seconds)')
     plt.ylabel('Meter / Second^2 (in G)')
-    plt.xlim(0,time[-1])
-    plt.savefig('../figures//acceleration/pu_accelY-'+sample+'.png');
+    plt.xlim(0, time[-1])
+    plt.savefig('../figures//acceleration/pu_accelY-' + sample + '.png');
     plt.close(fig2)
     fig3 = plt.figure()
     plt.plot(time, data.accelerometerAccelerationZ)
     plt.xlabel('Time (seconds)')
     plt.ylabel('Meter / Second^2 (in G)')
-    plt.xlim(0,time[-1])
+    plt.xlim(0, time[-1])
     plt.title('Z-component Acceleration');
-    plt.savefig('../figures/acceleration/pu_accelZ-'+sample+'.png');
+    plt.savefig('../figures/acceleration/pu_accelZ-' + sample + '.png');
     plt.close(fig3)
     
 def plot1_acceleration(data, freq, sample):
+    """ Plot the raw acceleration data. """
+
     rcParams['axes.color_cycle'] = dark2_colors
     time = data.index.values / freq
     fig1 = plt.figure()
@@ -61,31 +69,17 @@ def plot1_acceleration(data, freq, sample):
     plt.title('Acceleration')
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Meter / Second^2 (in G)')
-    plt.xlim(0,time[-1])
+    plt.xlim(0, time[-1])
     ymin, ymax = plt.ylim()
     ydiff = ymax - ymin
     plt.ylim(ymin - 0.1*ydiff, ymax)
-    #plt.ylim(-1.5,1.5)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures//acceleration/pu_accel-'+sample+'.png');
-    plt.close(fig1)
-
-def plot1_Uacceleration(data, freq, sample):
-    rcParams['axes.color_cycle'] = dark2_colors
-    time = data.index.values / freq
-    fig1 = plt.figure()
-    plt.plot(time, data.motionUserAccelerationX, label='X' )
-    plt.plot(time, data.motionUserAccelerationY, label='Y')
-    plt.plot(time, data.motionUserAccelerationZ, label='Z')
-    plt.title('User Acceleration')
-    plt.xlabel('Time (Seconds)')
-    plt.ylabel('Meter / Second^2 (in G)')
-    plt.xlim(0,time[-1])
-    plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/user_acceleration/pu_Uaccel-'+sample+'.png');
+    plt.savefig('../figures//acceleration/pu_accel-' + sample + '.png');
     plt.close(fig1)
     
 def plot1_quaternion(data, freq, sample):
+    """ Plot the raw quaternion data. """
+
     rcParams['axes.color_cycle'] = dark2_colors
     time = data.index.values / freq
     fig1 = plt.figure()
@@ -100,12 +94,13 @@ def plot1_quaternion(data, freq, sample):
     ymin, ymax = plt.ylim()
     ydiff = ymax - ymin
     plt.ylim(ymin - 0.1*ydiff, ymax)
-    #plt.ylim(-0.5, 1.0)
     plt.legend(loc='lower center', ncol=4, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/quaternion/pu_quat-'+sample+'.png');
+    plt.savefig('../figures/quaternion/pu_quat-' + sample + '.png');
     plt.close(fig1)
 
 def plot1_gyro(data, freq, sample):
+    """ Plot the raw gyro rotation rate data. """
+
     rcParams['axes.color_cycle'] = dark2_colors
     time = data.index.values / freq
     fig1 = plt.figure()
@@ -116,15 +111,16 @@ def plot1_gyro(data, freq, sample):
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Radians / Second')
     plt.xlim(0,time[-1])
-    #plt.ylim(-5.0, 5.0)
     ymin, ymax = plt.ylim()
     ydiff = ymax - ymin
     plt.ylim(ymin - 0.1*ydiff, ymax)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/gyro/pu_gyro-'+sample+'.png');
+    plt.savefig('../figures/gyro/pu_gyro-' + sample + '.png');
     plt.close(fig1)
     
 def plot1_motion(data, freq, sample):
+    """ Plot the raw phone attitude data. """
+
     rcParams['axes.color_cycle'] = dark2_colors
     time = data.index.values / freq
     fig1 = plt.figure()
@@ -135,15 +131,17 @@ def plot1_motion(data, freq, sample):
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Radians')
     plt.xlim(0,time[-1])
-    #plt.ylim(-2.0,3.0)
     ymin, ymax = plt.ylim()
     ydiff = ymax - ymin
     plt.ylim(ymin - 0.1*ydiff, ymax)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/motion/pu_attitude-'+sample+'.png');
+    plt.savefig('../figures/motion/pu_attitude-' + sample + '.png');
     plt.close(fig1)
 
 def plot_corr(data, correls, freq, sample):
+    """ Plot the feature correlations for each data type. They'll be a separate plot for accelerartion,
+    gyro rotation rate, phone attitude, and phone quaternions. """
+
     rcParams['axes.color_cycle'] = dark2_colors
     time = data.index.values / freq
     fig1 = plt.figure()
@@ -153,11 +151,11 @@ def plot_corr(data, correls, freq, sample):
     plt.title('Acceleration Feature Correlation')
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Correlation Coefficient')
-    plt.xlim(0,time[-1])
-    plt.ylim(-1.5,1.25)
-    plt.yticks(np.arange(-1.0,1.5,0.5))
+    plt.xlim(0, time[-1])
+    plt.ylim(-1.5, 1.25)
+    plt.yticks(np.arange(-1.0, 1.5, 0.5))
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/correlation/pu_corr_acc-'+sample+'.png');
+    plt.savefig('../figures/correlation/pu_corr_acc-' + sample + '.png');
     plt.close(fig1)
 
     fig2 = plt.figure()
@@ -168,10 +166,10 @@ def plot_corr(data, correls, freq, sample):
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Correlation Coefficient')
     plt.xlim(0,time[-1])
-    plt.ylim(-1.5,1.25)
-    plt.yticks(np.arange(-1.0,1.5,0.5))
+    plt.ylim(-1.5, 1.25)
+    plt.yticks(np.arange(-1.0, 1.5, 0.5))
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/correlation/pu_corr_gyro-'+sample+'.png');
+    plt.savefig('../figures/correlation/pu_corr_gyro-' + sample + '.png');
     plt.close(fig2)
 
     fig3 = plt.figure()
@@ -182,10 +180,10 @@ def plot_corr(data, correls, freq, sample):
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Correlation Coefficient')
     plt.xlim(0,time[-1])
-    plt.ylim(-1.5,1.25)
-    plt.yticks(np.arange(-1.0,1.5,0.5))
+    plt.ylim(-1.5, 1.25)
+    plt.yticks(np.arange(-1.0, 1.5, 0.5))
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/correlation/pu_corr_att-'+sample+'.png');
+    plt.savefig('../figures/correlation/pu_corr_att-' + sample + '.png');
     plt.close(fig3)
 
     fig4 = plt.figure()
@@ -198,17 +196,20 @@ def plot_corr(data, correls, freq, sample):
     plt.title('Quarternion Feature Correlation')
     plt.xlabel('Time (Seconds)')
     plt.ylabel('Correlation Coefficient')
-    plt.xlim(0,time[-1])
-    plt.ylim(-1.75,1.25)
-    plt.yticks(np.arange(-1.0,1.5,0.5))
+    plt.xlim(0, time[-1])
+    plt.ylim(-1.75, 1.25)
+    plt.yticks(np.arange(-1.0, 1.5, 0.5))
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/correlation/pu_corr_quat-'+sample+'.png');
+    plt.savefig('../figures/correlation/pu_corr_quat-' + sample + '.png');
     plt.close(fig4)
 
 def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
+    """ Plot the bandpass filtered data. They'll be a separate plot for filtered accelerartion,
+    gyro rotation rate, phone attitude, and phone quaternions. """
+
     rcParams['axes.color_cycle'] = pair_colors
     time = data.index.values / freq
-    fig1 = plt.figure(figsize=(10,6))
+    fig1 = plt.figure(figsize=(10, 6))
     plt.plot(time, data.accelerometerAccelerationX, label='X')
     plt.plot(time, filtered_data.accelerometerAccelerationX, lw=2, label='filtered X')
     plt.plot(time, data.accelerometerAccelerationY, label='Y')
@@ -220,10 +221,10 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.ylabel('Meter / Second^2 (in G)')
     plt.ylim(-2.0, 1.5)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/bp_filter/pu_bp_acc-'+sample+'.png');
+    plt.savefig('../figures/bp_filter/pu_bp_acc-' + sample + '.png');
     plt.close(fig1)
 
-    fig2 = plt.figure(figsize=(10,6))
+    fig2 = plt.figure(figsize=(10, 6))
     plt.plot(time, data.gyroRotationX, label='X')
     plt.plot(time, filtered_data.gyroRotationX, lw=2, label='filtered X')
     plt.plot(time, data.gyroRotationY, label='Y')
@@ -235,10 +236,10 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.ylabel('Radian / Second')
     plt.ylim(-5.0, 5.0)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/bp_filter/pu_bp_gyr-'+sample+'.png');
+    plt.savefig('../figures/bp_filter/pu_bp_gyr-' + sample + '.png');
     plt.close(fig2)
 
-    fig3 = plt.figure(figsize=(10,6))
+    fig3 = plt.figure(figsize=(10, 6))
     plt.plot(time, data.motionPitch, label='Pitch')
     plt.plot(time, filtered_data.motionPitch, lw=2, label='filtered Pitch')
     plt.plot(time, data.motionRoll, label='Roll')
@@ -248,12 +249,12 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.title('Attitude Motion bandpass filtered between %g and %g Hz' %(lowcut, highcut))
     plt.xlabel('Time (seconds)')
     plt.ylabel('Radians')
-    plt.ylim(-2.5,3.0)
+    plt.ylim(-2.5, 3.0)
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/bp_filter/pu_bp_att-'+sample+'.png');
+    plt.savefig('../figures/bp_filter/pu_bp_att-' + sample + '.png');
     plt.close(fig3)
 
-    fig4 = plt.figure(figsize=(10,6))
+    fig4 = plt.figure(figsize=(10, 6))
     plt.plot(time, data.motionQuaternionX, label='X')
     plt.plot(time, filtered_data.motionQuaternionX, lw=2, label='filtered X')
     plt.plot(time, data.motionQuaternionY, label='Y')
@@ -267,11 +268,15 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.ylabel('Radians')
     plt.ylim(-0.75, 1.0)
     plt.legend(loc='lower center', ncol=4, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.05)
-    plt.savefig('../figures/bp_filter/pu_bp_quat-'+sample+'.png');
+    plt.savefig('../figures/bp_filter/pu_bp_quat-' + sample + '.png');
     plt.close(fig4)
 
 def plot_pushups(data, pushup_data, window_ind, peakmax, feature, freq, sample):
+    """ Plot the raw pitch time series overlain with the pushup duration window and markings
+    for the individual repetitions. """
+
     rcParams['axes.color_cycle'] = dark2_colors
+    
     # separate out pushup data and convert everything to seconds (from frequency)
     time = data.index.values / freq
     pushup_start = window_ind[0] / freq # for marking the peaks
@@ -282,62 +287,19 @@ def plot_pushups(data, pushup_data, window_ind, peakmax, feature, freq, sample):
     pushup_lst = [pushup_arr[r]*180.0 / np.pi for r in xrange(len(pushup_arr))]
     plotting_amp = np.min(pushup_lst) - 5.0
     
-    
     # Plot complete time series and push-up duration overlay
     fig1 = plt.figure()
     plt.plot(time, data_lst, label='Full time series')
     plt.plot(pushup_time, pushup_lst, label='Pushup duration')
     
     # Mark push-up repetitions
-    plt.scatter([pushup_start + p for p in peakmax],np.linspace(plotting_amp,plotting_amp,num=len(peakmax)), color='r',marker='x', lw=2, label='Pushups')
+    plt.scatter([pushup_start + p for p in peakmax], np.linspace(plotting_amp, plotting_amp, num=len(peakmax)), color='r',marker='x', lw=2, label='Pushups')
     plt.title('Pushup Repetitions')
     plt.ylabel('Phone Pitch (degrees)')
     plt.xlabel('Time (Seconds)')
-    plt.xlim(0,time[-1])
+    plt.xlim(0, time[-1])
     ymin, ymax = plt.ylim()
     plt.ylim(-40.0, 100.0) # keep the ylim the same for all samples so you can easily compare amplitudes
     plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/pushup_reps/pu_reps-'+sample+'.png');
-    plt.close(fig1)
-
-def plot_ts(B, ts, component, sample, avg_length=34, freq=20.0):
-    rcParams['axes.color_cycle'] = spectral_colors
-    time = np.arange(0,avg_length,1)/freq
-    for c in xrange(len(component)):
-        fig = plt.figure(figsize=(10,5))
-        for t in xrange(len(ts[c])):
-            if t == 0:
-                plt.plot(time, B[0], ':', lw=2, color='k', alpha=0.4, label='optimal')
-                plt.ylabel('Pitch (radians)')
-            plt.xlim(0,2.0)
-            plt.plot(time, ts[c][t], label=str(t+1))
-            plt.xlabel('Time (seconds)')
-        plt.title('Push-up Repetitions')
-        plt.legend(loc='upper right', title = 'Push-up Reps', ncol=1, bbox_to_anchor=(1.0, 1.0), fontsize=14, frameon=False, columnspacing=1, borderpad=0.1)
-        plt.savefig('../figures/pushup_ts/pu_ts-'+component[c]+'_'+sample+'.png')
-        plt.close(fig)
-
-def plot_situps(data, situp_window, peakind, feature, freq, sample):
-    rcParams['axes.color_cycle'] = dark2_colors
-    # separate out pushup data and convert everything to seconds (from frequency)
-    time = data.index.values / freq
-    situp_start = situp_window[0] / freq
-    situp_time = time[situp_window[0]:(situp_window[-1]+1)]
-    situp_data = data.ix[situp_window[0]:situp_window[-1]]
-    
-    # Plot complete time series and push-up duration overlay
-    fig1 = plt.figure()
-    plt.plot(time, data[feature], label='Raw data')
-    plt.plot(situp_time, situp_data[feature], label='Sit-up duration')
-    
-    # Mark push-up repetitions
-    plt.scatter(situp_start + peakind,np.linspace(0.0,0.0,num=len(peakind)), color='r',marker='x', lw=2, label='Sit-ups')
-    plt.title('Sit-up Repetitions')
-    plt.ylabel('BP Filtered')
-    plt.xlabel('Time (Seconds)')
-    plt.xlim(0,time[-1])
-    ymin, ymax = plt.ylim()
-    #plt.ylim(-1.0, 1.0)
-    plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
-    plt.savefig('../figures/situp_reps/su_reps-'+sample+'.png');
+    plt.savefig('../figures/pushup_reps/pu_reps-' + sample + '.png');
     plt.close(fig1)

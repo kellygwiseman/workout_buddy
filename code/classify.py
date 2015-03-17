@@ -1,7 +1,5 @@
-import pandas as pd
 import numpy as np
 from dtw import *
-from sklearn.preprocessing import scale
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.cross_validation import StratifiedShuffleSplit
 from sklearn import metrics
@@ -15,7 +13,6 @@ class ClassifyRep(object):
 		INPUT:
 		- X: pushup feature array
 		- labels: pushup form labels
-
 		'''
 		self.pred_list = []
 		self.ensemble_pred = []
@@ -26,7 +23,7 @@ class ClassifyRep(object):
 
 	def split_data(self, labels, n_iter=5, test_size=0.3, random_state=100):
 		self.n_iter = n_iter
-		sss = StratifiedShuffleSplit(labels, n_iter = n_iter, test_size = test_size, random_state=random_state)
+		sss = StratifiedShuffleSplit(labels, n_iter=n_iter, test_size=test_size, random_state=random_state)
 		return sss
 
 	def random_forest(self, sss, X, labels, stance, n_est=50, max_feat=2, max_depth=2, prob=False, pickle=False):
@@ -34,7 +31,7 @@ class ClassifyRep(object):
 		self.recall_list = []
 		self.prec_list = []
 		pred_list = []
-		i=1
+		i = 1
 		for train_index, test_index in sss:
 		    X_train, X_test = X[train_index], X[test_index]
 		    y_train, y_test = labels[train_index], labels[test_index]
@@ -47,7 +44,7 @@ class ClassifyRep(object):
 		    	pred_list.append(y_prob[:,1])
 		    else:
 		    	pred_list.append(y_pred)
-		    i+=1
+		    i += 1
 
 		print 'Average accuracy and std:', np.mean(self.acc_list), np.std(self.acc_list)
 		print 'Average precison and std:', np.mean(self.prec_list), np.std(self.prec_list)
@@ -56,9 +53,9 @@ class ClassifyRep(object):
 		if pickle:      
 			rf = RandomForestClassifier(n_estimators=n_est, max_features=max_feat, max_depth=max_depth)
 			rf.fit(X, labels)
-			save_model(rf, "../models/rf"+'_n'+str(n_est)+'_mf'+str(max_feat)+'_md'+str(max_depth)+'_'+stance+'.pkl' )
+			save_model(rf, "../models/rf" + '_n' + str(n_est) + '_mf' + str(max_feat) + '_md' + str(max_depth) + '_' + stance + '.pkl' )
 
-	def support_vector_machine(self, sss, X, labels, stance, C = 20, gamma = 0.1, prob=False, pickle=False):
+	def support_vector_machine(self, sss, X, labels, stance, C=10, gamma=0.1, prob=False, pickle=False):
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
@@ -67,7 +64,7 @@ class ClassifyRep(object):
 		for train_index, test_index in sss:
 		    X_train, X_test = X[train_index], X[test_index]
 		    y_train, y_test = labels[train_index], labels[test_index]
-		    svm = SVC(class_weight = 'auto', C = C, gamma = gamma, probability = True)
+		    svm = SVC(class_weight='auto', C=C, gamma=gamma, probability=True)
 		    svm.fit(X_train, y_train)
 		    y_pred = svm.predict(X_test)
 		    y_prob = svm.predict_proba(X_test)
@@ -76,16 +73,16 @@ class ClassifyRep(object):
 		    	pred_list.append(y_prob[:,1])
 		    else:
 		    	pred_list.append(y_pred)
-		    i+=1
+		    i += 1
 
 		print 'Average accuracy and std:', np.mean(self.acc_list), np.std(self.acc_list)
 		print 'Average precison and std:', np.mean(self.prec_list), np.std(self.prec_list)
 		print 'Average recall and std:', np.mean(self.recall_list), np.std(self.recall_list)
 		self.pred_list.append(pred_list)
 		if pickle:      
-			svm = SVC(class_weight='auto', C = C, gamma = gamma, probability = True)
+			svm = SVC(class_weight='auto', C=C, gamma=gamma, probability=True)
 			svm.fit(X, labels)
-			save_model(svm, "../models/svm"+'_C'+str(C)+'_g'+str(gamma)+'_'+stance+'.pkl')
+			save_model(svm, "../models/svm" + '_C' + str(C) + '_g' + str(gamma) + '_' + stance + '.pkl')
 
 	def dtw_kNN(self, sss, ts, labels, stance, component, avg_length=34, n_neighbors=4, max_warping_window=10, prob=False, pickle=False):
 		self.acc_list = []
@@ -111,7 +108,7 @@ class ClassifyRep(object):
 			else:
 				pred_list.append(y_pred)
 			self._print_iteration_metrics(y_test, y_pred, i)
-			i+=1
+			i += 1
 
 		print 'Average accuracy and std:', np.mean(self.acc_list), np.std(self.acc_list)
 		print 'Average precison and std:', np.mean(self.prec_list), np.std(self.prec_list)
@@ -120,7 +117,7 @@ class ClassifyRep(object):
 		if pickle:      
 			m = KnnDtw(n_neighbors=n_neighbors, max_warping_window=max_warping_window)
 			m.fit(X, labels)
-			save_model(m, "../models/dtw_kNN"+component+'_n'+str(n_neighbors)+'_w'+str(max_warping_window)+'_'+stance+'.pkl' )
+			save_model(m, "../models/dtw_kNN" + component + '_n' + str(n_neighbors) + '_w' + str(max_warping_window) + '_' + stance + '.pkl' )
 
 	def ensemble(self, sss, labels, weights):
 		self.acc_list = []
@@ -134,7 +131,7 @@ class ClassifyRep(object):
 			w_pred = w_pred > 0.5
 			y_test = labels[test_index]
 			self._print_iteration_metrics(y_test, w_pred, i)
-			i+=1
+			i += 1
 		print 'Average accuracy and std:', np.mean(self.acc_list), np.std(self.acc_list)
 		print 'Average precison and std:', np.mean(self.prec_list), np.std(self.prec_list)
 		print 'Average recall and std:', np.mean(self.recall_list), np.std(self.recall_list)
