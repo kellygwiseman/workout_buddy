@@ -3,17 +3,17 @@ from classify import ClassifyRep
 import pandas as pd
 import numpy as np
 
-"""Used to build classification model"""
+"""Pipeline used to build classification model"""
 
 if __name__ == '__main__':
-	# process samples
+	# Process samples
 	info = pd.read_csv('../data/full_dataset_info.csv', skipinitialspace=True)
-	p = ProcessData(info,'all',plot=False)
+	p = ProcessData(info, 'all', plot=False)
 	avg_arr, rep_arr, ts_arr = p.batch_process_samples()
 
-	# select features to include in to training model
-	#avg_arr = np.load('../processed/pushup_avg_metrics_all.npy')
-	#ts_arr = np.load('../processed/pushup_raw_ts_one_all.npy')
+	# Select features to include in to training model
+	avg_arr = np.load('../processed/pushup_avg_metrics_all.npy')
+	ts_arr = np.load('../processed/pushup_raw_ts_one_all.npy')
 	X = avg_arr[:,[2,3]].astype(float) # just the amplitude and duration
 	labels = avg_arr[:,-1]
 	labels[labels =='excellent'] = 1
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	labels[labels == 'ok'] = 0
 	labels = labels.astype(int)
 
-	# train classifier
+	# Train classifier
 	stance = 'all'
 	prob = True
 	pickle = True
@@ -35,5 +35,7 @@ if __name__ == '__main__':
 	c.dtw_kNN(sss, ts, labels, component='accY', stance=stance, avg_length=34, n_neighbors=4, max_warping_window=10, prob=prob, pickle=pickle)
 	ts = ts_arr[2]
 	c.dtw_kNN(sss, ts, labels, component='accZ', stance=stance, avg_length=34, n_neighbors=4, max_warping_window=10, prob=prob,  pickle=pickle)
-	weights = np.array([0.25, 0.25, 0.25, 0.25, 0.0]) # equal weights for first four models, fifth model doesn't help anymore now that I increased the sample size
+	
+	# Ensemble model with equal weights for first four models. The fifth model doesn't help anymore now that I increased the sample size.
+	weights = np.array([0.25, 0.25, 0.25, 0.25, 0.0])
 	c.ensemble(sss, labels, weights)

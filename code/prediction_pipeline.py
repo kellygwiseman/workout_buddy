@@ -2,20 +2,19 @@ from process_data import ProcessData
 from classify import ClassifyRep
 import pandas as pd
 import numpy as np
-import plotly_graphs as pg
 
-"""Used to predict one sample"""
+"""Pipeline used to predict one sample. This pipeline is used in the testing/data analysis stage."""
 
 if __name__ == '__main__':
-	# process one sample
+	# Process one sample
 	info = pd.read_csv('../data/test_one_sample.csv', skipinitialspace=True)
 	p = ProcessData(info,'all',plot=True)
 	rep_arr, ts_arr, timestamp, sample = p.process_one_sample()
 
-	# select features to include in prediction model
+	# Select features to include in prediction model
 	X = rep_arr[:,[2,3]].astype(float) # just the amplitude and duration
 
-	# classify sequence of pushup repetitions
+	# Classify sequence of pushup repetitions
 	c = ClassifyRep()
 	pred_rf, prob_rf = c.predict('../models/rf_n50_mf2_md2_all.pkl', X)
 	pred_svm, prob_svm = c.predict('../models/svm_C10.0_g1.0_all.pkl', X)
@@ -25,12 +24,9 @@ if __name__ == '__main__':
 	ensemble_arr = np.array([pred_rf, pred_svm, pred_tsP, pred_tsY, pred_tsZ])
 	ensemble_prob_arr = np.array([prob_rf[:,1], prob_svm[:,1], prob_tsP, prob_tsY, prob_tsZ])
 
-	# use weighted ensemble probability model 
+	# Use weighted ensemble probability model 
 	weights = np.array([0.25, 0.25, 0.25, 0.25, 0.0])
 	w_prob = np.dot(weights,ensemble_prob_arr)
 	w_prob_true = (w_prob > 0.5) * 1.0
 	print 'ensemble probability:', w_prob
 	print 'ensemble prediction:', w_prob_true
-	ts_url = pg.plot_ts(p, sample, freq=20.0)
-	bar_url = pg.reps_bar_chart(w_prob, sample)
-

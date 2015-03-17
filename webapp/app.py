@@ -16,7 +16,7 @@ app = Flask(__name__)
 ts_urls = ['https://plot.ly/~kellygwiseman/220','https://plot.ly/~kellygwiseman/310', 'https://plot.ly/~kellygwiseman/160']
 bar_urls = ['https://plot.ly/~kellygwiseman/287', 'https://plot.ly/~kellygwiseman/311', 'https://plot.ly/~kellygwiseman/290']
 monthly_urls = ['https://plot.ly/~kellygwiseman/221', 'https://plot.ly/~kellygwiseman/208', 'https://plot.ly/~kellygwiseman/161']
-tips = ["Great form! Next time add more reps or try a different pushup stance.","You're doing good. Next time try to keep an even pace throughout your set.", "You're doing ok. Next time try to keep an even pace throughout your set."]
+tips = ["Great form! Next time add more reps or try a different pushup stance.", "You're doing good. Next time try to keep an even pace throughout your set.", "You're doing ok. Next time try to keep an even pace throughout your set."]
 user = 2 # start off plotting novice user
 
 # This is the path to the upload directory
@@ -34,14 +34,14 @@ def allowed_file(filename):
 # value of the operation
 @app.route('/')
 def index():
-    global user, ts_urls, bar_urls, monthly_urls, tips
-    return render_template('index.html', user = user, bar_fig = bar_urls, ts_fig = ts_urls, monthly_fig = monthly_urls, tip_text = tips)
+    global user
+    return render_template('index.html', user=user, bar_fig=bar_urls, ts_fig=ts_urls, monthly_fig=monthly_urls, tip_text=tips)
 
 
 # Route that will process the file upload
 @app.route('/upload', methods=['POST'])
 def upload():
-    global user, ts_urls, bar_urls, monthly_urls, tips
+    global user
     # Get the name of the uploaded file
     file = request.files['file']
     # Check if the file is one of the allowed types/extensions
@@ -61,7 +61,7 @@ def upload():
         monthly_urls.append(str(monthly_url))
         tips.append(tip)
         user += 1
-        return render_template('index.html', user = user, bar_fig = bar_urls, ts_fig = ts_urls, monthly_fig = monthly_urls, tip_text = tips)
+        return render_template('index.html', user=user, bar_fig=bar_urls, ts_fig=ts_urls, monthly_fig=monthly_urls, tip_text=tips)
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
@@ -73,6 +73,6 @@ def uploaded_file(filename):
 
 if __name__ == '__main__':
     app.run(
-        host="0.0.0.0",
-        port=8080,
-        debug=True)
+        host = "0.0.0.0",
+        port = 8080,
+        debug = True)
