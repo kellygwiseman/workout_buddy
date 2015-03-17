@@ -5,7 +5,10 @@ from filter import filter_features
 import detect_peaks as dp
 
 class ProcessData(object):
-	def __init__(self, info, pushup_type='all', user=None, plot=False):
+	"""
+	Add class description
+	"""
+	def __init__(self, info, pushup_type='all', plot=False):
 		'''
 		INPUT:
 		- info: dataframe with user and sample data
@@ -44,9 +47,7 @@ class ProcessData(object):
 
 	def batch_process_samples(self):
 		self._process_info()
-		numeric_features = ['motionUserAccelerationX', 'motionUserAccelerationY', 'motionUserAccelerationZ',
-                    'motionRotationRateX', 'motionRotationRateY', 'motionRotationRateZ',
-                    'accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
+		numeric_features = ['accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
                     'gyroRotationX','gyroRotationY','gyroRotationZ','motionYaw','motionRoll','motionPitch',
                     'motionQuaternionX','motionQuaternionY','motionQuaternionZ','motionQuaternionW']
 		# Initialize metrics lists
@@ -180,9 +181,7 @@ class ProcessData(object):
 	def process_one_sample(self):
 		self._process_info()
 		timestamp = self.info['timestamp']
-		numeric_features = ['motionUserAccelerationX', 'motionUserAccelerationY', 'motionUserAccelerationZ',
-                    'motionRotationRateX', 'motionRotationRateY', 'motionRotationRateZ',
-                    'accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
+		numeric_features = ['accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
                     'gyroRotationX','gyroRotationY','gyroRotationZ','motionYaw','motionRoll','motionPitch',
                     'motionQuaternionX','motionQuaternionY','motionQuaternionZ','motionQuaternionW']
 		# Initialize metrics list

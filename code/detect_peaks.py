@@ -1,4 +1,8 @@
-"""Determine Attributes about Exercise Repetitions"""
+"""
+This library includes functions used to determine attributes about the
+exercise repetitions, such as duration, peak amplitude, number of repetitions,
+etc.
+"""
 
 from __future__ import division, print_function
 import numpy as np
@@ -6,9 +10,10 @@ import numpy as np
 def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
                  kpsh=False, valley=False, show=False, ax=None):
 
-    """Detect peaks in data based on their amplitude and other features.
-
+    """
     Code from Marcos Duarte, https://github.com/demotu/BMC, version = 1.0.4
+
+    Detect peaks in data based on their amplitude and other features.
 
     Parameters
     ----------
@@ -45,9 +50,8 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
     negating the data: `ind_valleys = detect_peaks(-x)`
     
     The function can handle NaN's 
-"""
+    """
     
-
     x = np.atleast_1d(x).astype('float64')
     if x.size < 3:
         return np.array([], dtype=int)
@@ -107,12 +111,15 @@ def detect_peaks(x, mph=None, mpd=1, threshold=0, edge='rising',
 
     return ind
 
-
-""" My functions below """
+"""My functions below"""
 
 def count_peaks_initial(data, pushup_window, feature, mph, mpd, freq, valley=False, edge='falling'):
-    ''' Calculate initial timing of the press-up position since start of pushup window. 
-    Because the data is filtered, this won't include the starting up position. '''
+    '''
+    Calculate the timing of the press-up positions since start of the pushup
+    window and the number of pushups. This initial peak counting algorithm uses
+    the filtered data, and won't include the initial up position before the 
+    first repetition.
+    '''
     pushup_data = data.ix[pushup_window[0]:pushup_window[-1]]
     peakind = detect_peaks(pushup_data[feature], mph = mph, mpd = mpd, valley=valley)
     peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
@@ -120,7 +127,7 @@ def count_peaks_initial(data, pushup_window, feature, mph, mpd, freq, valley=Fal
     return peakind, count
 
 def count_peak_min(data, window_ind, feature, mph, mpd, freq, valley=False, edge='falling'):
-    ''' Calculate timing of the press-down position since start of pushup window'''
+    '''Calculate timing of the press-down position since start of pushup window'''
     pushup_data = data.ix[window_ind[0]:window_ind[-1]][feature].values
     # force the push-up reps to start at about 0 pitch amplitude
     pushup_data = [pushup_data[i] - pushup_data[0] for i in xrange(len(pushup_data))]
@@ -135,8 +142,10 @@ def count_peak_min(data, window_ind, feature, mph, mpd, freq, valley=False, edge
     return peakind, count, pushup_data
 
 def count_peak_max(data, peakmin_count, window_ind, feature, mph, mpd, freq, valley=False, edge='falling'):
-    ''' Calculate timing of the press-up position since start of pushup window.  This also include the starting
-    up position, so there is one more peak_max than peak_min.'''
+    ''' Calculate timing of the press-up position since start of pushup window.
+    This also include the starting up position, so there is one more peak_max
+    than peak_min.'''
+
     pushup_data = data.ix[window_ind[0]:window_ind[-1]][feature].values
     # force the push-up reps to start at about 0 pitch amplitude
     pushup_data = [pushup_data[i] - pushup_data[0] for i in xrange(len(pushup_data))]
@@ -151,13 +160,6 @@ def count_peak_max(data, peakmin_count, window_ind, feature, mph, mpd, freq, val
     count = len(peakind)
     return peakind, count, pushup_data
 
-def average_duration(peakind, count):
-    # don't include the first repetition duration because we are counting peaks (the end of the pushup)
-    # for this initial average duration before we have the final pushup window
-    duration = peakind[-1] - peakind[0]
-    avg_dur = duration / (count - 1)
-    return avg_dur
-
 def average_amplitude_initial(data, peakind, pushup_window, feature, freq):
     ind = [int(x*freq) for x in peakind]
     ind = [pushup_window[0] + x for x in ind]
@@ -171,6 +173,13 @@ def average_amplitude(data, peakmin, peakmax, window_ind, feature, freq):
     amps = [data.ix[max_ind[i]][feature] - data.ix[min_ind[i]][feature] for i in xrange(len(min_ind))]
     avg_amp = np.mean(amps)
     return avg_amp
+
+def average_duration(peakind, count):
+    # don't include the first repetition duration because we are counting peaks (the end of the pushup)
+    # for this initial average duration before we have the final pushup window
+    duration = peakind[-1] - peakind[0]
+    avg_dur = duration / (count - 1)
+    return avg_dur
 
 def rep_metrics(data, peakmin, peakmax, window_ind, feature, freq, female, height):
     min_ind = [window_ind[0] + int(x*freq) for x in peakmin]

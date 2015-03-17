@@ -8,12 +8,10 @@ from scipy import signal
 import cPickle as pickle
 
 class ClassifyRep(object):
+	"""
+	Add class description
+	"""
 	def __init__(self):
-		'''
-		INPUT:
-		- X: pushup feature array
-		- labels: pushup form labels
-		'''
 		self.pred_list = []
 		self.ensemble_pred = []
 		self.acc_list = []

@@ -1,9 +1,12 @@
+"""
+Pipeline used to predict one sample. This pipeline is used in the testing
+and data analysis stage.
+"""
+
 from process_data import ProcessData
 from classify import ClassifyRep
 import pandas as pd
 import numpy as np
-
-"""Pipeline used to predict one sample. This pipeline is used in the testing/data analysis stage."""
 
 if __name__ == '__main__':
 	# Process one sample

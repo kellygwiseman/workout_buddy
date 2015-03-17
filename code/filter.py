@@ -1,4 +1,4 @@
-""" Bandpass filter the Exercise data """
+"""Library with functions to bandpass filter the exercise data """
 
 from scipy.signal import butter, lfilter
 

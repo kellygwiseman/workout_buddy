@@ -1,11 +1,13 @@
+""" 
+Dynamic Time Warping module by Mark Regan
+http://nbviewer.ipython.org/github/markdregan/K-Nearest-Neighbors-with-Dynamic-Time-Warping/blob/master/K_Nearest_Neighbor_Dynamic_Time_Warping.ipynb 
+"""
+
 import sys
 import collections
 import itertools
 from scipy.stats import mode
 import numpy as np
-
-""" Dynamic Time Warping module by Mark Regan
-http://nbviewer.ipython.org/github/markdregan/K-Nearest-Neighbors-with-Dynamic-Time-Warping/blob/master/K_Nearest_Neighbor_Dynamic_Time_Warping.ipynb """
 
 try:
     from IPython.display import clear_output

@@ -6,6 +6,9 @@ import detect_peaks as dp
 from classify import ClassifyRep
 
 class AnonPrediction(object):
+	"""
+	Add class description
+	"""
 	def __init__(self, filename):
 		'''
 		INPUT:
@@ -14,9 +17,7 @@ class AnonPrediction(object):
 		self.filename = filename
 
 	def process_user_sample(self):
-		numeric_features = ['motionUserAccelerationX', 'motionUserAccelerationY', 'motionUserAccelerationZ',
-		            'motionRotationRateX', 'motionRotationRateY', 'motionRotationRateZ',
-		            'accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
+		numeric_features = ['accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
 		            'gyroRotationX','gyroRotationY','gyroRotationZ','motionYaw','motionRoll','motionPitch',
 		            'motionQuaternionX','motionQuaternionY','motionQuaternionZ','motionQuaternionW']
 
@@ -128,7 +129,6 @@ class AnonPrediction(object):
 		monthly_url = pg.monthly_reps(rep_bin_history, sample+'_monthly')
 
 		# make plotly figures of lastest reps
-		daily_url = pg.daily_reps(timestamp.hour, w_prob, sample)
 		ts_url = pg.plot_ts(p, sample, freq=20.0)
 		bar_url = pg.reps_bar_chart(w_prob, sample)
 
@@ -144,4 +144,4 @@ class AnonPrediction(object):
 		elif avg_metrics[2] > 1.4:
 			tip = "Great form! Next time add more reps or try a different pushup stance."
 
-		return tip, daily_url, ts_url, bar_url, monthly_url
+		return tip, ts_url, bar_url, monthly_url

@@ -1,8 +1,8 @@
 """ 
-This library is used to make plots to help with the signal processing and repetition detection
-stage of modeling process.  They are intended to help with data analysis, and are
-not the visualizations used in the webapp. The figures are automatically saved in a figure directory
-and are not shown.
+This library is used to make plots to help with the signal processing and 
+repetition detection stage of modeling process.  They are intended to help 
+with data analysis, and are not the visualizations used in the webapp. The 
+figures are automatically saved in a figure directory and are not shown.
 """
 
 import matplotlib.pyplot as plt
@@ -140,8 +140,9 @@ def plot1_motion(data, freq, sample):
     plt.close(fig1)
 
 def plot_corr(data, correls, freq, sample):
-    """Plot the feature correlations for each data type. There will be a separate plot for accelerartion,
-    gyro rotation rate, phone attitude, and quaternions."""
+    """Plot the feature correlations for each data type. There will be a 
+    separate plot for accelerartion, gyro rotation rate, phone attitude, and 
+    quaternions."""
 
     rcParams['axes.color_cycle'] = dark2_colors
     time = data.index.values / freq
@@ -205,8 +206,8 @@ def plot_corr(data, correls, freq, sample):
     plt.close(fig4)
 
 def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
-    """Plot the bandpass filtered data. They'll be a separate plot for filtered accelerartion,
-    gyro rotation rate, phone attitude, and quaternions."""
+    """Plot the bandpass filtered data. They'll be a separate plot for 
+    filtered accelerartion, gyro rotation rate, phone attitude, and quaternions."""
 
     rcParams['axes.color_cycle'] = pair_colors
     time = data.index.values / freq
@@ -273,8 +274,8 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.close(fig4)
 
 def plot_pushups(data, pushup_data, window_ind, peakmax, feature, freq, sample):
-    """Plot the raw pitch time series overlain with the pushup duration window and markings
-    for the individual repetitions."""
+    """Plot the raw pitch time series overlain with the pushup duration window
+    and markings for the individual repetitions."""
 
     rcParams['axes.color_cycle'] = dark2_colors
     

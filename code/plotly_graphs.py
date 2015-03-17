@@ -1,6 +1,6 @@
 """ 
-This library is used to make interactive plots for the webapp. The figures are stored at 
-https:plot.ly and the functions return the unique url. 
+This library is used to make interactive plots for the webapp. The figures are
+stored at https:plot.ly and the functions return the unique url. 
 """
 
 import plotly.plotly as py
@@ -216,11 +216,12 @@ def calculate_time_axis(ts, freq):
 	return np.arange(0, len(ts), 1) / freq
 
 def plot_ts(ts, sample, freq=20.0):
-	"""Plots the pitch data for the latest set of repetitions in a time series format and returns the url.
-	Each rep is plotted individually so you can easily compare the reps in your set."""
+	"""Plots the pitch data for the latest set of repetitions in a time series
+	format and returns the url. Each rep is plotted individually so you can 
+	easily compare the reps in your set."""
 
-	# optimal pitch
-	example_ts = np.load('../processed/pushup_raw_ts_Beau_normal.npy')[0,4] #normal stance for expert user Beau
+	# expert user optimal pitch for basic pushup stance
+	example_ts = np.load('../processed/pushup_raw_ts_expert_basic.npy')[0,4]
 	# initialize rep to 0
 	B = np.array([xi - xi[0] for xi in [example_ts]])
 	traceB = make_trace(calculate_time_axis(B[0], freq), rad_to_degree(B[0]), 'optimal rep', [150, 150, 150])

@@ -1,9 +1,9 @@
+"""Pipeline used to build classification model"""
+
 from process_data import ProcessData
 from classify import ClassifyRep
 import pandas as pd
 import numpy as np
-
-"""Pipeline used to build classification model"""
 
 if __name__ == '__main__':
 	# Process samples

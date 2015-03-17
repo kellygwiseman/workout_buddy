@@ -6,10 +6,13 @@ import detect_peaks as dp
 from classify import ClassifyRep
 
 class UserPrediction(object):
+	"""
+	Add class description
+	"""
 	def __init__(self, info, user=6):
 		'''
 		INPUT:
-		- info: dataframe with user and sample data
+		- info: dataframe that contains user and sample data
 		- user: user_id
 		'''
 		self.info = info
@@ -22,9 +25,7 @@ class UserPrediction(object):
 		self.timestamp = None
 
 	def _process_info(self):
-		'''
-		Process info dataframe and initialize exercise statistics
-		''' 
+		'''Process info dataframe to select specific user files''' 
 		self.info['file'] = self.info['timestamp'].copy()
 		self.info['timestamp'] = pd.to_datetime(self.info['timestamp'], format='%Y-%m-%d_%H-%M-%S')
 		cond = self.info['user_id'] == self.user
@@ -33,16 +34,14 @@ class UserPrediction(object):
 
 	def batch_process_user_samples(self):
 		self._process_info()
-		numeric_features = ['motionUserAccelerationX', 'motionUserAccelerationY', 'motionUserAccelerationZ',
-		            'motionRotationRateX', 'motionRotationRateY', 'motionRotationRateZ',
-		            'accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
+		numeric_features = ['accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
 		            'gyroRotationX','gyroRotationY','gyroRotationZ','motionYaw','motionRoll','motionPitch',
 		            'motionQuaternionX','motionQuaternionY','motionQuaternionZ','motionQuaternionW']
 
 		# Initiate rep_history list
 		rep_bin_history = []
 
-		# Iterate through all the samples in info
+		# Iterate through all the user samples
 		for i in xrange(self.info.shape[0]):
 
 			# Initialize time series lists
@@ -51,7 +50,7 @@ class UserPrediction(object):
 			accZ_ts = []
 			quatY_ts = []
 
-			df = pd.read_csv('../data/sensor/'+ self.info.loc[i,'file'] + '.csv')
+			df = pd.read_csv('../data/sensor/' + self.info.loc[i,'file'] + '.csv')
 			self.sample = 'user_'+str(self.user) + '_' + str(self.info.loc[i,'file'])
 			self.female = self.info.loc[i,'female']
 			freq = float(self.info.loc[i,'hertz'])
@@ -171,11 +170,10 @@ class UserPrediction(object):
 			rep_bin_history.append(([len(ok),len(good)], self.timestamp))
 
 		# make plotly figures of lastest reps
-		daily_url = pg.daily_reps(self.timestamp.hour, self.w_prob, self.sample)
 		ts_url = pg.plot_ts(self.p, self.sample, freq=20.0)
 		bar_url = pg.reps_bar_chart(self.w_prob, self.sample)
 
 		# make plotly aggregate monthly figure
 		monthly_url = pg.monthly_reps(rep_bin_history, self.user)
 
-		return tip, daily_url, ts_url, bar_url, monthly_url
+		return tip, ts_url, bar_url, monthly_url
