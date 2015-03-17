@@ -7,12 +7,13 @@ from classify import ClassifyRep
 
 class AnonPrediction(object):
 	"""
-	Add class description
+	This class contains methods to process, classify, and visualize anonymous
+	sensor data.
 	"""
 	def __init__(self, filename):
 		'''
 		INPUT:
-		- filename: filename of txt file containing all the raw pushup data
+		- filename: name of txt file containing all the raw pushup sensor data
 		'''
 		self.filename = filename
 
@@ -39,7 +40,7 @@ class AnonPrediction(object):
 		timestamp = pd.to_datetime(df.loc[1, 'loggingTime'], format='%Y-%m-%d %H:%M:%S.%f')
 		df_num = df[numeric_features]
 
-		# Bandpass filter the data to separate the noise from the pushup signal
+		# Bandpass filter the data to help separate the noise from the pushup signal
 		lowcut = 0.5
 		highcut = 2.0
 		order = 1
@@ -63,7 +64,8 @@ class AnonPrediction(object):
 		# Initial pushup repetition window
 		pushup_window = df_filt[cond1 & cond2 & cond3 & cond4].index
 
-		## Count the number of pushup repetitions ##
+		## Calculate pushup repetition parameters ##
+
 		# Calculate initial peak parameters using filtered data
 		mph = 0.18 # minimum peak height
 		mpd = (0.5 * freq) # minimum peak separation distance
@@ -75,7 +77,7 @@ class AnonPrediction(object):
 		# Final tight pushup repetition window
 		window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
-		# Calculate final peak parameters using unfiltered data
+		# Calculate final peak parameters using raw data
 		# min peaks (middle of the rep when you reach lowest press-down)
 		mph = avg_amp_initial # minimum peak height
 		mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
@@ -85,14 +87,14 @@ class AnonPrediction(object):
 		mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 		peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
 
-		# add repetition metrics to list
+		# Add repetition metrics to list
 		avg_metrics = dp.avg_rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
 		sample_metrics = dp.rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height)
 		sample_metrics = np.array(sample_metrics)
 
 		# Repetition windows
 		multiple_rep_windows = dp.calculate_multiple_rep_window(peakmax, window_ind, freq)
-		# add repetition time series to feature lists
+		# Add repetition time series to feature lists
 		for i in xrange(len(multiple_rep_windows)):
 		    pushup_data = df_num.ix[multiple_rep_windows[i][0]:multiple_rep_windows[i][1]]
 		    pitch_ts.append(pushup_data['motionPitch'].tolist())
@@ -103,7 +105,7 @@ class AnonPrediction(object):
 		accY_ts = np.array(accY_ts)
 		accZ_ts = np.array(accZ_ts)
 
-		# classify sequence of pushup repetitions
+		## Classify sequence of pushup repetitions ##
 		X = sample_metrics[:,[2,3]]
 		c = ClassifyRep()
 		pred_rf, prob_rf = c.predict('../models/rf_n50_mf2_md2_all.pkl', X)
@@ -113,7 +115,7 @@ class AnonPrediction(object):
 		z, pred_tsZ, prob_tsZ  = c.predict_ts('../models/dtw_kNNaccZ_n4_w10_all.pkl', accZ_ts, component='accZ', avg_length=34)
 		ensemble_prob_arr = np.array([prob_rf[:,1], prob_svm[:,1], prob_tsP, prob_tsY, prob_tsZ])
 
-		# use weighted ensemble probability model 
+		# Use weighted ensemble probability model 
 		weights = np.array([0.25, 0.25, 0.25, 0.25, 0.0])
 		w_prob = np.dot(weights,ensemble_prob_arr)
 		good = w_prob[(w_prob > 0.5)]
@@ -123,14 +125,6 @@ class AnonPrediction(object):
 			form = 'good'
 		else:
 			form = 'ok'
-
-		# make plotly aggregate monthly figure
-		rep_bin_history.append(([len(ok),len(good)], timestamp))
-		monthly_url = pg.monthly_reps(rep_bin_history, sample+'_monthly')
-
-		# make plotly figures of lastest reps
-		ts_url = pg.plot_ts(p, sample, freq=20.0)
-		bar_url = pg.reps_bar_chart(w_prob, sample)
 
 		# Determine appropriate tip message
 		if avg_metrics[4] > 0.1:
@@ -143,5 +137,14 @@ class AnonPrediction(object):
 			tip = "You're doing "+form+". Next time try pressing down even lower."
 		elif avg_metrics[2] > 1.4:
 			tip = "Great form! Next time add more reps or try a different pushup stance."
+
+		## Make Interactive plots for webapp ##
+		# Make aggregate monthly figure
+		rep_bin_history.append(([len(ok),len(good)], timestamp))
+		monthly_url = pg.monthly_reps(rep_bin_history, sample+'_monthly')
+
+		# Make figures of lastest set of reps
+		ts_url = pg.plot_ts(p, sample, freq=20.0)
+		bar_url = pg.reps_bar_chart(w_prob, sample)
 
 		return tip, ts_url, bar_url, monthly_url

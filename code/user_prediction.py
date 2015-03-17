@@ -7,7 +7,8 @@ from classify import ClassifyRep
 
 class UserPrediction(object):
 	"""
-	Add class description
+	This class contains methods to process, classify, and visualize samples
+	from one user. 
 	"""
 	def __init__(self, info, user=6):
 		'''
@@ -59,7 +60,7 @@ class UserPrediction(object):
 			df_num = df[numeric_features]
 			exercise = self.info.loc[i, 'exercise']
 
-			# Bandpass filter the data to separate the noise from the pushup signal
+			# Bandpass filter the data to help separate the noise from the pushup signal
 			lowcut = 0.5
 			highcut = 2.0
 			order = 1
@@ -83,7 +84,8 @@ class UserPrediction(object):
 			# Initial pushup repetition window
 			pushup_window = df_filt[cond1 & cond2 & cond3 & cond4].index
 
-			## Count the number of pushup repetitions ##
+			## Calculate pushup repetition parameters ##
+
 			# Calculate initial peak parameters using filtered data
 			mph = 0.18 # minimum peak height
 			mpd = (0.5 * freq)  # minimum peak separation distance
@@ -95,7 +97,7 @@ class UserPrediction(object):
 			# Final tight pushup repetition window
 			window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
-			# Calculate final peak parameters using unfiltered data
+			# Calculate final peak parameters using raw data
 			# min peaks (middle of the rep when you reach lowest press-down)
 			mph = avg_amp_initial # minimum peak height
 			mpd = min((avg_dur * freq - 0.45 * freq), 1.5 * freq) # minimum peak separation distance
@@ -114,7 +116,7 @@ class UserPrediction(object):
 
 			# Repetition windows
 			multiple_rep_windows = dp.calculate_multiple_rep_window(peakmax, window_ind, freq)
-			# add repetition time series to feature lists
+			# Add repetition time series to feature lists
 			for i in xrange(len(multiple_rep_windows)):
 			    pushup_data = df_num.ix[multiple_rep_windows[i][0]:multiple_rep_windows[i][1]]
 			    pitch_ts.append(pushup_data['motionPitch'].tolist())
@@ -125,7 +127,7 @@ class UserPrediction(object):
 			accY_ts = np.array(accY_ts)
 			accZ_ts = np.array(accZ_ts)
 
-			# classify sequence of pushup repetitions
+			## Classify sequence of pushup repetitions ##
 			X = sample_metrics[:,[2,3]]
 			c = ClassifyRep()
 			pred_rf, prob_rf = c.predict('../models/rf_n50_mf2_md2_all.pkl', X)
@@ -136,7 +138,7 @@ class UserPrediction(object):
 			ensemble_arr = np.array([pred_rf, pred_svm, pred_tsP, pred_tsY, pred_tsZ])
 			ensemble_prob_arr = np.array([prob_rf[:,1], prob_svm[:,1], prob_tsP, prob_tsY, prob_tsZ])
 
-			# use weighted ensemble probability model 
+			# Use weighted ensemble probability model 
 			weights = np.array([0.25, 0.25, 0.25, 0.25, 0.0])
 			self.w_prob = np.dot(weights,ensemble_prob_arr)
 			w_prob_true = (self.w_prob > 0.5) * 1.0
@@ -166,14 +168,15 @@ class UserPrediction(object):
 
 			print tip
 
-			# append rep ratings to rep history list
+			# Append rep ratings to rep history list
 			rep_bin_history.append(([len(ok),len(good)], self.timestamp))
 
-		# make plotly figures of lastest reps
+		## Make interactive plots for webapp ##
+		# Make figures of lastest set of reps
 		ts_url = pg.plot_ts(self.p, self.sample, freq=20.0)
 		bar_url = pg.reps_bar_chart(self.w_prob, self.sample)
 
-		# make plotly aggregate monthly figure
+		# Make aggregate monthly figure
 		monthly_url = pg.monthly_reps(rep_bin_history, self.user)
 
 		return tip, ts_url, bar_url, monthly_url

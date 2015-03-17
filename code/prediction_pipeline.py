@@ -1,6 +1,6 @@
 """
 Pipeline used to predict one sample. This pipeline is used in the testing
-and data analysis stage.
+and data analysis stage of the modeling process.
 """
 
 from process_data import ProcessData

@@ -9,7 +9,7 @@ import cPickle as pickle
 
 class ClassifyRep(object):
 	"""
-	Add class description
+	This class contains methods used to train classifiers and make predections.
 	"""
 	def __init__(self):
 		self.pred_list = []
@@ -20,11 +20,16 @@ class ClassifyRep(object):
 		self.n_iter = 5
 
 	def split_data(self, labels, n_iter=5, test_size=0.3, random_state=100):
+		"""Returns train and test indices."""
 		self.n_iter = n_iter
 		sss = StratifiedShuffleSplit(labels, n_iter=n_iter, test_size=test_size, random_state=random_state)
 		return sss
 
 	def random_forest(self, sss, X, labels, stance, n_est=50, max_feat=2, max_depth=2, prob=False, pickle=False):
+		"""
+		Builds a Random Forest classifier and prints to screen the test set
+		prediction metrics.
+		"""
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
@@ -54,6 +59,10 @@ class ClassifyRep(object):
 			save_model(rf, "../models/rf" + '_n' + str(n_est) + '_mf' + str(max_feat) + '_md' + str(max_depth) + '_' + stance + '.pkl' )
 
 	def support_vector_machine(self, sss, X, labels, stance, C=10, gamma=0.1, prob=False, pickle=False):
+		"""
+		Builds a Support Vector Machine classifier and prints to screen the 
+		test set prediction metrics.
+		"""
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
@@ -83,13 +92,18 @@ class ClassifyRep(object):
 			save_model(svm, "../models/svm" + '_C' + str(C) + '_g' + str(gamma) + '_' + stance + '.pkl')
 
 	def dtw_kNN(self, sss, ts, labels, stance, component, avg_length=34, n_neighbors=4, max_warping_window=10, prob=False, pickle=False):
+		"""
+		Calculates a dynamic time warping distance matrix for all the samples. 
+		Then builds a K-Nearest Neighbor classifier with the distance 
+		measurements and prints to screen the test set prediction metrics.
+		"""
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
 		pred_list = []
-		# resample to average length
+		# Resample to average length
 		X = [signal.resample(xi, avg_length) for xi in ts]
-		# initialize rep to 0
+		# Initialize rep to 0
 		X = np.array([xi - xi[0] for xi in X]) 
 		i = 1
 		for train_index, test_index in sss:
@@ -118,6 +132,12 @@ class ClassifyRep(object):
 			save_model(m, "../models/dtw_kNN" + component + '_n' + str(n_neighbors) + '_w' + str(max_warping_window) + '_' + stance + '.pkl' )
 
 	def ensemble(self, sss, labels, weights):
+		"""
+		Combines the results from previously run models and weights the 
+		predictions to produce an ensemble prediction. The results are printed
+		to the screen.
+		"""
+
 		self.acc_list = []
 		self.recall_list = []
 		self.prec_list = []
@@ -135,17 +155,24 @@ class ClassifyRep(object):
 		print 'Average recall and std:', np.mean(self.recall_list), np.std(self.recall_list)
 
 	def predict(self, pickle_mdl, X):
+		"""Makes a prediction using a pickled classification model."""
+
 		m = get_model(pickle_mdl)
 		y_pred = m.predict(X)
 		y_prob = m.predict_proba(X)
 		return y_pred, y_prob
 
 	def predict_ts(self, pickle_mdl, ts, component, avg_length=34):
-		# resample to average length
+		"""
+		Makes a prediction using the time series data and pickled dtw_knn 
+		model.
+		"""
+
+		# Resample to average length
 		Xnorm = [signal.resample(xi, avg_length) for xi in ts]
-		# initialize rep to 0
+		# Initialize rep to 0
 		Xnorm = np.array([xi - xi[0] for xi in Xnorm])
-		# non-resampled data for plotting
+		# Non-resampled data for plotting
 		X = np.array([xi - xi[0] for xi in ts])
 		m = get_model(pickle_mdl)
 		y_pred, y_prob = m.predict(Xnorm)
@@ -155,6 +182,8 @@ class ClassifyRep(object):
 		return X, y_pred, y_prob
 		
 	def _print_iteration_metrics(self, y_test, y_pred, i):
+		"""Calculate prediction metrics."""
+
 		acc = metrics.accuracy_score(y_test, y_pred)
 		self.acc_list.append(acc)
 		recall = metrics.recall_score(y_test, y_pred)
@@ -162,16 +191,20 @@ class ClassifyRep(object):
 		precision = metrics.precision_score(y_test, y_pred)
 		self.prec_list.append(precision)
 		cm = metrics.confusion_matrix(y_test, y_pred)
-		print'Iteration',i,'confusion matrix:'
+		print 'Iteration', i, 'confusion matrix:'
 		print cm[0]
 		print cm[1]
 		print ''
 
 def get_model(pickle_mdl):
+	"""Load a pickled model."""
+
 	with open(pickle_mdl, 'r') as f:
 		_model = pickle.load(f)
 	return _model
 
 def save_model(mdl, path):
+	"""Pickle a classification model."""
+	
     with open(path, 'w') as f:
         pickle.dump(mdl, f)

@@ -1,4 +1,4 @@
-"""Pipeline used to build classification model"""
+"""Pipeline used to build classification model."""
 
 from process_data import ProcessData
 from classify import ClassifyRep

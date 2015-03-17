@@ -2,17 +2,14 @@ import sys
 sys.path.append(r'../code')
 from anonymous_user_prediction import AnonPrediction
 import os
-# We'll render HTML templates and access data sent by POST
-# using the request object from flask. Redirect and url_for
-# will be used to redirect the user once the upload is done
-# and send_from_directory will help us to send/show on the
-# browser the file that the user just uploaded
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename, SharedDataMiddleware
 
 # Initialize the Flask application
 app = Flask(__name__)
-# Example user plots, orderd by pro, good, novice
+
+# Example user plots
+# They are orderd: pro, good, novice
 ts_urls = ['https://plot.ly/~kellygwiseman/220','https://plot.ly/~kellygwiseman/310', 'https://plot.ly/~kellygwiseman/160']
 bar_urls = ['https://plot.ly/~kellygwiseman/287', 'https://plot.ly/~kellygwiseman/311', 'https://plot.ly/~kellygwiseman/290']
 monthly_urls = ['https://plot.ly/~kellygwiseman/221', 'https://plot.ly/~kellygwiseman/208', 'https://plot.ly/~kellygwiseman/161']
@@ -21,7 +18,8 @@ user = 2 # start off plotting novice user
 
 # This is the path to the upload directory
 app.config['UPLOAD_FOLDER'] = 'uploads/'
-# These are the extension that we are accepting to be uploaded
+
+# These are the extensions that we are accepting to be uploaded
 app.config['ALLOWED_EXTENSIONS'] = set(['txt'])
 
 # For a given file, return whether it's an allowed type or not
@@ -52,10 +50,10 @@ def upload():
         # the upload folder we setup
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-        # run sample
+        # Run anonymous sample
         data = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         p = AnonPrediction(data)
-        tip, daily_url, ts_url, bar_url, monthly_url = p.process_user_sample()
+        tip, ts_url, bar_url, monthly_url = p.process_user_sample()
         ts_urls.append(str(ts_url))
         bar_urls.append(str(bar_url))
         monthly_urls.append(str(monthly_url))
@@ -64,9 +62,7 @@ def upload():
         return render_template('index.html', user=user, bar_fig=bar_urls, ts_fig=ts_urls, monthly_fig=monthly_urls, tip_text=tips)
 
 # This route is expecting a parameter containing the name
-# of a file. Then it will locate that file on the upload
-# directory and show it on the browser, so if the user uploads
-# an image, that image is going to be show after the upload
+# of a file. 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)

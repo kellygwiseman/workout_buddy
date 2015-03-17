@@ -6,7 +6,7 @@ import detect_peaks as dp
 
 class ProcessData(object):
 	"""
-	Add class description
+	This class contains methods used to process pushup data for training purposes.
 	"""
 	def __init__(self, info, pushup_type='all', plot=False):
 		'''
@@ -20,9 +20,7 @@ class ProcessData(object):
 		self.plot = plot
 
 	def _process_info(self):
-		'''
-		Process info dataframe and initialize exercise statistics
-		''' 
+		'''Process info dataframe and initialize exercise statistics.''' 
 
 		self.info['file'] = self.info['timestamp'].copy()
 		self.info['timestamp'] = pd.to_datetime(self.info['timestamp'],format='%Y-%m-%d_%H-%M-%S')
@@ -46,10 +44,13 @@ class ProcessData(object):
 		self.info['dur_std'] = 0.0
 
 	def batch_process_samples(self):
+		"""Process all the pushup rep data for model training purposes."""
+
 		self._process_info()
 		numeric_features = ['accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
                     'gyroRotationX','gyroRotationY','gyroRotationZ','motionYaw','motionRoll','motionPitch',
                     'motionQuaternionX','motionQuaternionY','motionQuaternionZ','motionQuaternionW']
+		
 		# Initialize metrics lists
 		rep_metrics_list = []
 		avg_metrics_list = []
@@ -75,7 +76,7 @@ class ProcessData(object):
 			form = self.info.loc[i,'form']
 			df_num = df[numeric_features]
 
-			# Bandpass filter the data to separate the noise from the pushup signal
+			# Bandpass filter the data to help separate the noise from the pushup signal
 			lowcut = 0.5
 			highcut = 2.0
 			order = 1
@@ -99,7 +100,8 @@ class ProcessData(object):
 			# Initial pushup repetition window
 			pushup_window = df_filt[cond1 & cond2 & cond3 & cond4].index
 
-			## Count the number of pushup repetitions ##
+			## Calculate pushup repetition parameters ##
+
 			# Calculate initial peak parameters using filtered data
 			mph = 0.18  # minimum peak height
 			mpd = (0.5 * freq) # minimum peak separation distance
@@ -111,7 +113,7 @@ class ProcessData(object):
 			# Final tight pushup repetition window
 			window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
-			# Calculate final peak parameters using unfiltered data
+			# Calculate final peak parameters using raw data
 			# min peaks (middle of the rep when you reach lowest press-down)
 			mph = avg_amp_initial # minimum peak height
 			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
@@ -121,33 +123,34 @@ class ProcessData(object):
 			mph = -0.8 # minimum peak height
 			mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 			peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
-			print count_max
+			print count_max # should be one more than count_min
 
 			# Middle repetition window
 			rep_window_ind = dp.one_rep_window(peakmax, window_ind, freq)
 
-			# add repetition metrics to list
+			# Add repetition metrics to list
 			avg_metrics = dp.avg_rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
 			avg_metrics_list.append(avg_metrics)
 			sample_metrics = dp.rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height)
 			rep_metrics_list.append(np.array(sample_metrics))
 
-			# add results to dataframe
+			# Add results to dataframe
 			self.info.loc[i, 'Pcount'] = count_min
 			self.info.loc[i, 'avg_amp'] = avg_metrics[2]
 			self.info.loc[i, 'avg_dur'] = avg_metrics[3]
 			self.info.loc[i, 'amp_std'] = avg_metrics[4]
 			self.info.loc[i, 'dur_std'] = avg_metrics[5]
 
-			# add middle repetition time series to feature lists
+			# Add middle repetition time series to feature lists
 			rep_data = df_num.ix[rep_window_ind[0]:rep_window_ind[1]]
 			pitch_one_ts.append(rep_data['motionPitch'].tolist())
 			accY_one_ts.append(rep_data['accelerometerAccelerationY'].tolist())
 			accZ_one_ts.append(rep_data['accelerometerAccelerationZ'].tolist())
 			quatY_one_ts.append(rep_data['motionQuaternionY'].tolist())
 
+			## Plot the data ##
 			if self.plot:
-				# Plot raw data #
+				# Plot raw data
 				gr.plot1_acceleration(df_num, freq, sample)
 				gr.plot1_gyro(df_num, freq, sample)
 				gr.plot1_motion(df_num, freq, sample)
@@ -160,6 +163,7 @@ class ProcessData(object):
 				gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, feature, freq, sample)
 
 	    ## Write processed data to files ##
+
 	    # write processed data to csv file
 		self.info.drop('file',axis=1, inplace=True)
 		self.info.to_csv('../processed/processed_pushup_'+self.pushup_type+'.csv')
@@ -179,11 +183,17 @@ class ProcessData(object):
 		return avg_arr, rep_arr, ts_one_arr
 
 	def process_one_sample(self):
+		"""
+		Process the pushup rep data for one sample to use with model 
+		prediction testing.
+		"""
+
 		self._process_info()
 		timestamp = self.info['timestamp']
 		numeric_features = ['accelerometerAccelerationX','accelerometerAccelerationY','accelerometerAccelerationZ',
                     'gyroRotationX','gyroRotationY','gyroRotationZ','motionYaw','motionRoll','motionPitch',
                     'motionQuaternionX','motionQuaternionY','motionQuaternionZ','motionQuaternionW']
+		
 		# Initialize metrics list
 		rep_metrics_list = []
 
@@ -193,7 +203,7 @@ class ProcessData(object):
 		accZ_ts = []
 		quatY_ts = []
 
-		# process sample
+		# Process sample
 		df = pd.read_csv('../data/sensor/'+ self.info.loc[0,'file'] + '.csv')
 		sample = self.info.loc[0,'name'] + '_' + self.info.loc[0,'stance']
 		female = self.info.loc[0,'female']
@@ -202,7 +212,7 @@ class ProcessData(object):
 		form = 'unknown'
 		df_num = df[numeric_features]
 	    
-		# Bandpass filter the data to separate the noise from the pushup signal
+		# Bandpass filter the data to help separate the noise from the pushup signal
 		lowcut = 0.5
 		highcut = 2.0
 		order = 1
@@ -226,7 +236,8 @@ class ProcessData(object):
 		# Initial pushup repetition window
 		pushup_window = df_filt[cond1 & cond2 & cond3 & cond4].index
 
-		## Count the number of pushup repetitions ##
+		## Calculate pushup repetition parameters ##
+
 		# Calculate initial peak parameters using filtered data
 		mph = 0.18  # minimum peak height
 		mpd = (0.5 * freq) # minimum peak separation distance
@@ -238,7 +249,7 @@ class ProcessData(object):
 		# Final tight pushup repetition window
 		window_ind = dp.calculate_total_rep_window(peakind, pushup_window, avg_dur, freq)
 
-		# Calculate final peak parameters using unfiltered data
+		# Calculate final peak parameters using raw data
 		# min peaks (middle of the rep when you reach lowest press-down)
 		mph = avg_amp_initial # minimum peak height
 		mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
@@ -254,18 +265,18 @@ class ProcessData(object):
 		# Repetition windows
 		multiple_rep_windows = dp.calculate_multiple_rep_window(peakmax, window_ind, freq)
 
-		# add repetition metrics to list
+		# Add repetition metrics to list
 		sample_metrics = dp.rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height)
 		avg_metrics = dp.avg_rep_metrics(df_num, peakmin, peakmax, window_ind, feature, freq, female, height, form)
 
-		# add results to dataframe
+		# Add results to dataframe
 		self.info.loc[0, 'Pcount'] = count_min
 		self.info.loc[0, 'avg_amp'] = avg_metrics[2]
 		self.info.loc[0, 'avg_dur'] = avg_metrics[3]
 		self.info.loc[0, 'amp_std'] = avg_metrics[4]
 		self.info.loc[0, 'dur_std'] = avg_metrics[5]
 
-		# add repetition time series to feature lists
+		# Add repetition time series to feature lists
 		for i in xrange(len(multiple_rep_windows)):
 		    pushup_data = df_num.ix[multiple_rep_windows[i][0]:multiple_rep_windows[i][1]]
 		    pitch_ts.append(pushup_data['motionPitch'].tolist())
@@ -277,8 +288,9 @@ class ProcessData(object):
 		accZ_ts = np.array(accZ_ts)
 		quatY_ts = np.array(quatY_ts)
 
+		## Plot the data ##
 		if self.plot:
-			# Plot raw data #
+			# Plot raw data
 			gr.plot1_acceleration(df_num, freq, sample)
 			gr.plot1_gyro(df_num, freq, sample)
 			gr.plot1_motion(df_num, freq, sample)
@@ -291,15 +303,16 @@ class ProcessData(object):
 			gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, feature, freq, sample)
 
 		## Write processed data to files ##
-		# write processed data to csv file
+
+		# Write processed data to csv file
 		self.info.drop('file',axis=1, inplace=True)
 		self.info.to_csv('../processed/processed_pushup_'+sample+'.csv')
 
-		# write rep_metrics to file
+		# Write rep_metrics to file
 		rep_arr = np.array(sample_metrics)
 		np.save('../processed/pushup_rep_metrics_'+sample+'.npy', rep_arr)
 
-		# write time series to file
+		# Write time series to file
 		ts_arr = np.array([pitch_ts, accY_ts, accZ_ts, quatY_ts])
 		np.save('../processed/pushup_raw_ts_'+sample+'.npy', ts_arr)
 
