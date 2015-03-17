@@ -1,5 +1,6 @@
 """ 
-This library is used to make interactive plots for the webapp.
+This library is used to make interactive plots for the webapp. The figures are stored at 
+https:plot.ly and the functions return the unique url. 
 """
 
 import plotly.plotly as py
@@ -12,7 +13,7 @@ import brewer2mpl
 spectral_colors = brewer2mpl.get_map('Spectral', 'Diverging', 10).colors
 
 def reps_bar_chart(w_prob, sample):
-	"""This function plots the latest set of reps ratings in a bar chart."""
+	"""Plot the latest set of reps ratings in a bar chart and returns url."""
 
 	w_prob_true = (w_prob > 0.5)*1.0
 	w_prob_false = (w_prob <= 0.5)*1.0
@@ -83,7 +84,7 @@ def reps_bar_chart(w_prob, sample):
 	return plot_url
 
 def reps_polar_chart(w_prob, sample):
-	"""This function plots the latest set of reps ratings in a polar chart."""
+	"""Plots the latest set of reps ratings in a polar chart and returns the url."""
 
 	w_prob_true = (w_prob > 0.5)*1.0
 	w_prob_false = (w_prob <= 0.5)*1.0
@@ -131,7 +132,7 @@ def reps_polar_chart(w_prob, sample):
 	return plot_url
 
 def monthly_reps(bin_history, sample):
-	"""This function plots the past month's aggregate number of reps in a bar chart."""
+	"""Plots the past month's aggregate number of reps in a bar chart and returns the url."""
 
 	start = date.today() - timedelta(days=29)
 	end = date.today()
@@ -190,7 +191,7 @@ def monthly_reps(bin_history, sample):
 	return plot_url
 
 def make_trace(x, y, name, color):
-	"""This function creates a repetition trace for the time series plot."""
+	"""Creates a repetition trace for the time series plot."""
 
     return Scatter(
         x = x,     
@@ -207,15 +208,15 @@ def make_trace(x, y, name, color):
     )
 
 def rad_to_degree(rad):
-	"""This function converts radians to degrees."""
+	"""Converts radians to degrees."""
 	return [rad[r]*180.0 / np.pi for r in xrange(len(rad))]
 
 def calculate_time_axis(ts, freq):
-	"""This function creates the repetiton time axis for the time series plot."""
+	"""Creates the repetiton time axis for the time series plot."""
 	return np.arange(0, len(ts), 1) / freq
 
 def plot_ts(ts, sample, freq=20.0):
-	"""This function plots the pitch data for the latest set of repetitions in a time series format.
+	"""Plots the pitch data for the latest set of repetitions in a time series format and returns the url.
 	Each rep is plotted individually so you can easily compare the reps in your set."""
 
 	# optimal pitch
