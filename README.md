@@ -15,7 +15,9 @@ Workout Buddy uses your phone's accelerometer and gyro sensor data, collected fr
 I use a series of filters to separate the pushup signal from the background noise.  First I bandpass filter the data between 0.5 - 2.0 Hertz, then I select the time window when key feature pairs are correlated. The pushup duration detection algorithm is robust to a range of typical user behaviors.  It can handle the phone being worn on either the left or right arm, and can detect pushups from users doing a variety of pushup stances: basic wide stance, elbows-in stance, hands-in stance, and knee pushups.
 
 #### Repetition Detection
+Once the pushup duration window is calculated, Workout Buddy uses peak detection algorithms, on the unfiltered pitch data, to pick out the press-down and push-up times for each repetition in the set. The maximum press-down amplitude and repetition duration are calculated to be used as features for classifying the pushup form. In addition, the entire repetition time series, for the pitch rotation and y-component of acceleration, are used during the classification process.
 
 #### Exercise Classification and Rating
+Workout Buddy uses an ensemble of classifiers to provide detailed ratings of your latest workout. It uses Random Forest and Support Vector Machine classifiers to model the pitch amplitude and repetition duration features. Dynamic Time Warping, a method of calculating the distance between time series, is used in combination with K-Nearest Neighbors to classify the repetition time series. Each of the models provides a probability that the pushup repetition is either 'ok' or 'good'. The ensemble of models are combined, with equal weights. Workout Buddy uses the binary classification, along with the probabilities, to provide detailed ratings of your set of pushup repeitions.
 
 #### Interactive Visualizations
