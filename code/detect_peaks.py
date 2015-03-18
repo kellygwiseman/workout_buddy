@@ -1,6 +1,6 @@
 """
 This library includes functions used to determine attributes about the
-exercise repetitions, such as duration, peak amplitude, number of repetitions,
+exercise repetitions, such as: duration, peak amplitude, number of repetitions,
 etc.
 """
 

@@ -205,6 +205,6 @@ def get_model(pickle_mdl):
 
 def save_model(mdl, path):
 	"""Pickle a classification model."""
-	
-    with open(path, 'w') as f:
-        pickle.dump(mdl, f)
+
+	with open(path, 'w') as f:
+		pickle.dump(mdl, f)

@@ -193,7 +193,7 @@ def monthly_reps(bin_history, sample):
 def make_trace(x, y, name, color):
 	"""Creates a repetition trace for the time series plot."""
 
-    return Scatter(
+	return Scatter(
         x = x,     
         y = y,
         name = name,
