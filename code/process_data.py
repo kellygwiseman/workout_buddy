@@ -160,7 +160,7 @@ class ProcessData(object):
 				# Plot the feature correlations
 				gr.plot_corr(df_filt, correls, freq, sample)
 				# Plot pushup repetitions
-				gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, feature, freq, sample)
+				gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, peakmax, feature, freq, sample)
 
 	    ## Write processed data to files ##
 
@@ -260,7 +260,6 @@ class ProcessData(object):
 		mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 		peakmax, count_max, pushup_data = dp.count_peak_max(df_num, count_min, window_ind, feature, mph, mpd, freq, valley=False)
 		print count_max
-		gr.plot_pushups(df_num, pushup_data, window_ind, peakmax, feature, freq, sample)
 
 		# Repetition windows
 		multiple_rep_windows = dp.calculate_multiple_rep_window(peakmax, window_ind, freq)
@@ -300,7 +299,7 @@ class ProcessData(object):
 			# Plot the feature correlations
 			gr.plot_corr(df_filt, correls, freq, sample)
 			# Plot pushup repetitions
-			gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, feature, freq, sample)
+			gr.plot_pushups(df_num, pushup_data, window_ind, peakmin, peakmax, feature, freq, sample)
 
 		## Write processed data to files ##
 

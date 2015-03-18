@@ -8,7 +8,7 @@ import numpy as np
 if __name__ == '__main__':
 	# Process samples
 	info = pd.read_csv('../data/full_dataset_info.csv', skipinitialspace=True)
-	p = ProcessData(info, 'normal', plot=True)
+	p = ProcessData(info, 'all', plot=True)
 	avg_arr, rep_arr, ts_arr = p.batch_process_samples()
 
 	# Select features to include in to training model

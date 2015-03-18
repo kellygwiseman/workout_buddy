@@ -114,7 +114,7 @@ tRp29
 (I1
 tg23
 I00
-S'\xca\x93\x97\x8d\xe7\xba\xf0\xbf'
+S'K.G\xf3\x13\\\xef\xbf'
 tbsS'_sparse'
 p30
 I00
@@ -220,7 +220,7 @@ tRp52
 (I1
 tg23
 I00
-S'Qs\x0c\x01\x9b$\xdb?'
+S'Y\x1c\xd8\x94\xdc5\xe5?'
 tbsS'cache_size'
 p53
 I200

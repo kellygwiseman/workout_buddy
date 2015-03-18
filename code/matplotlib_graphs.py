@@ -19,7 +19,7 @@ pair_colors = brewer2mpl.get_map('Paired', 'Qualitative', 8).mpl_colors
 RYG_colors = brewer2mpl.get_map('RdYlGn', 'Diverging', 10).mpl_colors
 spectral_colors = brewer2mpl.get_map('Spectral', 'Diverging', 10).mpl_colors
 rcParams['figure.figsize'] = (8, 5)
-rcParams['figure.dpi'] = 150
+rcParams['figure.dpi'] = 400
 rcParams['axes.color_cycle'] = dark2_colors
 rcParams['lines.linewidth'] = 1.5
 rcParams['axes.facecolor'] = 'white'
@@ -273,7 +273,7 @@ def plot_bandpass(data, filtered_data, freq, lowcut, highcut, sample):
     plt.savefig('../figures/bp_filter/pu_bp_quat-' + sample + '.png');
     plt.close(fig4)
 
-def plot_pushups(data, pushup_data, window_ind, peakmax, feature, freq, sample):
+def plot_pushups(data, pushup_data, window_ind, peakmin, peakmax, feature, freq, sample):
     """Plot the raw pitch time series overlain with the pushup duration window
     and markings for the individual repetitions."""
 
@@ -287,21 +287,31 @@ def plot_pushups(data, pushup_data, window_ind, peakmax, feature, freq, sample):
     data_lst = [data_arr[r]*180.0 / np.pi for r in xrange(len(data_arr))]
     pushup_arr = data.ix[window_ind[0]:window_ind[1]][feature].values
     pushup_lst = [pushup_arr[r]*180.0 / np.pi for r in xrange(len(pushup_arr))]
-    plotting_amp = np.min(pushup_lst) - 5.0
+    plotting_amp_min = np.min(pushup_lst) - 5.0
+    plotting_amp_max = np.max(pushup_lst) + 5.0
     
     # Plot complete time series and push-up duration overlay
-    fig1 = plt.figure()
+    fig1 = plt.figure(figsize=(6,4.5))
     plt.plot(time, data_lst, label='Full time series')
     plt.plot(pushup_time, pushup_lst, label='Pushup duration')
     
+    # Plot just one repetition
+    #p_start = pushup_start + peakmax[0]
+    #p_end = pushup_start + peakmax[1]
+    #rep_time = time[int(p_start*freq):int(p_end*freq)+1]
+    #rep_arr = data.ix[int(p_start*freq):int(p_end*freq)][feature].values
+    #rep_lst = [rep_arr[r]*180.0 / np.pi for r in xrange(len(rep_arr))]
+    #plt.plot(rep_time, rep_lst, label='Rep duration')
+    
     # Mark push-up repetitions
-    plt.scatter([pushup_start + p for p in peakmax], np.linspace(plotting_amp, plotting_amp, num=len(peakmax)), color='r',marker='x', lw=2, label='Pushups')
+    plt.scatter([pushup_start + p for p in peakmax], np.linspace(plotting_amp_max, plotting_amp_max, num=len(peakmax)), color='k',marker='+', lw=2, label='Push-up')
+    plt.scatter([pushup_start + p for p in peakmin], np.linspace(plotting_amp_min, plotting_amp_min, num=len(peakmin)), color='r',marker='_', lw=2, label='Press-down')
     plt.title('Pushup Repetitions')
     plt.ylabel('Phone Pitch (degrees)')
     plt.xlabel('Time (Seconds)')
     plt.xlim(0, time[-1])
     ymin, ymax = plt.ylim()
-    plt.ylim(-40.0, 100.0) # keep the ylim the same for all samples so you can easily compare amplitudes
-    plt.legend(loc='lower center', ncol=3, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
+    plt.ylim(-60.0, 100.0) # keep the ylim the same for all samples so you can easily compare amplitudes
+    plt.legend(loc='lower center', ncol=2, bbox_to_anchor=(0.5, 0.0), frameon=False, columnspacing=1, borderpad=0.1)
     plt.savefig('../figures/pushup_reps/pu_reps-' + sample + '.png');
     plt.close(fig1)
