@@ -21,3 +21,18 @@ Once the pushup duration window is calculated, Workout Buddy uses peak detection
 Workout Buddy uses an ensemble of classifiers to provide detailed ratings of your latest workout. It uses Random Forest and Support Vector Machine classifiers to model the pitch amplitude and repetition duration features. Dynamic Time Warping, a method of calculating the distance between time series, is used in combination with K-Nearest Neighbors to classify the repetition time series. Each of the models provides a probability that the pushup repetition is either 'ok' or 'good'. The ensemble of models are combined, with equal weights. Workout Buddy uses the binary classification, along with the probabilities, to provide detailed ratings of your set of pushup repeitions.
 
 #### Interactive Visualizations
+
+==============
+#### Implementation Details ####
+The code and data to train your own classifiers is provided and can be run with training_pipeline.py. You can also use the provided models to classify your own data with user_prediction_pipeline.py (for data with user info) or anon_prediction_pipeline (for anonymous sensor data). Run setup.py first to set up the necessary directory structure.
+
+#### Necessary Python Packages ####
+1. cPickle
+2. Flask - just for webapp
+3. Matplotlib
+4. Numpy
+5. Pandas
+6. Plotly
+7. Scikit-Learn
+8. Scipy
+9. Werkzeug - just for webapp 
