@@ -79,7 +79,7 @@ class AnonPrediction(object):
 
 		# Calculate final peak parameters using raw data
 		# min peaks (middle of the rep when you reach lowest press-down)
-		mph = avg_amp_initial # minimum peak height
+		mph = avg_amp_initial*1.2 # minimum peak height, scale it by the filtered avg_amp which is ~ half the unfiltered avg_amp
 		mpd = min((avg_dur*freq - 0.45*freq), 1.5*freq) # minimum peak separation distance
 		peakmin, count_min, pushup_data = dp.count_peak_min(df_num, window_ind, feature, mph, mpd, freq, valley=True)
 		# max peaks (start and end of rep)
