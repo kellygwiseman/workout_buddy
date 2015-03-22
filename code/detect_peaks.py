@@ -133,10 +133,10 @@ def count_peak_min(data, window_ind, feature, mph, mpd, freq, valley=False, edge
     pushup_data = data.ix[window_ind[0]:window_ind[-1]][feature].values
     # force the push-up reps to start at about 0 pitch amplitude
     pushup_data = [pushup_data[i] - pushup_data[0] for i in xrange(len(pushup_data))]
-    peakind = detect_peaks(pushup_data, mph = mph, mpd = mpd, valley=valley)
+    peakind = detect_peaks(pushup_data, mph=mph, mpd=mpd, valley=valley)
     peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
-    # check to max sure there are no local minimums on the edges
-    if (peakind[0] < 0.2):
+    # check to make sure there are no local minimums on the edges
+    if (peakind[0] < 0.3):
         peakind = peakind[1:]
     if (window_ind[-1] - window_ind[0])/freq - peakind[-1] < 0.3:
         peakind = peakind[:-1]
@@ -151,14 +151,14 @@ def count_peak_max(data, peakmin_count, window_ind, feature, mph, mpd, freq, val
     pushup_data = data.ix[window_ind[0]:window_ind[-1]][feature].values
     # force the push-up reps to start at about 0 pitch amplitude
     pushup_data = [pushup_data[i] - pushup_data[0] for i in xrange(len(pushup_data))]
-    peakind = detect_peaks(pushup_data, mph = mph, mpd = mpd, valley=valley)
+    peakind = detect_peaks(pushup_data, mph=mph, mpd=mpd, valley=valley)
     count = len(peakind)
     peakind = [x / freq for x in peakind] # convert to seconds instead of frequency
     if (peakind[0] > 1.0) and (count <= peakmin_count):
         peakind.insert(0, 0)
     # try to deal with the problem of the first max peak (start of reps) being picked too late.
     if (peakind[1] - peakind[0]) > 1.15*(peakind[2] - peakind[1]):
-        peakind[0]+= ((peakind[1] - peakind[0]) - (peakind[2] - peakind[1]))/2
+        peakind[0] += ((peakind[1] - peakind[0]) - (peakind[2] - peakind[1]))/2
     count = len(peakind)
     return peakind, count, pushup_data
 
