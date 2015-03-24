@@ -144,9 +144,10 @@ def monthly_reps(bin_history, sample):
 	y1 = np.linspace(0, 0, 30)
 	y2 = np.linspace(0, 0, 30)
 	for i, d in enumerate(dates):
-		ind = x.index(d)
-		y1[ind] += ok[i]
-		y2[ind] += good[i]
+		if d >= x[0]:
+			ind = x.index(d)
+			y1[ind] += ok[i]
+			y2[ind] += good[i]
 
 	trace1 = Bar(
 	    x = x,
